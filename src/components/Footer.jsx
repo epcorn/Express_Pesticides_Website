@@ -78,10 +78,10 @@ export default function Footer() {
           <h3 className="text-xl font-bold mb-4 text-blue-500">Get in Touch</h3>
           <p className="mb-1 font-semibold">Express Pesticides Private Limited</p>
           <p className="mb-3 text-gray-300">
-            Door No. S - 5, 2nd Floor, Khira Industrial Estate, VM Bhargav Rd,
+             S - 5, 2nd Floor, Khira Industrial Estate, VM Bhargav Rd,
             Khira Nagar, Santacruz (West), Mumbai, Maharashtra 400054
           </p>
-          <p className="mb-2">Phone: <a href="tel:02266914400" className="hover:text-blue-400">022 6691 4400</a></p>
+          <p className="mb-2">Phone: <a href="tel:02261386600" className="hover:text-blue-400">02261386600</a></p>
           <p className="mb-4">
             Email:{" "}
             <a

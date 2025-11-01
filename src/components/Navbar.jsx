@@ -52,11 +52,18 @@ export default function Navbar() {
             {isOpen ? <X size={26} /> : <Menu size={26} />}
           </button>
         </div>
-
+        <Image
+            src="https://res.cloudinary.com/epcorn/image/upload/v1762003511/Express_Pesticides_Website/HOMEPAGE_IMAGES/Be_sure_we_are_there_background_removed_qce4xf.png"
+            alt="Express Pesticides Logo"
+            width={200}
+            height={120}
+            priority
+            className="object-contain h-12 md:h-16"
+          />
         {/* --- Right Side: Logo (constant size) --- */}
         <Link href="/" className="flex items-center space-x-2">
           <Image
-            src="https://res.cloudinary.com/epcorn/image/upload/v1761733971/Express_Pesticides_Website/Express_pesticide_logo_swa79u.png"
+            src="https://res.cloudinary.com/epcorn/image/upload/v1762002808/Express_Pesticides_Website/Express_Pesticide_logo_New_transparent_background_q4agzj.png"
             alt="Express Pesticides Logo"
             width={200}
             height={120}

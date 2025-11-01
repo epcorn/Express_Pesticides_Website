@@ -70,8 +70,8 @@ export default function ContactUsPage() {
   };
 
   const address =
-    "Door No. S - 5, 2nd Floor, Khira Industrial Estate, VM Bhargav Rd, Khira Nagar, Santacruz (West), Mumbai, Maharashtra 400054";
-  const phone = "022 6691 4400";
+    "S - 5, 2nd Floor, Khira Industrial Estate, VM Bhargav Rd, Khira Nagar, Santacruz (West), Mumbai, Maharashtra 400054";
+  const phone = "02261386600";
   const email = "info@expresspesticides.com";
   const tagline = "Be sure, we are there.";
 

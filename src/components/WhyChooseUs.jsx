@@ -1,38 +1,31 @@
 "use client";
 
-import {
-  FaUsersGear,
-  FaLeaf,
-  FaMicrochip,
-  FaClipboardList,
-  FaShieldHeart,
-} from "react-icons/fa6";
-import FeatureCard from "./FeatureCard";
+import ServiceCard from "./ServiceCard";
 
 const features = [
   {
-    icon: <FaUsersGear className="text-blue-600 text-3xl sm:text-4xl md:text-5xl" />,
-    title: "Expert Team",
+    logo: "https://res.cloudinary.com/epcorn/image/upload/v1761997367/Express_Pesticides_Website/WhyChooseUs/Service_image_uc9nrs.jpg",
+    name: "Expert Team",
     description: "Trained and certified professionals.",
   },
   {
-    icon: <FaLeaf className="text-green-600 text-3xl sm:text-4xl md:text-5xl" />,
-    title: "Safe-Eco Solutions",
+    logo: "https://res.cloudinary.com/epcorn/image/upload/v1761997364/Express_Pesticides_Website/WhyChooseUs/Igbc_logo_ebk7l6.jpg",
+    name: "Safe-Eco Solutions",
     description: "Safe for people, pets, and the planet.",
   },
   {
-    icon: <FaMicrochip className="text-indigo-600 text-3xl sm:text-4xl md:text-5xl" />,
-    title: "Advanced Technology",
+    logo: "https://res.cloudinary.com/epcorn/image/upload/v1761997367/Express_Pesticides_Website/WhyChooseUs/Reasarch_ozvfao.jpg",
+    name: "Advanced Technology",
     description: "Digital reports, QR tracking & smart monitoring.",
   },
   {
-    icon: <FaClipboardList className="text-amber-600 text-3xl sm:text-4xl md:text-5xl" />,
-    title: "Customized Plans",
+    logo: "https://res.cloudinary.com/epcorn/image/upload/v1761997366/Express_Pesticides_Website/WhyChooseUs/QR_scan_c12jlp.png",
+    name: "Customized Plans",
     description: "Tailored treatments for every need.",
   },
   {
-    icon: <FaShieldHeart className="text-red-600 text-3xl sm:text-4xl md:text-5xl" />,
-    title: "Dependable Service",
+    logo: "https://res.cloudinary.com/epcorn/image/upload/v1761997364/Express_Pesticides_Website/WhyChooseUs/Handshake_wjf4rt.avif",
+    name: "Dependable Service",
     description: "Proven results and long-term protection.",
   },
 ];
@@ -53,12 +46,15 @@ export default function WhyChooseUs() {
       {/* Feature Cards Grid */}
       <div className="max-w-6xl mx-auto grid gap-6 sm:gap-8 sm:grid-cols-2 lg:grid-cols-3 px-4 sm:px-6">
         {features.map((feature) => (
-          <FeatureCard
-            key={feature.title}
-            icon={feature.icon}
-            title={feature.title}
-            description={feature.description}
-          />
+          <div
+            key={feature.name}
+            className="flex flex-col items-center text-center bg-white rounded-2xl shadow-md hover:shadow-lg transition p-6"
+          >
+            <ServiceCard name={feature.name} logo={feature.logo} />
+            <p className="text-gray-600 text-sm sm:text-base mt-3">
+              {feature.description}
+            </p>
+          </div>
         ))}
       </div>
 

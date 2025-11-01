@@ -4,8 +4,10 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 
 const images = [
-  "https://res.cloudinary.com/epcorn/image/upload/v1761743794/Express_Pesticides_Website/HOMEPAGE_IMAGES/Latest_banner_smhi0q.png",
-  "https://res.cloudinary.com/epcorn/image/upload/v1761742885/Express_Pesticides_Website/HOMEPAGE_IMAGES/Banner_5_wzdsac.png",
+   "https://res.cloudinary.com/epcorn/image/upload/v1762001230/Express_Pesticides_Website/Epcorn_54_design_new_banner_jararf.png",
+   "https://res.cloudinary.com/epcorn/image/upload/v1761992475/Express_Pesticides_Website/HOMEPAGE_IMAGES/New_banner_image_01_syeylm.png",
+   "https://res.cloudinary.com/epcorn/image/upload/v1762001234/Express_Pesticides_Website/New_front_banner_ro6dsi.png",
+   "https://res.cloudinary.com/epcorn/image/upload/v1762001235/Express_Pesticides_Website/New_latest_banner_owamjp.png",
 ];
 
 export default function HeroSection() {
@@ -25,7 +27,7 @@ export default function HeroSection() {
         h-[65vh] sm:h-[75vh] md:h-[85vh] lg:h-screen 
         bg-gray-50 flex items-center justify-center
         overflow-hidden
-        mt-0 mb-0
+        mt-0 
       "
     >
       {images.map((img, index) => (

@@ -305,7 +305,7 @@ export default function BookServiceModal() {
                   </div>
 
                   {/* Subcategory */}
-                  {subcategories.length > 0 && (
+                  {/* {subcategories.length > 0 && (
                     <div>
                       <label className="block font-medium mb-1">
                         Subcategory
@@ -324,7 +324,7 @@ export default function BookServiceModal() {
                         ))}
                       </select>
                     </div>
-                  )}
+                  )} */}
 
                   {/* BHK or Area */}
                   {formData.category === "Civil Work" ? (
@@ -376,8 +376,8 @@ export default function BookServiceModal() {
                       onChange={handleChange}
                       className="w-full px-3 py-2 border rounded"
                     >
-                      <option value="single">Single Service</option>
-                      <option value="annual">Annual Contract</option>
+                      <option value="single">Single Contract Service</option>
+                      <option value="annual">Annual Contract Service</option>
                     </select>
                   </div>
 
@@ -533,7 +533,7 @@ export default function BookServiceModal() {
                         Total Estimated Cost:
                       </span>
                       <span className="font-bold text-blue-600 text-lg">
-                        ₹ {calculatedCost.toLocaleString("en-IN")}
+                        ₹ {(1.18*calculatedCost).toLocaleString("en-IN") + "(Includes 9% CGST &  9% SGST)"}
                       </span>
                     </div>
 

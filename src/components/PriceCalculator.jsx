@@ -54,7 +54,6 @@ export default function PriceCalculator() {
   }, [formData]);
 
   const categories = Object.keys(servicesData);
-  const subcategories =
     formData.category &&
     typeof servicesData[formData.category] === "object" &&
     !servicesData[formData.category].perSqFt
@@ -78,10 +77,10 @@ export default function PriceCalculator() {
       {/* Heading */}
       <div className="max-w-3xl mx-auto text-center mb-10">
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black mb-3 sm:mb-4">
-          Get Instant Quote
+          Instant Quote
         </h2>
         <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
-          Choose your service details below to calculate an instant price estimate.
+          Get your instant price estimate.
         </p>
       </div>
 
@@ -92,7 +91,7 @@ export default function PriceCalculator() {
           {/* Category */}
           <div>
             <label className="block font-medium mb-1 text-sm sm:text-base">
-              Service Category
+              Choose your service
             </label>
             <select
               name="category"
@@ -118,26 +117,7 @@ export default function PriceCalculator() {
           </div>
 
           {/* Subcategory */}
-          {subcategories.length > 0 && (
-            <div>
-              <label className="block font-medium mb-1 text-sm sm:text-base">
-                Subcategory
-              </label>
-              <select
-                name="subcategory"
-                value={formData.subcategory}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
-              >
-                <option value="">-- Select --</option>
-                {subcategories.map((sub) => (
-                  <option key={sub} value={sub}>
-                    {sub}
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
+         
 
           {/* Area or BHK */}
           {formData.category === "Civil Work" ? (
@@ -180,7 +160,7 @@ export default function PriceCalculator() {
           {/* Service Type */}
           <div>
             <label className="block font-medium mb-1 text-sm sm:text-base">
-              Service Type
+              Choose your contract 
             </label>
             <select
               name="serviceType"
@@ -188,8 +168,8 @@ export default function PriceCalculator() {
               onChange={handleChange}
               className="w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
             >
-              <option value="single">Single Service</option>
-              <option value="annual">Annual Contract</option>
+              <option value="single">Single Service Contract</option>
+              <option value="annual">Annual Service Contract</option>
             </select>
           </div>
         </div>
@@ -200,7 +180,7 @@ export default function PriceCalculator() {
             <div className="inline-block px-6 py-3 border border-blue-600 text-blue-600 rounded-full shadow-sm text-sm sm:text-base">
               <span className="font-medium">Estimated Price: </span>
               <span className="font-bold text-lg sm:text-xl">
-                ₹ {calculatedCost.toLocaleString("en-IN")}
+                ₹ {calculatedCost.toLocaleString("en-IN") + " + GST"} 
               </span>
             </div>
           </div>
