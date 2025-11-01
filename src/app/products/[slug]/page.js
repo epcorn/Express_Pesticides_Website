@@ -20,7 +20,7 @@ const productData = {
   // 1. Soto Rodent Repellent
   "soto-rodent-repellent": {
     name: "Soto Rodent Repellent",
-    image: "https://res.cloudinary.com/epcorn/image/upload/v1761738048/Express_Pesticides_Website/Rodent_Repellent_Product_e16igr.png",
+    image: "https://res.cloudinary.com/epcorn/image/upload/f_auto,q_auto/v1761738048/Express_Pesticides_Website/Rodent_Repellent_Product_e16igr.png",
     intro: "Rodent problems are not just a nuisance... SOTO Rodent Repellent provides an innovative, herbal-based solution...",
     whyChoose: [
       "Non-toxic, eco-friendly, and safe for humans & pets",

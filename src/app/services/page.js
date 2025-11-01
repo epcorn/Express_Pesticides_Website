@@ -1,9 +1,19 @@
 // app/services/page.js
 "use client";
 
-import ServiceCard from "@/components/ServiceCard";
 import Link from "next/link";
-import { FaHospital, FaBriefcase, FaHotel, FaWarehouse, FaSchool, FaIndustry, FaHome, FaShoppingBag, FaCapsules, FaBuilding } from "react-icons/fa";
+import {
+  FaHospital,
+  FaBriefcase,
+  FaHotel,
+  FaWarehouse,
+  FaSchool,
+  FaIndustry,
+  FaHome,
+  FaShoppingBag,
+  FaCapsules,
+  FaBuilding,
+} from "react-icons/fa";
 import Footer from "@/components/Footer";
 
 export default function ServicesPage() {
@@ -39,14 +49,29 @@ export default function ServicesPage() {
           <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-12">
             Our <span className="text-blue-600">Services</span>
           </h2>
-          <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+
+          <div className="grid gap-8 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 justify-items-center">
             {services.map((s) => (
               <Link
                 key={s.slug}
                 href={`/services/${s.slug}`}
-                className="transform hover:-translate-y-2 transition duration-300"
+                className="flex flex-col items-center transform hover:-translate-y-2 transition duration-300"
               >
-                <ServiceCard name={s.name} logo={s.logo} />
+                <div className="relative w-28 h-28 rounded-full overflow-hidden flex items-center justify-center bg-transparent">
+                  <img
+                    src={s.logo}
+                    alt={s.name}
+                    className="w-full h-full object-cover scale-[1.3]"
+                    style={{
+                      maskImage: "radial-gradient(circle, white 100%, transparent 100%)",
+                      WebkitMaskImage: "radial-gradient(circle, white 100%, transparent 100%)",
+                      backgroundColor: "transparent",
+                    }}
+                  />
+                </div>
+                <h3 className="text-gray-800 font-semibold text-lg mt-4 text-center">
+                  {s.name}
+                </h3>
               </Link>
             ))}
           </div>
@@ -59,6 +84,7 @@ export default function ServicesPage() {
           <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-12">
             Where We <span className="text-blue-600">Work</span>
           </h2>
+
           <div className="grid gap-8 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
             {workAreas.map((area) => (
               <div

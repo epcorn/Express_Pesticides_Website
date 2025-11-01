@@ -1,31 +1,31 @@
 "use client";
 
+import { FaUsersGear, FaLeaf, FaMicrochip, FaClipboardList, FaShieldHeart } from "react-icons/fa6";
 import FeatureCard from "./FeatureCard";
 
-// Replace icon URLs with your own Cloudinary or local images
 const features = [
   {
-    icon: "/icons/expert-team.svg",
+    icon: <FaUsersGear className="text-blue-600 text-5xl" />,
     title: "Expert Team",
     description: "Trained and certified professionals.",
   },
   {
-    icon: "/icons/safe-eco.svg",
+    icon: <FaLeaf className="text-green-600 text-5xl" />,
     title: "Safe-Eco Solutions",
     description: "Safe for people, pets, and the planet.",
   },
   {
-    icon: "/icons/advanced-tech.svg",
+    icon: <FaMicrochip className="text-indigo-600 text-5xl" />,
     title: "Advanced Technology",
     description: "Digital reports, QR tracking & smart monitoring.",
   },
   {
-    icon: "/icons/customized-plans.svg",
+    icon: <FaClipboardList className="text-amber-600 text-5xl" />,
     title: "Customized Plans",
     description: "Tailored treatments for every need.",
   },
   {
-    icon: "/icons/dependable.svg",
+    icon: <FaShieldHeart className="text-red-600 text-5xl" />,
     title: "Dependable Service",
     description: "Proven results and long-term protection.",
   },
