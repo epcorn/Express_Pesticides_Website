@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { servicesData } from "../app/services/lib/ServiceData.js";
+import { servicesData } from "../app/services/lib/ServiceData";
 
 export default function PriceCalculator() {
   const [formData, setFormData] = useState({
@@ -22,7 +22,6 @@ export default function PriceCalculator() {
     }));
   };
 
-  // 🔢 Cost calculation logic (same as BookServiceModal)
   useEffect(() => {
     const { category, subcategory, bhkType, serviceType, area } = formData;
 
@@ -75,22 +74,26 @@ export default function PriceCalculator() {
         ));
 
   return (
-    <section className="py-20 bg-gray-50">
-      <div className="max-w-4xl mx-auto text-center mb-12">
-        <h2 className="text-4xl font-bold text-black mb-4">
+<section className="py-10 sm:py-16 lg:py-20 bg-gray-50 px-4 sm:px-6 mt-0">
+      {/* Heading */}
+      <div className="max-w-3xl mx-auto text-center mb-10">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black mb-3 sm:mb-4">
           Get Instant Quote
         </h2>
-        <p className="text-gray-600 text-lg">
+        <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
           Choose your service details below to calculate an instant price estimate.
         </p>
       </div>
 
-      <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-xl p-8 space-y-6">
-        {/* Service Details */}
-        <div className="grid md:grid-cols-2 gap-6">
+      {/* Calculator Card */}
+      <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-2xl p-5 sm:p-6 md:p-8 space-y-6">
+        {/* Input Fields Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
           {/* Category */}
           <div>
-            <label className="block font-medium mb-1">Service Category</label>
+            <label className="block font-medium mb-1 text-sm sm:text-base">
+              Service Category
+            </label>
             <select
               name="category"
               value={formData.category}
@@ -103,7 +106,7 @@ export default function PriceCalculator() {
                   area: "",
                 }));
               }}
-              className="w-full px-3 py-2 border rounded"
+              className="w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
             >
               <option value="">-- Select --</option>
               {categories.map((cat) => (
@@ -117,12 +120,14 @@ export default function PriceCalculator() {
           {/* Subcategory */}
           {subcategories.length > 0 && (
             <div>
-              <label className="block font-medium mb-1">Subcategory</label>
+              <label className="block font-medium mb-1 text-sm sm:text-base">
+                Subcategory
+              </label>
               <select
                 name="subcategory"
                 value={formData.subcategory}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border rounded"
+                className="w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
               >
                 <option value="">-- Select --</option>
                 {subcategories.map((sub) => (
@@ -134,28 +139,32 @@ export default function PriceCalculator() {
             </div>
           )}
 
-          {/* Area or BHK Type */}
+          {/* Area or BHK */}
           {formData.category === "Civil Work" ? (
             <div>
-              <label className="block font-medium mb-1">Area (sq.ft)</label>
+              <label className="block font-medium mb-1 text-sm sm:text-base">
+                Area (sq.ft)
+              </label>
               <input
                 type="number"
                 name="area"
                 value={formData.area}
                 onChange={handleChange}
                 placeholder="Enter total area"
-                className="w-full px-3 py-2 border rounded"
+                className="w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
               />
             </div>
           ) : (
             bhkOptions?.length > 0 && (
               <div>
-                <label className="block font-medium mb-1">Property Type</label>
+                <label className="block font-medium mb-1 text-sm sm:text-base">
+                  Property Type
+                </label>
                 <select
                   name="bhkType"
                   value={formData.bhkType}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border rounded"
+                  className="w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
                 >
                   <option value="">-- Select --</option>
                   {bhkOptions.map((bhk) => (
@@ -170,12 +179,14 @@ export default function PriceCalculator() {
 
           {/* Service Type */}
           <div>
-            <label className="block font-medium mb-1">Service Type</label>
+            <label className="block font-medium mb-1 text-sm sm:text-base">
+              Service Type
+            </label>
             <select
               name="serviceType"
               value={formData.serviceType}
               onChange={handleChange}
-              className="w-full px-3 py-2 border rounded"
+              className="w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
             >
               <option value="single">Single Service</option>
               <option value="annual">Annual Contract</option>
@@ -183,12 +194,12 @@ export default function PriceCalculator() {
           </div>
         </div>
 
-        {/* Cost Display */}
+        {/* Estimated Price */}
         {calculatedCost > 0 && (
-          <div className="text-center mt-8">
-            <div className="inline-block px-6 py-3 border border-blue-600 text-blue-600 rounded-full shadow-sm">
+          <div className="text-center mt-6 sm:mt-8">
+            <div className="inline-block px-6 py-3 border border-blue-600 text-blue-600 rounded-full shadow-sm text-sm sm:text-base">
               <span className="font-medium">Estimated Price: </span>
-              <span className="font-bold text-lg">
+              <span className="font-bold text-lg sm:text-xl">
                 ₹ {calculatedCost.toLocaleString("en-IN")}
               </span>
             </div>

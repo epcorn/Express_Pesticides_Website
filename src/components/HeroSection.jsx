@@ -14,29 +14,42 @@ export default function HeroSection() {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % images.length);
-    }, 3000); // Change image every 3 seconds
+    }, 4000);
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <section className="relative w-full h-screen bg-gray-100 flex items-center justify-center"> {/* Added bg-gray-100 for background when image doesn't cover */}
+    <section
+      className="
+        relative w-full 
+        h-[65vh] sm:h-[75vh] md:h-[85vh] lg:h-screen 
+        bg-gray-50 flex items-center justify-center
+        overflow-hidden
+        mt-0 mb-0
+      "
+    >
       {images.map((img, index) => (
         <div
           key={index}
-          className={`absolute inset-0 transition-opacity duration-1000 ${
+          className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
             index === current ? "opacity-100 z-10" : "opacity-0 z-0"
-          } flex items-center justify-center`} // Added flex for centering if image doesn't fill
+          }`}
         >
-          <Image
-            src={img}
-            alt={`Slide ${index + 1}`}
-            fill
-            style={{ objectFit: "contain" }} // Changed to "contain"
-          />
+          <div className="relative w-full h-full">
+            <Image
+              src={img}
+              alt={`Slide ${index + 1}`}
+              fill
+              priority={index === 0}
+              className="
+                object-contain sm:object-contain md:object-cover 
+                object-center
+              "
+              sizes="100vw"
+            />
+          </div>
         </div>
       ))}
-
-      {/* Removed the overlay text div completely */}
     </section>
   );
 }

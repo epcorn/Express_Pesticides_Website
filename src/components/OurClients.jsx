@@ -1,7 +1,6 @@
 "use client";
 
 import ClientLogo from "./ClientLogo";
-import PartnerLogo from "./ClientLogo";
 
 const clients = [
   {
@@ -40,17 +39,19 @@ const clients = [
 
 export default function OurClients() {
   return (
-    <section className="py-20 bg-white">
+    <section className="py-10 sm:py-12 md:py-20 bg-white px-4 sm:px-6">
       {/* Heading */}
-      <div className="max-w-4xl mx-auto text-center mb-12 px-6">
-        <h2 className="text-4xl font-bold text-black mb-4">Our Clients</h2>
-        <p className="text-gray-600 text-lg">
+      <div className="max-w-4xl mx-auto text-center mb-8 md:mb-12">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black mb-3 sm:mb-4">
+          Our Clients
+        </h2>
+        <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
           Trusted by leading companies for safe and effective pest control solutions.
         </p>
       </div>
 
       {/* Client Logos */}
-      <div className="max-w-6xl mx-auto grid gap-6 grid-cols-2 sm:grid-cols-3 md:grid-cols-5 items-center px-6">
+      <div className="max-w-6xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6 md:gap-8 items-center justify-items-center">
         {clients.map((client) => (
           <ClientLogo key={client.name} logo={client.logo} name={client.name} />
         ))}

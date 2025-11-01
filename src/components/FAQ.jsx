@@ -37,17 +37,17 @@ const faqs = [
 
 export default function FAQ() {
   return (
-    <section className="py-20 bg-gray-50">
-      <div className="max-w-4xl mx-auto text-center mb-12 px-6">
-        <h2 className="text-4xl font-bold text-black mb-4">
+    <section className="py-10 sm:py-12 md:py-20 bg-gray-50">
+      <div className="max-w-4xl mx-auto text-center mb-8 md:mb-12 px-4 sm:px-6">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black mb-3 sm:mb-4">
           Frequently Asked Questions
         </h2>
-        <p className="text-gray-600 text-lg">
+        <p className="text-gray-600 text-sm sm:text-base md:text-lg">
           Here are answers to the most common questions about our pest control services.
         </p>
       </div>
 
-      <div className="max-w-4xl mx-auto px-6 space-y-4">
+      <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 space-y-4">
         {faqs.map((faq, index) => (
           <FAQItem key={index} question={faq.question} answer={faq.answer} />
         ))}

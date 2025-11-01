@@ -1,6 +1,7 @@
+// app/layout.jsx
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import BookServiceModal from "@/components/BookServiceModal"; // <-- 1. Import the new component
+import Navbar from "../components/Navbar";
+import BookServiceModal from "../components/BookServiceModal";
 
 export const metadata = {
   title: "YourCompany",
@@ -10,11 +11,15 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="bg-white text-black">
+      <body className="bg-white text-black overflow-x-hidden">
         <Navbar />
-        <BookServiceModal /> {/* <-- 2. Add it here */}
-        <main>{children}</main>
-        {/* The Footer is added on individual pages in your setup, so we'll leave it out of here */}
+        <BookServiceModal />
+
+        {/* Add top padding only on md and above so desktop content sits below fixed navbar.
+            On mobile we DON'T add padding so hero remains tight under navbar (no unwanted gap). */}
+        <main className="min-h-screen md:pt-16">
+          {children}
+        </main>
       </body>
     </html>
   );

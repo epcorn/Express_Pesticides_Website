@@ -1,65 +1,74 @@
 "use client";
 
 import { FaFacebookF, FaInstagram, FaLinkedinIn, FaTwitter } from "react-icons/fa";
+import Link from "next/link"; // Import Next.js Link
 
 export default function Footer() {
   return (
-    <footer className="bg-black text-white py-16">
+    // 1. RESPONSIVE PADDING:
+    // py-12 on mobile, md:py-16 on desktop
+    <footer className="bg-black text-white py-12 md:py-16">
       <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-10">
         {/* Quick Links */}
         <div>
           <h3 className="text-xl font-bold mb-4 text-blue-500">Quick Links</h3>
           <ul className="space-y-2">
             <li>
-              <a href="/" className="hover:text-blue-400 transition-colors">
+              {/* 2. NEXT.JS LINK: Swapped <a> for <Link> */}
+              <Link href="/" className="hover:text-blue-400 transition-colors">
                 Home
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#services" className="hover:text-blue-400 transition-colors">
+              <Link href="/services" className="hover:text-blue-400 transition-colors">
                 Services
-              </a>
+              </Link>
+            </li>
+             <li>
+              <Link href="/products" className="hover:text-blue-400 transition-colors">
+                Products
+              </Link>
             </li>
             <li>
-              <a href="#blogs" className="hover:text-blue-400 transition-colors">
+              <Link href="/blogs" className="hover:text-blue-400 transition-colors">
                 Blogs
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#about" className="hover:text-blue-400 transition-colors">
+              <Link href="/aboutus" className="hover:text-blue-400 transition-colors">
                 About Us
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#contact" className="hover:text-blue-400 transition-colors">
+              <Link href="/contactus" className="hover:text-blue-400 transition-colors">
                 Contact
-              </a>
+              </Link>
             </li>
 
             {/* Policy Links */}
             <li className="pt-3 border-t border-gray-700">
-              <a
+              <Link
                 href="/privacy-policy"
                 className="hover:text-blue-400 transition-colors"
               >
                 Privacy Policy
-              </a>
+              </Link>
             </li>
             <li>
-              <a
+              <Link
                 href="/refund-policy"
                 className="hover:text-blue-400 transition-colors"
               >
                 Refund Policy
-              </a>
+              </Link>
             </li>
             <li>
-              <a
+              <Link
                 href="/cancellation-policy"
                 className="hover:text-blue-400 transition-colors"
               >
                 Cancellation Policy
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
