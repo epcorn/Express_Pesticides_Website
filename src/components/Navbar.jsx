@@ -63,7 +63,7 @@ export default function Navbar() {
         {/* --- Right Side: Logo (constant size) --- */}
         <Link href="/" className="flex items-center space-x-2">
           <Image
-            src="https://res.cloudinary.com/epcorn/image/upload/v1762002808/Express_Pesticides_Website/Express_Pesticide_logo_New_transparent_background_q4agzj.png"
+            src="https://res.cloudinary.com/epcorn/image/upload/v1762003702/Express_Pesticides_Website/HOMEPAGE_IMAGES/Express_pestcide_logo_transparent_ra6ld9.png"
             alt="Express Pesticides Logo"
             width={200}
             height={120}
