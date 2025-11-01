@@ -109,17 +109,14 @@ export default function AboutPage() {
             <div>
               <FaShieldAlt className="text-5xl mx-auto mb-4" />
               <h3 className="text-2xl font-bold mb-2">Quality Assured</h3>
-              <p>You mentioned you will provide icons. This is a placeholder.</p>
             </div>
             <div>
               <FaLeaf className="text-5xl mx-auto mb-4" />
               <h3 className="text-2xl font-bold mb-2">Eco-Friendly</h3>
-              <p>You can replace this section with your 3 icons.</p>
             </div>
             <div>
               <FaStar className="text-5xl mx-auto mb-4" />
               <h3 className="text-2xl font-bold mb-2">5-Star Service</h3>
-              <p>Just let me know what icons and text to add here.</p>
             </div>
           </div>
         </div>
