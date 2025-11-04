@@ -4,10 +4,10 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 
 const images = [
-   "https://res.cloudinary.com/epcorn/image/upload/v1762001230/Express_Pesticides_Website/Epcorn_54_design_new_banner_jararf.png",
-   "https://res.cloudinary.com/epcorn/image/upload/v1761992475/Express_Pesticides_Website/HOMEPAGE_IMAGES/New_banner_image_01_syeylm.png",
-   "https://res.cloudinary.com/epcorn/image/upload/v1762001234/Express_Pesticides_Website/New_front_banner_ro6dsi.png",
-   "https://res.cloudinary.com/epcorn/image/upload/v1762001235/Express_Pesticides_Website/New_latest_banner_owamjp.png",
+  "https://res.cloudinary.com/epcorn/image/upload/v1762241440/Express_Pesticides_Website/HOMEPAGE_IMAGES/HERO_SECTION_IMAGES/NEW_Banner_01_oecm5h.png",
+  "https://res.cloudinary.com/epcorn/image/upload/v1762241440/Express_Pesticides_Website/HOMEPAGE_IMAGES/HERO_SECTION_IMAGES/NEW_Banner_02_rr4hrr.png",
+  "https://res.cloudinary.com/epcorn/image/upload/v1762241442/Express_Pesticides_Website/HOMEPAGE_IMAGES/HERO_SECTION_IMAGES/NEW_Banner_03_kzivzx.png",
+  "https://res.cloudinary.com/epcorn/image/upload/v1762241443/Express_Pesticides_Website/HOMEPAGE_IMAGES/HERO_SECTION_IMAGES/NEW_Banner_04_nzdqzy.png",
 ];
 
 export default function HeroSection() {
@@ -24,10 +24,9 @@ export default function HeroSection() {
     <section
       className="
         relative w-full 
-        h-[65vh] sm:h-[75vh] md:h-[85vh] lg:h-screen 
+        aspect-video /* THIS IS THE FIX: Replaces all h-[...] classes */
         bg-gray-50 flex items-center justify-center
         overflow-hidden
-        mt-0 
       "
     >
       {images.map((img, index) => (
@@ -44,7 +43,7 @@ export default function HeroSection() {
               fill
               priority={index === 0}
               className="
-                object-contain sm:object-contain md:object-cover 
+                object-cover /* Keep object-cover. It will fill the 16:9 box perfectly. */
                 object-center
               "
               sizes="100vw"

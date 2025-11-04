@@ -76,9 +76,10 @@ export default function PriceCalculator() {
 <section className="py-10 sm:py-16 lg:py-20 bg-gray-50 px-4 sm:px-6 mt-0">
       {/* Heading */}
       <div className="max-w-3xl mx-auto text-center mb-10">
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black mb-3 sm:mb-4">
-          Instant Quote
-        </h2>
+<h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black mb-3 sm:mb-4 border-2 border-solid border-[#00bfff] shadow-[0_0_15px_#00bfff] p-2">
+  Instant Quote
+</h2>
+
         <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
           Get your instant price estimate.
         </p>

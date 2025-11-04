@@ -15,9 +15,8 @@ export default function RootLayout({ children }) {
         <Navbar />
         <BookServiceModal />
 
-        {/* Add top padding only on md and above so desktop content sits below fixed navbar.
-            On mobile we DON'T add padding so hero remains tight under navbar (no unwanted gap). */}
-        <main className="min-h-screen md:pt-16">
+        {/* This is still required to push content below the fixed h-16 navbar */}
+        <main className="min-h-screen pt-16">
           {children}
         </main>
       </body>
