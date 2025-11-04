@@ -46,7 +46,7 @@ export default function ProductsPage() {
       title: "Termite Control",
       products: [
         { 
-          name: "Tremida", 
+          name: "Termida", 
           logo: "https://res.cloudinary.com/epcorn/image/upload/v1761738316/Express_Pesticides_Website/Termida_Product_viy4i8.png"
         },
       ],
