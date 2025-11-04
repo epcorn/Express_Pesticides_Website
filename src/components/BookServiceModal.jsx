@@ -13,6 +13,7 @@ export default function BookServiceModal() {
   const [calculatedCost, setCalculatedCost] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState("");
+  const [sameAsShipping, setSameAsShipping] = useState(true);
 
   const [formData, setFormData] = useState({
     category: "",
@@ -22,16 +23,26 @@ export default function BookServiceModal() {
     name: "",
     email: "",
     phone: "",
-    address1: "",
-    address2: "",
-    address3: "",
-    location: "",
-    city: "",
-    area: "",
+    // Service Address (Ship To)
+    serviceAddress1: "",
+    serviceAddress2: "",
+    serviceAddress3: "",
+    serviceLocation: "",
+    serviceLandmark: "",
+    serviceCity: "",
+    // Billing Address (Bill To)
+    billingAddress1: "",
+    billingAddress2: "",
+    billingAddress3: "",
+    billingLocation: "",
+    billingLandmark: "",
+    billingCity: "",
+    billingPincode: "",
     dateOfService: "",
     firstServiceDate: "",
     preferredDay: "",
     preferredTime: "",
+    area: "",
   });
 
   const mockPincodes = ["400054", "110001", "560001"];
@@ -77,26 +88,47 @@ export default function BookServiceModal() {
       return;
     }
 
-    // Civil Work case (perSqFt)
     if (selectedCategory.perSqFt) {
       const sqft = parseFloat(area) || 0;
       setCalculatedCost(sqft * selectedCategory.rate);
       return;
     }
 
-    // Category with subtypes
     if (subcategory && selectedCategory[subcategory]) {
       const bhkPricing = selectedCategory[subcategory][bhkType];
       setCalculatedCost(bhkPricing ? bhkPricing[serviceType] || 0 : 0);
-    }
-    // Direct category (no subcategory)
-    else if (!subcategory && selectedCategory[bhkType]) {
+    } else if (!subcategory && selectedCategory[bhkType]) {
       const bhkPricing = selectedCategory[bhkType];
       setCalculatedCost(bhkPricing ? bhkPricing[serviceType] || 0 : 0);
     } else {
       setCalculatedCost(0);
     }
   }, [formData]);
+
+  // Sync billing address if sameAsShipping is checked
+  useEffect(() => {
+    if (sameAsShipping) {
+      setFormData((prev) => ({
+        ...prev,
+        billingAddress1: prev.serviceAddress1,
+        billingAddress2: prev.serviceAddress2,
+        billingAddress3: prev.serviceAddress3,
+        billingLocation: prev.serviceLocation,
+        billingLandmark: prev.serviceLandmark,
+        billingCity: prev.serviceCity,
+        billingPincode: pincode,
+      }));
+    }
+  }, [
+    sameAsShipping,
+    formData.serviceAddress1,
+    formData.serviceAddress2,
+    formData.serviceAddress3,
+    formData.serviceLocation,
+    formData.serviceLandmark,
+    formData.serviceCity,
+    pincode,
+  ]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -107,7 +139,7 @@ export default function BookServiceModal() {
       !formData.name ||
       !formData.email ||
       !formData.phone ||
-      !formData.address1
+      !formData.serviceAddress1
     ) {
       setSubmitMessage("Please fill all personal and address details.");
       setIsSubmitting(false);
@@ -185,17 +217,6 @@ export default function BookServiceModal() {
   };
 
   const categories = Object.keys(servicesData);
-  const subcategories =
-    formData.category &&
-    typeof servicesData[formData.category] === "object" &&
-    !servicesData[formData.category].perSqFt
-      ? Object.keys(servicesData[formData.category]).filter(
-          (key) =>
-            typeof servicesData[formData.category][key] === "object" &&
-            !servicesData[formData.category][key].perSqFt
-        )
-      : [];
-
   const bhkOptions =
     formData.category &&
     (formData.subcategory
@@ -217,6 +238,7 @@ export default function BookServiceModal() {
     <>
       <Script src="https://checkout.razorpay.com/v1/checkout.js" />
 
+      {/* BOOK BUTTON */}
       <button
         onClick={() => setIsOpen(true)}
         className="fixed top-1/2 -translate-y-1/2 right-0 z-40 bg-blue-600 text-white font-bold py-3 px-5 rounded-l-lg shadow-lg hover:bg-blue-700"
@@ -225,6 +247,7 @@ export default function BookServiceModal() {
         Book a Service
       </button>
 
+      {/* MODAL */}
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
           <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
@@ -262,6 +285,7 @@ export default function BookServiceModal() {
                 </>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
+                  {/* PINCODE CONFIRMATION */}
                   <div className="bg-green-50 border border-green-300 p-2 rounded">
                     <p>
                       Pincode: {pincode} (Serviceable){" "}
@@ -275,7 +299,7 @@ export default function BookServiceModal() {
                     </p>
                   </div>
 
-                  {/* Category */}
+                  {/* CATEGORY SELECTION */}
                   <div>
                     <label className="block font-medium mb-1">
                       Service Category
@@ -283,15 +307,7 @@ export default function BookServiceModal() {
                     <select
                       name="category"
                       value={formData.category}
-                      onChange={(e) => {
-                        handleChange(e);
-                        setFormData((p) => ({
-                          ...p,
-                          subcategory: "",
-                          bhkType: "",
-                          area: "",
-                        }));
-                      }}
+                      onChange={handleChange}
                       required
                       className="w-full px-3 py-2 border rounded"
                     >
@@ -304,29 +320,7 @@ export default function BookServiceModal() {
                     </select>
                   </div>
 
-                  {/* Subcategory */}
-                  {/* {subcategories.length > 0 && (
-                    <div>
-                      <label className="block font-medium mb-1">
-                        Subcategory
-                      </label>
-                      <select
-                        name="subcategory"
-                        value={formData.subcategory}
-                        onChange={handleChange}
-                        className="w-full px-3 py-2 border rounded"
-                      >
-                        <option value="">-- Select --</option>
-                        {subcategories.map((sub) => (
-                          <option key={sub} value={sub}>
-                            {sub}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  )} */}
-
-                  {/* BHK or Area */}
+                  {/* BHK or AREA */}
                   {formData.category === "Civil Work" ? (
                     <div>
                       <label className="block font-medium mb-1">
@@ -365,7 +359,7 @@ export default function BookServiceModal() {
                     )
                   )}
 
-                  {/* Service Type */}
+                  {/* SERVICE TYPE */}
                   <div>
                     <label className="block font-medium mb-1">
                       Service Type
@@ -379,93 +373,27 @@ export default function BookServiceModal() {
                       <option value="single">Single Contract Service</option>
                       <option value="annual">Annual Contract Service</option>
                     </select>
+                    {formData.serviceType === "annual" && (
+                      <p className="text-sm text-green-700 mt-1">
+                        ✅ Annual Contract includes{" "}
+                        <strong>3 free service visits</strong> throughout the
+                        contract period.
+                      </p>
+                    )}
                   </div>
 
-                  {/* Date and Time Section */}
-                  {formData.serviceType === "single" ? (
-                    <>
-                      <div>
-                        <label className="block font-medium mb-1">
-                          Date of Service
-                        </label>
-                        <input
-                          type="date"
-                          name="dateOfService"
-                          value={formData.dateOfService}
-                          onChange={handleChange}
-                          className="w-full px-3 py-2 border rounded"
-                          required
-                        />
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div>
-                        <label className="block font-medium mb-1">
-                          First Service Start Date
-                        </label>
-                        <input
-                          type="date"
-                          name="firstServiceDate"
-                          value={formData.firstServiceDate}
-                          onChange={handleChange}
-                          className="w-full px-3 py-2 border rounded"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <label className="block font-medium mb-1">
-                          Preferred Day
-                        </label>
-                        <select
-                          name="preferredDay"
-                          value={formData.preferredDay}
-                          onChange={handleChange}
-                          className="w-full px-3 py-2 border rounded"
-                          required
-                        >
-                          <option value="">-- Select Day --</option>
-                          {["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"].map(
-                            (d) => (
-                              <option key={d} value={d}>
-                                {d}
-                              </option>
-                            )
-                          )}
-                        </select>
-                      </div>
-                    </>
-                  )}
+                  {/* SERVICE ADDRESS */}
+                  <div className="border-t pt-4">
+                    <h3 className="font-semibold text-lg mb-2 text-blue-700">
+                      Ship To (Service Address)
+                    </h3>
 
-                  {/* Preferred Time (for both types) */}
-                  <div>
-                    <label className="block font-medium mb-1">
-                      Preferred Time
-                    </label>
-                    <select
-                      name="preferredTime"
-                      value={formData.preferredTime}
-                      onChange={handleChange}
-                      className="w-full px-3 py-2 border rounded"
-                      required
-                    >
-                      <option value="">-- Select Time Slot --</option>
-                      {preferredTimeSlots.map((time) => (
-                        <option key={time} value={time}>
-                          {time}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* Contact Details */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <input
                       name="name"
                       placeholder="Full Name"
                       value={formData.name}
                       onChange={handleChange}
-                      className="border px-3 py-2 rounded"
+                      className="border px-3 py-2 rounded w-full mb-2"
                       required
                     />
                     <input
@@ -473,67 +401,151 @@ export default function BookServiceModal() {
                       placeholder="Phone Number"
                       value={formData.phone}
                       onChange={handleChange}
-                      className="border px-3 py-2 rounded"
+                      className="border px-3 py-2 rounded w-full mb-2"
+                      required
+                    />
+                    <input
+                      name="email"
+                      placeholder="Email Address"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="border px-3 py-2 rounded w-full mb-2"
+                      required
+                    />
+                    <input
+                      name="serviceAddress1"
+                      placeholder="Address Line 1 (Building/Office Name)"
+                      value={formData.serviceAddress1}
+                      onChange={handleChange}
+                      className="border px-3 py-2 rounded w-full mb-2"
+                      required
+                    />
+                    <input
+                      name="serviceAddress2"
+                      placeholder="Address Line 2 (Flat/Office No)"
+                      value={formData.serviceAddress2}
+                      onChange={handleChange}
+                      className="border px-3 py-2 rounded w-full mb-2"
+                    />
+                    <input
+                      name="serviceAddress3"
+                      placeholder="Address Line 3 (Road/Lane Name)"
+                      value={formData.serviceAddress3}
+                      onChange={handleChange}
+                      className="border px-3 py-2 rounded w-full mb-2"
+                    />
+                    <input
+                      name="serviceLocation"
+                      placeholder="Location"
+                      value={formData.serviceLocation}
+                      onChange={handleChange}
+                      className="border px-3 py-2 rounded w-full mb-2"
+                      required
+                    />
+                    <input
+                      name="serviceLandmark"
+                      placeholder="Landmark"
+                      value={formData.serviceLandmark}
+                      onChange={handleChange}
+                      className="border px-3 py-2 rounded w-full mb-2"
+                    />
+                    <input
+                      name="serviceCity"
+                      placeholder="City"
+                      value={formData.serviceCity}
+                      onChange={handleChange}
+                      className="border px-3 py-2 rounded w-full mb-2"
                       required
                     />
                   </div>
-                  <input
-                    name="email"
-                    placeholder="Email Address"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="border px-3 py-2 rounded w-full"
-                    required
-                  />
 
-                  {/* Address Fields */}
-                  <input
-                    name="address1"
-                    placeholder="Address Line 1"
-                    value={formData.address1}
-                    onChange={handleChange}
-                    className="border px-3 py-2 rounded w-full"
-                    required
-                  />
-                  <input
-                    name="address2"
-                    placeholder="Address Line 2"
-                    value={formData.address2}
-                    onChange={handleChange}
-                    className="border px-3 py-2 rounded w-full"
-                  />
-                  <input
-                    name="address3"
-                    placeholder="Address Line 3"
-                    value={formData.address3}
-                    onChange={handleChange}
-                    className="border px-3 py-2 rounded w-full"
-                  />
-                  <input
-                    name="location"
-                    placeholder="Landmark / Area"
-                    value={formData.location}
-                    onChange={handleChange}
-                    className="border px-3 py-2 rounded w-full"
-                    required
-                  />
-                  <input
-                    name="city"
-                    placeholder="City"
-                    value={formData.city}
-                    onChange={handleChange}
-                    className="border px-3 py-2 rounded w-full"
-                    required
-                  />
+                  {/* BILLING ADDRESS */}
+                  <div className="border-t pt-4">
+                    <div className="flex justify-between items-center mb-2">
+                      <h3 className="font-semibold text-lg text-blue-700">
+                        Bill To (Billing Address)
+                      </h3>
+                      <label className="flex items-center space-x-2 text-sm">
+                        <input
+                          type="checkbox"
+                          checked={sameAsShipping}
+                          onChange={(e) =>
+                            setSameAsShipping(e.target.checked)
+                          }
+                        />
+                        <span>Same as Service Address</span>
+                      </label>
+                    </div>
 
-                  {/* Cost Display */}
+                    {!sameAsShipping && (
+                      <>
+                        <input
+                          name="billingAddress1"
+                          placeholder="Address Line 1 (Building/Office Name)"
+                          value={formData.billingAddress1}
+                          onChange={handleChange}
+                          className="border px-3 py-2 rounded w-full mb-2"
+                          required
+                        />
+                        <input
+                          name="billingAddress2"
+                          placeholder="Address Line 2 (Flat/Office No)"
+                          value={formData.billingAddress2}
+                          onChange={handleChange}
+                          className="border px-3 py-2 rounded w-full mb-2"
+                        />
+                        <input
+                          name="billingAddress3"
+                          placeholder="Address Line 3 (Road/Lane Name)"
+                          value={formData.billingAddress3}
+                          onChange={handleChange}
+                          className="border px-3 py-2 rounded w-full mb-2"
+                        />
+                        <input
+                          name="billingLocation"
+                          placeholder="Location"
+                          value={formData.billingLocation}
+                          onChange={handleChange}
+                          className="border px-3 py-2 rounded w-full mb-2"
+                          required
+                        />
+                        <input
+                          name="billingLandmark"
+                          placeholder="Landmark"
+                          value={formData.billingLandmark}
+                          onChange={handleChange}
+                          className="border px-3 py-2 rounded w-full mb-2"
+                        />
+                        <input
+                          name="billingCity"
+                          placeholder="City"
+                          value={formData.billingCity}
+                          onChange={handleChange}
+                          className="border px-3 py-2 rounded w-full mb-2"
+                          required
+                        />
+                        <input
+                          name="billingPincode"
+                          placeholder="Pincode"
+                          value={formData.billingPincode}
+                          onChange={handleChange}
+                          className="border px-3 py-2 rounded w-full mb-2"
+                          required
+                        />
+                      </>
+                    )}
+                  </div>
+
+                  {/* COST DISPLAY */}
                   <div className="pt-4 border-t">
                     <div className="flex justify-between mb-2">
                       <span className="font-medium text-gray-700">
                         Total Estimated Cost:
                       </span>
                       <span className="font-bold text-blue-600 text-lg">
-                        ₹ {(1.18*calculatedCost).toLocaleString("en-IN") + "(Includes 9% CGST &  9% SGST)"}
+                        ₹
+                        {(1.18 * calculatedCost).toLocaleString("en-IN") +
+                          " (Incl. 9% CGST & 9% SGST)"}
                       </span>
                     </div>
 
@@ -544,35 +556,37 @@ export default function BookServiceModal() {
                     >
                       {isSubmitting ? "Processing..." : "Proceed to Payment"}
                     </button>
-               <div className="mt-6 text-center text-sm text-gray-600">
-  <p>
-    By booking, you agree to our{" "}
-    <a
-      href="/cancellation-policy"
-      target="_blank"
-      className="text-blue-600 underline"
-    >
-      Cancellation Policy
-    </a>
-    ,{" "}
-    <a
-      href="/refund-policy"
-      target="_blank"
-      className="text-blue-600 underline"
-    >
-      Refund Policy
-    </a>{" "}
-    and{" "}
-    <a
-      href="/privacy-policy"
-      target="_blank"
-      className="text-blue-600 underline"
-    >
-      Data Policy
-    </a>
-    .
-  </p>
-</div>
+
+                    <div className="mt-6 text-center text-sm text-gray-600">
+                      <p>
+                        By booking, you agree to our{" "}
+                        <a
+                          href="/cancellation-policy"
+                          target="_blank"
+                          className="text-blue-600 underline"
+                        >
+                          Cancellation Policy
+                        </a>
+                        ,{" "}
+                        <a
+                          href="/refund-policy"
+                          target="_blank"
+                          className="text-blue-600 underline"
+                        >
+                          Refund Policy
+                        </a>{" "}
+                        and{" "}
+                        <a
+                          href="/privacy-policy"
+                          target="_blank"
+                          className="text-blue-600 underline"
+                        >
+                          Data Policy
+                        </a>
+                        .
+                      </p>
+                    </div>
+
                     {submitMessage && (
                       <p
                         className={`mt-3 text-center ${
