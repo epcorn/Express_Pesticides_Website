@@ -28,16 +28,13 @@ export default function BookServiceModal() {
     serviceAddress2: "",
     serviceAddress3: "",
     serviceLocation: "",
-    serviceLandmark: "",
     serviceCity: "",
     // Billing Address (Bill To)
     billingAddress1: "",
     billingAddress2: "",
     billingAddress3: "",
     billingLocation: "",
-    billingLandmark: "",
     billingCity: "",
-    billingPincode: "",
     dateOfService: "",
     firstServiceDate: "",
     preferredDay: "",
@@ -45,8 +42,24 @@ export default function BookServiceModal() {
     area: "",
   });
 
-  const mockPincodes = ["400054", "110001", "560001"];
-
+const mockPincodes = [
+  "400001","400002","400003","400004","400005","400006","400007","400008","400009","400010",
+  "400011","400012","400013","400014","400015","400016","400017","400018","400019","400020",
+  "400021","400022","400023","400024","400025","400026","400027","400028","400029","400030",
+  "400031","400032","400033","400034","400035","400036","400037","400038","400039","400040",
+  "400042","400043","400046","400047","400049","400050","400051","400052","400053","400054",
+  "400055","400056","400057","400058","400059","400060","400061","400062","400063","400064",
+  "400065","400066","400067","400068","400069","400070","400072","400074","400075","400076",
+  "400077","400078","400079","400080","400081","400082","400083","400084","400085","400086",
+  "400087","400088","400089","400090","400091","400092","400093","400094","400095","400096",
+  "400097","400098","400099","400101","400102","400103","400104",
+  // Virar, Vasai, Nalasopara (401xxx)
+  "401101","401102","401103","401104","401201","401202","401203","401204","401205","401206",
+  "401207","401208","401209","401301","401302","401303","401304","401305","401401","401402",
+  "401403","401404","401405","401501","401502","401503","401504","401601","401602","401603",
+  "401604","401605","401606","401607","401608","401609","401610","401701","401702","401703",
+  "401704","401705","401708"
+];
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -114,21 +127,10 @@ export default function BookServiceModal() {
         billingAddress2: prev.serviceAddress2,
         billingAddress3: prev.serviceAddress3,
         billingLocation: prev.serviceLocation,
-        billingLandmark: prev.serviceLandmark,
         billingCity: prev.serviceCity,
-        billingPincode: pincode,
       }));
     }
-  }, [
-    sameAsShipping,
-    formData.serviceAddress1,
-    formData.serviceAddress2,
-    formData.serviceAddress3,
-    formData.serviceLocation,
-    formData.serviceLandmark,
-    formData.serviceCity,
-    pincode,
-  ]);
+  }, [sameAsShipping, formData.serviceAddress1, formData.serviceAddress2, formData.serviceAddress3, formData.serviceLocation, formData.serviceCity]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -238,7 +240,6 @@ export default function BookServiceModal() {
     <>
       <Script src="https://checkout.razorpay.com/v1/checkout.js" />
 
-      {/* BOOK BUTTON */}
       <button
         onClick={() => setIsOpen(true)}
         className="fixed top-1/2 -translate-y-1/2 right-0 z-40 bg-blue-600 text-white font-bold py-3 px-5 rounded-l-lg shadow-lg hover:bg-blue-700"
@@ -247,7 +248,6 @@ export default function BookServiceModal() {
         Book a Service
       </button>
 
-      {/* MODAL */}
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
           <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
@@ -285,7 +285,6 @@ export default function BookServiceModal() {
                 </>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
-                  {/* PINCODE CONFIRMATION */}
                   <div className="bg-green-50 border border-green-300 p-2 rounded">
                     <p>
                       Pincode: {pincode} (Serviceable){" "}
@@ -373,13 +372,92 @@ export default function BookServiceModal() {
                       <option value="single">Single Contract Service</option>
                       <option value="annual">Annual Contract Service</option>
                     </select>
-                    {formData.serviceType === "annual" && (
-                      <p className="text-sm text-green-700 mt-1">
-                        ✅ Annual Contract includes{" "}
-                        <strong>3 free service visits</strong> throughout the
-                        contract period.
-                      </p>
-                    )}
+                      {formData.serviceType === "annual" && (
+    <p className="text-sm text-green-700 mt-1">
+      ✅ Annual Contract includes <strong>3 free service visits</strong> throughout the contract period.
+    </p>
+  )}
+                  </div>
+
+                  {/* DATE & TIME */}
+                  {formData.serviceType === "single" ? (
+                    <div>
+                      <label className="block font-medium mb-1">
+                        Date of Service
+                      </label>
+                      <input
+                        type="date"
+                        name="dateOfService"
+                        value={formData.dateOfService}
+                        onChange={handleChange}
+                        className="w-full px-3 py-2 border rounded"
+                        required
+                      />
+                    </div>
+                  ) : (
+                    <>
+                      <div>
+                        <label className="block font-medium mb-1">
+                          First Service Start Date
+                        </label>
+                        <input
+                          type="date"
+                          name="firstServiceDate"
+                          value={formData.firstServiceDate}
+                          onChange={handleChange}
+                          className="w-full px-3 py-2 border rounded"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label className="block font-medium mb-1">
+                          Preferred Day
+                        </label>
+                        <select
+                          name="preferredDay"
+                          value={formData.preferredDay}
+                          onChange={handleChange}
+                          className="w-full px-3 py-2 border rounded"
+                          required
+                        >
+                          <option value="">-- Select Day --</option>
+                          {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map(
+                            (d) => (
+                              <option key={d} value={d}>
+                                {d}
+                              </option>
+                            )
+                          )}
+                        </select>
+                      </div>
+                    </>
+                  )}
+
+                  {/* PREFERRED TIME */}
+                  <div>
+                    <label className="block font-medium mb-1">
+                      Preferred Time
+                    </label>
+                    <select
+                      name="preferredTime"
+                      value={formData.preferredTime}
+                      onChange={handleChange}
+                      className="w-full px-3 py-2 border rounded"
+                      required
+                    >
+                      <option value="">-- Select Time Slot --</option>
+                      {preferredTimeSlots.map((time) => (
+                        <option key={time} value={time}>
+                          {time}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* CONTACT DETAILS */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+             
                   </div>
 
                   {/* SERVICE ADDRESS */}
@@ -387,8 +465,7 @@ export default function BookServiceModal() {
                     <h3 className="font-semibold text-lg mb-2 text-blue-700">
                       Ship To (Service Address)
                     </h3>
-
-                    <input
+                                        <input
                       name="name"
                       placeholder="Full Name"
                       value={formData.name}
@@ -396,7 +473,7 @@ export default function BookServiceModal() {
                       className="border px-3 py-2 rounded w-full mb-2"
                       required
                     />
-                    <input
+                                        <input
                       name="phone"
                       placeholder="Phone Number"
                       value={formData.phone}
@@ -404,14 +481,14 @@ export default function BookServiceModal() {
                       className="border px-3 py-2 rounded w-full mb-2"
                       required
                     />
-                    <input
-                      name="email"
-                      placeholder="Email Address"
-                      value={formData.email}
-                      onChange={handleChange}
+                   <input
+                    name="email"
+                    placeholder="Email Address"
+                    value={formData.email}
+                    onChange={handleChange}
                       className="border px-3 py-2 rounded w-full mb-2"
-                      required
-                    />
+                    required
+                  />
                     <input
                       name="serviceAddress1"
                       placeholder="Address Line 1 (Building/Office Name)"
@@ -442,12 +519,13 @@ export default function BookServiceModal() {
                       className="border px-3 py-2 rounded w-full mb-2"
                       required
                     />
-                    <input
-                      name="serviceLandmark"
+                                        <input
+                      name="serviceLocation"
                       placeholder="Landmark"
-                      value={formData.serviceLandmark}
+                      value={formData.serviceLocation}
                       onChange={handleChange}
                       className="border px-3 py-2 rounded w-full mb-2"
+                      required
                     />
                     <input
                       name="serviceCity"
@@ -457,6 +535,7 @@ export default function BookServiceModal() {
                       className="border px-3 py-2 rounded w-full mb-2"
                       required
                     />
+
                   </div>
 
                   {/* BILLING ADDRESS */}
@@ -469,9 +548,7 @@ export default function BookServiceModal() {
                         <input
                           type="checkbox"
                           checked={sameAsShipping}
-                          onChange={(e) =>
-                            setSameAsShipping(e.target.checked)
-                          }
+                          onChange={(e) => setSameAsShipping(e.target.checked)}
                         />
                         <span>Same as Service Address</span>
                       </label>
@@ -479,7 +556,31 @@ export default function BookServiceModal() {
 
                     {!sameAsShipping && (
                       <>
-                        <input
+                     <input
+                      name="name"
+                      placeholder="Full Name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      className="border px-3 py-2 rounded w-full mb-2"
+                      required
+                    />
+                                        <input
+                      name="phone"
+                      placeholder="Phone Number"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      className="border px-3 py-2 rounded w-full mb-2"
+                      required
+                    />
+                                        <input
+                    name="email"
+                    placeholder="Email Address"
+                    value={formData.email}
+                    onChange={handleChange}
+                      className="border px-3 py-2 rounded w-full mb-2"
+                    required
+                  />
+                                          <input
                           name="billingAddress1"
                           placeholder="Address Line 1 (Building/Office Name)"
                           value={formData.billingAddress1}
@@ -510,11 +611,12 @@ export default function BookServiceModal() {
                           required
                         />
                         <input
-                          name="billingLandmark"
+                          name="billingLocation"
                           placeholder="Landmark"
-                          value={formData.billingLandmark}
+                          value={formData.billingLocation}
                           onChange={handleChange}
                           className="border px-3 py-2 rounded w-full mb-2"
+                          required
                         />
                         <input
                           name="billingCity"
@@ -524,14 +626,7 @@ export default function BookServiceModal() {
                           className="border px-3 py-2 rounded w-full mb-2"
                           required
                         />
-                        <input
-                          name="billingPincode"
-                          placeholder="Pincode"
-                          value={formData.billingPincode}
-                          onChange={handleChange}
-                          className="border px-3 py-2 rounded w-full mb-2"
-                          required
-                        />
+
                       </>
                     )}
                   </div>
@@ -543,7 +638,7 @@ export default function BookServiceModal() {
                         Total Estimated Cost:
                       </span>
                       <span className="font-bold text-blue-600 text-lg">
-                        ₹
+                        ₹{" "}
                         {(1.18 * calculatedCost).toLocaleString("en-IN") +
                           " (Incl. 9% CGST & 9% SGST)"}
                       </span>
