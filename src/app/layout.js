@@ -1,7 +1,7 @@
 import "./globals.css";
 import Navbar from "../components/Navbar";
 import BookServiceModal from "../components/BookServiceModal";
-import Chatbot from "../components/Chatbot"; // 1. Import the Chatbot
+import Chatbot from "@/components/ChatBot";
 
 export const metadata = {
   title: "Express Pesticides",
