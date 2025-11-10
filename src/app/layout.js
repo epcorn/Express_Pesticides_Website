@@ -6,7 +6,7 @@ import Chatbot from "@/components/Chatbot";
 
 export const metadata = {
   title: "Express Pesticides",
-  description: "Express Pesticides homepage",
+  description: "Express Pesticides homepage", //added
 };
 
 export default function RootLayout({ children }) {
