@@ -5,7 +5,7 @@ import BookServiceModal from "../components/BookServiceModal";
 import Chatbot from "@/components/Chatbot";
 
 export const metadata = {
-  title: "Express Pesticides",
+  title: "Express Pesticides", //changed
   description: "Express Pesticides homepage", //added
 };
 
