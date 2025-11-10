@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { MessageSquare, X, Bot, Send } from "lucide-react";
-import Link from "next/link";
+import Link from "next/link"; // ...
 
 /* ========== SERVICE SUMMARIES + FAQ MESSAGES (sourced from ServiceDetailPage.jsx) ========== */
 const servicesData = {
