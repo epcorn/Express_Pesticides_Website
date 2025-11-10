@@ -278,7 +278,7 @@ Cancellations after this period are **not eligible for a refund**.
 
   contact_email: {
     message:
-      "Drop us a mail at **info@expresspesticides.com**.\nWe reply within **24 hours** in working days.",
+      "Drop us a mail at **info@expresspesticides.com**.\nWe reply within **24 hours** on working days.",
     options: [{ text: "Back to menu", nextStep: "start" }],
   },
 
