@@ -1,10 +1,10 @@
-// app/layout.jsx
 import "./globals.css";
 import Navbar from "../components/Navbar";
 import BookServiceModal from "../components/BookServiceModal";
+import Chatbot from "../components/Chatbot"; // 1. Import the Chatbot
 
 export const metadata = {
-  title: "YourCompany",
+  title: "Express Pesticides",
   description: "Your company's homepage",
 };
 
@@ -14,9 +14,12 @@ export default function RootLayout({ children }) {
       <body className="bg-white text-black overflow-x-hidden">
         <Navbar />
         <BookServiceModal />
+        <Chatbot /> {/* 2. Add the Chatbot component here */}
 
-        {/* This is still required to push content below the fixed h-16 navbar */}
-        <main className="min-h-screen pt-16">
+        {/* 3. Removed 'pt-16' from main */}
+        {/* This allows your hero section to go all the way to the top. */}
+        {/* You will add 'pt-32' to your other pages (like about, contact) */}
+        <main className="min-h-screen">
           {children}
         </main>
       </body>

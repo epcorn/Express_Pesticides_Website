@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 
 export async function POST(req) {
-  try {
+  try {  
     const { firstName , lastName, email, subject,company, issue } = await req.json();
 
     // ✅ Setup transporter using .env variables
