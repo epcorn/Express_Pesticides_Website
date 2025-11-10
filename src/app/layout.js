@@ -2,7 +2,7 @@
 import "./globals.css";
 import Navbar from "../components/Navbar";
 import BookServiceModal from "../components/BookServiceModal";
-import Chatbot from "../components/Chatbot";// was giving error
+//import Chatbot from "../components/Chatbot";// was giving error
 
 export const metadata = {
   title: "Express Pesticides", //changed
@@ -15,7 +15,7 @@ export default function RootLayout({ children }) {
       <body className="bg-white text-black overflow-x-hidden">
         <Navbar />
         <BookServiceModal />
-        <Chatbot/>
+        
 
         {/* This is still required to push content below the fixed h-16 navbar */}
         <main className="min-h-screen pt-16">
