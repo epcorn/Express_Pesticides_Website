@@ -2,7 +2,7 @@
 import "./globals.css";
 import Navbar from "../components/Navbar";
 import BookServiceModal from "../components/BookServiceModal";
-import Chatbot from "@/components/Chatbot";
+import Chatbot from "@/components/Chatbot"; // was giving error
 
 export const metadata = {
   title: "Express Pesticides", //changed
