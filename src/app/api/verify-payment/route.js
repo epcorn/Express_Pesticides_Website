@@ -21,18 +21,66 @@ const razorpay = new Razorpay({
 });
 
 // ✅ Function to build the HTML invoice
+// --- THIS FUNCTION IS NOW UPDATED ---
 function buildInvoiceHtml(formData, paymentDetails, status) {
   const isSuccess = status === "Success";
-  const fullAddress = [
-    formData.address1,
-    formData.address2,
-    formData.address3,
-    formData.location,
-    formData.city,
+  
+  // --- FIX: Using the new 'serviceAddress' keys ---
+  const serviceAddress = [
+    formData.serviceAddress1,
+    formData.serviceAddress2,
+    formData.serviceAddress3,
+    formData.serviceLocation,
+    formData.serviceCity,
+  ]
+    .filter(Boolean) // Removes any empty/null/undefined fields
+    .join(", ");
+    
+  // --- NEW: Read billing address ---
+  const billingAddress = [
+    formData.billingAddress1,
+    formData.billingAddress2,
+    formData.billingAddress3,
+    formData.billingLocation,
+    formData.billingCity,
   ]
     .filter(Boolean)
     .join(", ");
+    
+  // Check if billing is same as service
+  const isBillingSame = (billingAddress === serviceAddress);
+
   const amountPaid = (paymentDetails.amount / 100).toLocaleString("en-IN");
+
+  // --- NEW: Add scheduling details ---
+  let schedulingHtml = '';
+  if (formData.serviceType === "single") {
+    schedulingHtml = `
+      <tr>
+        <td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>Date of Service:</strong></td>
+        <td style="padding: 10px 0; border-bottom: 1px solid #eee; text-align: right;">${formData.dateOfService}</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>Preferred Time:</strong></td>
+        <td style="padding: 10px 0; border-bottom: 1px solid #eee; text-align: right;">${formData.preferredTime}</td>
+      </tr>
+    `;
+  } else { // 'annual'
+    schedulingHtml = `
+      <tr>
+        <td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>First Service Date:</strong></td>
+        <td style="padding: 10px 0; border-bottom: 1px solid #eee; text-align: right;">${formData.firstServiceDate}</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>Preferred Day:</strong></td>
+        <td style="padding: 10px 0; border-bottom: 1px solid #eee; text-align: right;">${formData.preferredDay}</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>Preferred Time:</strong></td>
+        <td style="padding: 10px 0; border-bottom: 1px solid #eee; text-align: right;">${formData.preferredTime}</td>
+      </tr>
+    `;
+  }
 
   return `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #ddd; padding: 20px; border-radius: 8px;">
@@ -49,27 +97,34 @@ function buildInvoiceHtml(formData, paymentDetails, status) {
       </p>
 
       <h2 style="border-bottom: 2px solid #eee; padding-bottom: 5px; color: #333;">Order Summary</h2>
-      <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
-        <tr><td><strong>Service:</strong></td><td style="text-align: right;">${formData.service}</td></tr>
-        <tr><td><strong>Service Type:</strong></td><td style="text-align: right;">${formData.serviceType}</td></tr>
-        ${
-          formData.serviceType === "contract-based"
-            ? `
-              <tr><td><strong>Duration:</strong></td><td style="text-align: right;">${formData.duration}</td></tr>
-              <tr><td><strong>Frequency:</strong></td><td style="text-align: right;">${formData.frequency}</td></tr>
-            `
-            : ""
-        }
-        <tr><td><strong>Address:</strong></td><td style="text-align: right;">${fullAddress}</td></tr>
-        <tr><td><strong>Total Paid:</strong></td><td style="text-align: right; font-weight: bold; color: #3B82F6;">₹ ${amountPaid}</td></tr>
+      <table style="width: 100%; border-collapse: collapse; font-size: 14px; text-align: left;">
+        <tr><td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>Service:</strong></td><td style="text-align: right; padding: 10px 0; border-bottom: 1px solid #eee;">${formData.category}</td></tr>
+        ${formData.bhkType ? `<tr><td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>Property Type:</strong></td><td style="text-align: right; padding: 10px 0; border-bottom: 1px solid #eee;">${formData.bhkType}</td></tr>` : ''}
+        ${formData.area ? `<tr><td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>Area:</strong></td><td style="text-align: right; padding: 10px 0; border-bottom: 1px solid #eee;">${formData.area} sq.ft.</td></tr>` : ''}
+        <tr><td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>Service Type:</strong></td><td style="text-align: right; padding: 10px 0; border-bottom: 1px solid #eee;">${formData.serviceType}</td></tr>
+        
+        <!-- NEW SCHEDULING INFO -->
+        ${schedulingHtml}
+        
+        <tr><td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>Service Address:</strong></td><td style="text-align: right; padding: 10px 0; border-bottom: 1px solid #eee;">${serviceAddress}</td></tr>
+        
+        <!-- NEW BILLING ADDRESS INFO -->
+        <tr>
+          <td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>Billing Address:</strong></td>
+          <td style="text-align: right; padding: 10px 0; border-bottom: 1px solid #eee;">
+            ${isBillingSame ? 'Same as Service Address' : billingAddress}
+          </td>
+        </tr>
+        
+        <tr><td style="padding: 10px 0;"><strong>Total Paid:</strong></td><td style="text-align: right; padding: 10px 0; font-weight: bold; font-size: 18px; color: #3B82F6;">₹ ${amountPaid}</td></tr>
       </table>
 
-      <h2 style="border-bottom: 2px solid #eee; padding-bottom: 5px; color: #333;">Payment Details</h2>
-      <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
-        <tr><td><strong>Order ID:</strong></td><td style="text-align: right;">${paymentDetails.order_id}</td></tr>
-        <tr><td><strong>Payment ID:</strong></td><td style="text-align: right;">${paymentDetails.id || "N/A"}</td></tr>
-        <tr><td><strong>Payment Method:</strong></td><td style="text-align: right;">${paymentDetails.method || "N/A"}</td></tr>
-        <tr><td><strong>Status:</strong></td><td style="text-align: right; font-weight: bold; color: ${isSuccess ? "#22c55e" : "#ef4444"};">${paymentDetails.status || status}</td></tr>
+      <h2 style="border-bottom: 2px solid #eee; padding-bottom: 5px; color: #333; margin-top: 20px;">Payment Details</h2>
+      <table style="width: 100%; border-collapse: collapse; font-size: 14px; text-align: left;">
+        <tr><td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>Order ID:</strong></td><td style="text-align: right; padding: 10px 0; border-bottom: 1px solid #eee;">${paymentDetails.order_id}</td></tr>
+        <tr><td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>Payment ID:</strong></td><td style="text-align: right; padding: 10px 0; border-bottom: 1px solid #eee;">${paymentDetails.id || "N/A"}</td></tr>
+        <tr><td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>Payment Method:</strong></td><td style="text-align: right; padding: 10px 0; border-bottom: 1px solid #eee; text-transform: capitalize;">${paymentDetails.method || "N/A"}</td></tr>
+        <tr><td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>Status:</strong></td><td style="text-align: right; padding: 10px 0; border-bottom: 1px solid #eee; font-weight: bold; color: ${isSuccess ? "#22c55e" : "#ef4444"};">${paymentDetails.status || status}</td></tr>
       </table>
 
       <p style="margin-top: 30px; font-size: 12px; color: #777; text-align: center;">
@@ -78,6 +133,7 @@ function buildInvoiceHtml(formData, paymentDetails, status) {
     </div>
   `;
 }
+
 
 // ✅ Helper: Fetch Razorpay payment with timeout
 async function fetchPaymentWithTimeout(paymentId, timeoutMs = 7000) {
@@ -93,7 +149,8 @@ async function fetchPaymentWithTimeout(paymentId, timeoutMs = 7000) {
 export async function POST(req) {
   console.log("🟢 Payment verification initiated...");
 
-  const { razorpay_order_id, razorpay_payment_id, razorpay_signature, formData } = await req.json();
+  // --- FIX: Now correctly destructuring 'cost' as well ---
+  const { razorpay_order_id, razorpay_payment_id, razorpay_signature, formData, cost } = await req.json();
   const key_secret = process.env.RAZORPAY_KEY_SECRET;
 
   if (!key_secret) {
@@ -124,12 +181,21 @@ export async function POST(req) {
       try {
         paymentDetails = await fetchPaymentWithTimeout(razorpay_payment_id);
         console.log("💰 Payment fetched:", paymentDetails.status);
+        
+        // --- NEW: Server-side amount check ---
+        if (paymentDetails.amount !== (cost * 100)) {
+           console.error("❌ Amount Mismatch! Frontend said:", cost * 100, "Razorpay said:", paymentDetails.amount);
+           // Handle this serious error, maybe flag for review
+           paymentStatus = "Amount Mismatch";
+           emailSubject = `Payment Alert: Amount Mismatch (Order: ${razorpay_order_id})`;
+        }
+
       } catch (fetchError) {
         console.error("⚠️ Razorpay Fetch Error:", fetchError);
         paymentDetails = {
           id: razorpay_payment_id,
           order_id: razorpay_order_id,
-          amount: 0,
+          amount: cost * 100, // Fallback to frontend cost
           method: "Unknown",
           status: "Fetch Failed",
         };
@@ -141,7 +207,7 @@ export async function POST(req) {
       paymentDetails = {
         id: razorpay_payment_id,
         order_id: razorpay_order_id,
-        amount: 0,
+        amount: cost * 100, // Fallback to frontend cost
         method: "N/A",
         status: "Failed",
       };
@@ -179,6 +245,10 @@ export async function POST(req) {
     }
   } catch (error) {
     console.error("🔥 Main API Error:", error);
+    // Add a check for the formData to be sure
+    if (!formData) {
+      console.error("FATAL: formData was undefined in the request.");
+    }
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

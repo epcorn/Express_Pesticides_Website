@@ -27,7 +27,7 @@ export default function BlogsPage() {
             Coming Soon!
           </h2>
           <p className="text-xl text-gray-600 max-w-lg mx-auto">
-            We're working hard to bring you helpful articles and pest control insights. Please check back later!
+            We are working hard to bring you helpful articles and pest control insights. Please check back later!
           </p>
         </div>
       </section>

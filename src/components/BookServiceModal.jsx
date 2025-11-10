@@ -158,7 +158,7 @@ const mockPincodes = [
       const orderRes = await fetch("/api/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: calculatedCost }),
+        body: JSON.stringify({ amount: 1.18*calculatedCost }),
       });
 
       if (!orderRes.ok) throw new Error("Failed to create order");
@@ -180,7 +180,7 @@ const mockPincodes = [
               body: JSON.stringify({
                 ...response,
                 formData,
-                cost: calculatedCost,
+                cost: 1.18*calculatedCost,
               }),
             });
 
