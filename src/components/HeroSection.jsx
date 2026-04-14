@@ -42,10 +42,7 @@ export default function HeroSection() {
               alt={`Slide ${index + 1}`}
               fill
               priority={index === 0}
-              className="
-                object-cover /* Keep object-cover. It will fill the 16:9 box perfectly. */
-                object-center
-              "
+              className="object-cover object-top"
               sizes="100vw"
             />
           </div>
