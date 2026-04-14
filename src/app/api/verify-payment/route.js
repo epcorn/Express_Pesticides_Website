@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic';
+export const dynamic = 'force-dynamic'; //force dynamic without razorpay payment 
 
 import { NextResponse } from "next/server";
 import crypto from "crypto";
@@ -17,10 +17,10 @@ const transporter = nodemailer.createTransport({
 });
 
 // ✅ Razorpay setup
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_KEY_SECRET,
-});
+// const razorpay = new Razorpay({
+//   key_id: process.env.RAZORPAY_KEY_ID,
+//   key_secret: process.env.RAZORPAY_KEY_SECRET,
+// });
 
 // ✅ Function to build the HTML invoice
 // --- THIS FUNCTION IS NOW UPDATED ---
