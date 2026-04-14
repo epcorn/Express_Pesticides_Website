@@ -14,7 +14,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className="bg-white text-black overflow-x-hidden">
         <Navbar />
-        <BookServiceModal />
+        {/* <BookServiceModal /> */}
         <Chatbot/>
 
         {/* This is still required to push content below the fixed h-16 navbar */}

@@ -1,6 +1,6 @@
 "use client";
 
-import { FaFacebookF, FaInstagram, FaLinkedinIn, FaTwitter } from "react-icons/fa";
+import { FaFacebookF, FaInstagram, FaLinkedinIn, FaTwitter, FaYoutube } from "react-icons/fa";
 import Link from "next/link"; // Import Next.js Link
 
 export default function Footer() {
@@ -93,17 +93,18 @@ export default function Footer() {
           </p>
 
           <div className="flex gap-4 mt-2 text-lg">
-            <a href="#" className="hover:text-blue-400 transition-colors">
+            <a href="https://www.facebook.com/p/Express-Pesticides-Pvt-Ltd-100071776751735/" rel="noopener noreferrer" target="_blank" className="hover:text-blue-400 transition-colors">
               <FaFacebookF />
             </a>
-            <a href="#" className="hover:text-blue-400 transition-colors">
+            <a href="https://www.instagram.com/expresspesticidespvtltd/" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors">
               <FaInstagram />
             </a>
-            <a href="#" className="hover:text-blue-400 transition-colors">
+            <a href="https://in.linkedin.com/company/express-pesticides-private-limited" rel="noopener noreferrer" target="_blank" className="hover:text-blue-400 transition-colors">
               <FaLinkedinIn />
             </a>
-            <a href="#" className="hover:text-blue-400 transition-colors">
-              <FaTwitter />
+            <a href="https://www.youtube.com/@epcorn1972" target="_blank" 
+  rel="noopener noreferrer"  className="hover:text-blue-400 transition-colors">
+              <FaYoutube />
             </a>
           </div>
         </div>

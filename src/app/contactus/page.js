@@ -86,11 +86,10 @@ export default function ContactUsPage() {
           <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900">
             Contact <span className="text-blue-600">Us</span>
           </h1>
-          <p className="text-lg text-gray-600 mt-4 max-w-2xl mx-auto">
-            We're here to help! Reach out with any questions or service requests.
+          <p className="text-lg text-gray-600 mt-4 max-w-2xl mx-auto"> We&apos;re here to help! Reach out with any questions or service requests.
           </p>
           <p className="mt-4 text-xl font-semibold text-blue-700 italic">
-            "{tagline}"
+            {`"${tagline}"`}
           </p>
         </div>
       </section>

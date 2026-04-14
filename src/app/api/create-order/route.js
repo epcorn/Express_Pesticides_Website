@@ -7,7 +7,6 @@ export async function POST(req) {
   const { amount } = await req.json();
   
   // 2. Initialize Razorpay using your *secret* keys from .env.local
-  // This is safe because this code only runs on the server.
   const razorpay = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
     key_secret: process.env.RAZORPAY_KEY_SECRET,
@@ -16,7 +15,6 @@ export async function POST(req) {
   // 3. Set up the order options
   const options = {
     amount: amount * 100, // Razorpay needs the amount in the smallest unit (paise)
-                         // So, ₹1000 becomes 100000 paise
     currency: "INR",
     receipt: `receipt_order_${new Date().getTime()}`, // A unique ID for your records
   };
