@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Footer from "@/components/Footer";
-import { FaShieldAlt, FaLeaf, FaStar, FaEye, FaBullseye, FaFlag } from "react-icons/fa"; // Placeholder icons
+import { FaShieldAlt, FaLeaf, FaStar, FaEye, FaBullseye, FaFlag } from "react-icons/fa";
 
 
 export default function AboutPage() {
@@ -100,11 +100,10 @@ export default function AboutPage() {
             <p className="text-lg text-gray-700 leading-relaxed">
               Our team of constantly trained professionals, certified applicators,
               and quality assurance specialists work hand-in-hand to uphold
-              Express Pesticide's pledge: Zero compromise on safety, service, and
-              satisfaction.
+              Express {`Pesticide's`} pledge: Zero compromise on safety, service, and satisfaction.
             </p>
           </div>
-          <div className="w-full h-96 relative rounded-lg overflow-hidden shadow-lg border">
+          <div className="w-full h-96 relative rounded-lg overflow-hidden shadow-lg shadow-zinc-600">
             <Image
               src="https://res.cloudinary.com/epcorn/image/upload/v1761741739/Express_Pesticides_Website/ABOUT_US_IMAGES/about_us_picture_erxqjz.jpg"
               alt="Express Pesticides Team"
@@ -118,7 +117,7 @@ export default function AboutPage() {
       {/* Section 2: Sustainability */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          <div className="w-full h-96 relative rounded-lg overflow-hidden shadow-lg border md:order-1">
+          <div className="w-full h-96 relative rounded-lg overflow-hidden shadow-lg shadow-zinc-500 md:order-1">
             <Image
               src="https://res.cloudinary.com/epcorn/image/upload/v1761741752/Express_Pesticides_Website/ABOUT_US_IMAGES/Sustaintability_at_express_mtmiuv.webp"
               alt="Eco-friendly pest control"
@@ -174,17 +173,18 @@ export default function AboutPage() {
             Our Certifications & Accreditations
           </h2>
 
-          <div className="overflow-x-auto scrollbar-hide">
-            <div className="flex gap-8 min-w-max px-2">
+          <div className="overflow-x-auto scrollbar-hidden ">
+            <div className="flex gap-8 min-w-max p-2">
               {certificates.map((cert) => (
                 <div
                   key={cert.name}
-                  className="relative w-[300px] h-[380px] flex-shrink-0 rounded-lg overflow-hidden shadow-md border bg-white hover:shadow-xl transition-shadow duration-300"
+                  className="relative w-[300px] h-[380px] flex-shrink-0 rounded-lg overflow-hidden shadow-md bg-white hover:shadow-xl transition-shadow duration-300"
                 >
                   <Image
                     src={cert.src}
                     alt={cert.name}
                     fill
+                    sizes="300px"
                     className="object-contain p-4"
                   />
                   <div className="absolute bottom-3 left-3 right-3 bg-white/90 p-2 text-center rounded">
@@ -228,21 +228,36 @@ export default function AboutPage() {
       </section>
 
       {/* Section 7: Process Steps */}
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <FaFlag className="text-5xl text-blue-600 mx-auto mb-4" />
-          <h2 className="text-3xl font-bold mb-10 text-gray-900">
-            Our Process — The Express Approach
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {processSteps.map((step) => (
+      <section className="py-20 bg-slate-50">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <span className="text-blue-600 font-bold tracking-widest uppercase text-sm">How we work</span>
+            <h2 className="text-4xl font-bold mt-2 text-slate-900">
+              The Express Approach
+            </h2>
+            <div className="h-1.5 w-20 bg-blue-600 mx-auto mt-4 rounded-full"></div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 relative">
+            {/* Optional: The connecting line for Desktop */}
+            <div className="hidden md:block absolute top-1/4 left-0 w-full h-0.5 bg-blue-100 -z-0"></div>
+
+            {processSteps.map((step, index) => (
               <div
                 key={step.step}
-                className="bg-white border rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow"
+                className="relative group bg-white rounded-2xl shadow-sm border border-slate-100 p-10 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 z-10"
               >
-                <h3 className="text-5xl font-bold text-blue-600 mb-4">{step.step}</h3>
-                <h4 className="text-xl font-semibold mb-3 text-gray-900">{step.title}</h4>
-                <p className="text-gray-700 text-base leading-relaxed">{step.desc}</p>
+                {/* Step Number Circle */}
+                <div className="absolute -top-6 left-10 w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-xl shadow-lg ring-4 ring-white">
+                  {step.step}
+                </div>
+
+                <h4 className="text-2xl font-bold mb-4 text-slate-800 group-hover:text-blue-600 transition-colors">
+                  {step.title}
+                </h4>
+                <p className="text-slate-600 text-lg leading-relaxed">
+                  {step.desc}
+                </p>
               </div>
             ))}
           </div>
@@ -268,19 +283,41 @@ export default function AboutPage() {
       </section>
 
       {/* Section 9: Core Values */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <h2 className="text-3xl font-bold mb-10 text-gray-900">Our Core Values</h2>
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b border-gray-100 pb-8">
+            <div className="max-w-2xl">
+              <h2 className="text-blue-600 font-bold tracking-widest uppercase text-sm mb-3">Foundations</h2>
+              <h3 className="text-4xl font-extrabold text-slate-900">Our Core Values</h3>
+            </div>
+            <p className="text-slate-500 mt-4 md:mt-0 max-w-sm">
+              The principles that guide every technician, every treatment, and every customer interaction.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
             {coreValues.map((value) => (
               <div
                 key={value.name}
-                className="bg-white border rounded-lg p-6 shadow hover:shadow-lg transition"
+                className="group relative bg-slate-50 rounded-2xl p-8 hover:bg-blue-600 transition-all duration-500 ease-in-out shadow-sm hover:shadow-2xl hover:-translate-y-2"
               >
-                <h3 className="text-xl font-semibold text-blue-600 mb-2">
+                {/* Subtle Icon/Number background */}
+                <div className="mb-6 inline-flex items-center justify-center w-14 h-14 rounded-xl bg-white text-blue-600 shadow-sm group-hover:bg-blue-500 group-hover:text-white transition-colors duration-300">
+                  {/* You can replace this with an actual Lucide or FontAwesome icon */}
+                  <span className="text-lg font-black uppercase tracking-tighter">
+                    {value.name.substring(0, 2)}
+                  </span>
+                </div>
+
+                <h4 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-white transition-colors duration-300">
                   {value.name}
-                </h3>
-                <p className="text-gray-700">{value.desc}</p>
+                </h4>
+                <p className="text-slate-600 text-sm leading-relaxed group-hover:text-blue-50 transition-colors duration-300">
+                  {value.desc}
+                </p>
+
+                {/* Decorative Corner Accents */}
+                <div className="absolute top-0 right-0 w-16 h-16 bg-blue-100 rounded-tr-2xl rounded-bl-full opacity-20 group-hover:opacity-10 transition-opacity"></div>
               </div>
             ))}
           </div>

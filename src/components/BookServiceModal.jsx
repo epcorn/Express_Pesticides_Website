@@ -42,24 +42,24 @@ export default function BookServiceModal() {
     area: "",
   });
 
-const mockPincodes = [
-  "400001","400002","400003","400004","400005","400006","400007","400008","400009","400010",
-  "400011","400012","400013","400014","400015","400016","400017","400018","400019","400020",
-  "400021","400022","400023","400024","400025","400026","400027","400028","400029","400030",
-  "400031","400032","400033","400034","400035","400036","400037","400038","400039","400040",
-  "400042","400043","400046","400047","400049","400050","400051","400052","400053","400054",
-  "400055","400056","400057","400058","400059","400060","400061","400062","400063","400064",
-  "400065","400066","400067","400068","400069","400070","400072","400074","400075","400076",
-  "400077","400078","400079","400080","400081","400082","400083","400084","400085","400086",
-  "400087","400088","400089","400090","400091","400092","400093","400094","400095","400096",
-  "400097","400098","400099","400101","400102","400103","400104",
-  // Virar, Vasai, Nalasopara (401xxx)
-  "401101","401102","401103","401104","401201","401202","401203","401204","401205","401206",
-  "401207","401208","401209","401301","401302","401303","401304","401305","401401","401402",
-  "401403","401404","401405","401501","401502","401503","401504","401601","401602","401603",
-  "401604","401605","401606","401607","401608","401609","401610","401701","401702","401703",
-  "401704","401705","401708"
-];
+  const mockPincodes = [
+    "400001", "400002", "400003", "400004", "400005", "400006", "400007", "400008", "400009", "400010",
+    "400011", "400012", "400013", "400014", "400015", "400016", "400017", "400018", "400019", "400020",
+    "400021", "400022", "400023", "400024", "400025", "400026", "400027", "400028", "400029", "400030",
+    "400031", "400032", "400033", "400034", "400035", "400036", "400037", "400038", "400039", "400040",
+    "400042", "400043", "400046", "400047", "400049", "400050", "400051", "400052", "400053", "400054",
+    "400055", "400056", "400057", "400058", "400059", "400060", "400061", "400062", "400063", "400064",
+    "400065", "400066", "400067", "400068", "400069", "400070", "400072", "400074", "400075", "400076",
+    "400077", "400078", "400079", "400080", "400081", "400082", "400083", "400084", "400085", "400086",
+    "400087", "400088", "400089", "400090", "400091", "400092", "400093", "400094", "400095", "400096",
+    "400097", "400098", "400099", "400101", "400102", "400103", "400104",
+    // Virar, Vasai, Nalasopara (401xxx)
+    "401101", "401102", "401103", "401104", "401201", "401202", "401203", "401204", "401205", "401206",
+    "401207", "401208", "401209", "401301", "401302", "401303", "401304", "401305", "401401", "401402",
+    "401403", "401404", "401405", "401501", "401502", "401503", "401504", "401601", "401602", "401603",
+    "401604", "401605", "401606", "401607", "401608", "401609", "401610", "401701", "401702", "401703",
+    "401704", "401705", "401708"
+  ];
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -158,14 +158,16 @@ const mockPincodes = [
       const orderRes = await fetch("/api/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: 1.18*calculatedCost }),
+        body: JSON.stringify({ amount: 1.18 * calculatedCost }),
       });
 
       if (!orderRes.ok) throw new Error("Failed to create order");
       const orderData = await orderRes.json();
 
+
+      //payment modal
       const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID_TEST,
         amount: orderData.amount,
         currency: "INR",
         name: "Express Pesticides",
@@ -180,7 +182,7 @@ const mockPincodes = [
               body: JSON.stringify({
                 ...response,
                 formData,
-                cost: 1.18*calculatedCost,
+                cost: 1.18 * calculatedCost,
               }),
             });
 
@@ -197,6 +199,12 @@ const mockPincodes = [
             setSubmitMessage(`Payment verification failed: ${err.message}`);
           }
           setIsSubmitting(false);
+        },
+        modal:{
+          ondismiss: function(){
+            setSubmitMessage("Error: Payment was cancelled")
+            setIsSubmitting(false);
+          }
         },
         prefill: {
           name: formData.name,
@@ -224,8 +232,8 @@ const mockPincodes = [
     (formData.subcategory
       ? Object.keys(servicesData[formData.category][formData.subcategory] || {})
       : Object.keys(servicesData[formData.category] || {}).filter(
-          (key) => key.includes("BHK") || key.includes("RK")
-        ));
+        (key) => key.includes("BHK") || key.includes("RK")
+      ));
 
   const preferredTimeSlots = [
     "9–11 AM",
@@ -235,6 +243,13 @@ const mockPincodes = [
     "3–5 PM",
     "5–7 PM",
   ];
+
+  useEffect(()=>{
+    if(isOpen){
+      document.body.style.overflow="hidden"
+    }else 
+      document.body.style.overflow="auto"
+  },[isOpen])
 
   return (
     <>
@@ -372,11 +387,11 @@ const mockPincodes = [
                       <option value="single">Single Contract Service</option>
                       <option value="annual">Annual Contract Service</option>
                     </select>
-                      {formData.serviceType === "annual" && (
-    <p className="text-sm text-green-700 mt-1">
-      ✅ Annual Contract includes <strong>3 free service visits</strong> throughout the contract period.
-    </p>
-  )}
+                    {formData.serviceType === "annual" && (
+                      <p className="text-sm text-green-700 mt-1">
+                        ✅ Annual Contract includes <strong>3 free service visits</strong> throughout the contract period.
+                      </p>
+                    )}
                   </div>
 
                   {/* DATE & TIME */}
@@ -457,7 +472,7 @@ const mockPincodes = [
                   {/* CONTACT DETAILS */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
-             
+
                   </div>
 
                   {/* SERVICE ADDRESS */}
@@ -465,7 +480,7 @@ const mockPincodes = [
                     <h3 className="font-semibold text-lg mb-2 text-blue-700">
                       Ship To (Service Address)
                     </h3>
-                                        <input
+                    <input
                       name="name"
                       placeholder="Full Name"
                       value={formData.name}
@@ -473,7 +488,7 @@ const mockPincodes = [
                       className="border px-3 py-2 rounded w-full mb-2"
                       required
                     />
-                                        <input
+                    <input
                       name="phone"
                       placeholder="Phone Number"
                       value={formData.phone}
@@ -481,14 +496,14 @@ const mockPincodes = [
                       className="border px-3 py-2 rounded w-full mb-2"
                       required
                     />
-                   <input
-                    name="email"
-                    placeholder="Email Address"
-                    value={formData.email}
-                    onChange={handleChange}
+                    <input
+                      name="email"
+                      placeholder="Email Address"
+                      value={formData.email}
+                      onChange={handleChange}
                       className="border px-3 py-2 rounded w-full mb-2"
-                    required
-                  />
+                      required
+                    />
                     <input
                       name="serviceAddress1"
                       placeholder="Address Line 1 (Building/Office Name)"
@@ -519,7 +534,7 @@ const mockPincodes = [
                       className="border px-3 py-2 rounded w-full mb-2"
                       required
                     />
-                                        <input
+                    <input
                       name="serviceLocation"
                       placeholder="Landmark"
                       value={formData.serviceLocation}
@@ -556,31 +571,31 @@ const mockPincodes = [
 
                     {!sameAsShipping && (
                       <>
-                     <input
-                      name="name"
-                      placeholder="Full Name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      className="border px-3 py-2 rounded w-full mb-2"
-                      required
-                    />
-                                        <input
-                      name="phone"
-                      placeholder="Phone Number"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      className="border px-3 py-2 rounded w-full mb-2"
-                      required
-                    />
-                                        <input
-                    name="email"
-                    placeholder="Email Address"
-                    value={formData.email}
-                    onChange={handleChange}
-                      className="border px-3 py-2 rounded w-full mb-2"
-                    required
-                  />
-                                          <input
+                        <input
+                          name="name"
+                          placeholder="Full Name"
+                          value={formData.name}
+                          onChange={handleChange}
+                          className="border px-3 py-2 rounded w-full mb-2"
+                          required
+                        />
+                        <input
+                          name="phone"
+                          placeholder="Phone Number"
+                          value={formData.phone}
+                          onChange={handleChange}
+                          className="border px-3 py-2 rounded w-full mb-2"
+                          required
+                        />
+                        <input
+                          name="email"
+                          placeholder="Email Address"
+                          value={formData.email}
+                          onChange={handleChange}
+                          className="border px-3 py-2 rounded w-full mb-2"
+                          required
+                        />
+                        <input
                           name="billingAddress1"
                           placeholder="Address Line 1 (Building/Office Name)"
                           value={formData.billingAddress1}
@@ -643,11 +658,22 @@ const mockPincodes = [
                           " (Incl. 9% CGST & 9% SGST)"}
                       </span>
                     </div>
+                    {submitMessage && (
+                      <p
+                        className={`mt-3 text-center ${submitMessage.includes("failed") ||
+                            submitMessage.includes("Error")
+                            ? "text-red-600"
+                            : "text-green-600"
+                          }`}
+                      >
+                        {submitMessage}
+                      </p>
+                    )}
 
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded font-medium"
+                      className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded font-medium"
                     >
                       {isSubmitting ? "Processing..." : "Proceed to Payment"}
                     </button>
@@ -682,18 +708,7 @@ const mockPincodes = [
                       </p>
                     </div>
 
-                    {submitMessage && (
-                      <p
-                        className={`mt-3 text-center ${
-                          submitMessage.includes("failed") ||
-                          submitMessage.includes("Error")
-                            ? "text-red-600"
-                            : "text-green-600"
-                        }`}
-                      >
-                        {submitMessage}
-                      </p>
-                    )}
+                    
                   </div>
                 </form>
               )}

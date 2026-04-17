@@ -2,13 +2,9 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import { images } from "@/data/herosectionData";
 
-const images = [
-  "https://res.cloudinary.com/epcorn/image/upload/v1762241440/Express_Pesticides_Website/HOMEPAGE_IMAGES/HERO_SECTION_IMAGES/NEW_Banner_01_oecm5h.png",
-  "https://res.cloudinary.com/epcorn/image/upload/v1762241440/Express_Pesticides_Website/HOMEPAGE_IMAGES/HERO_SECTION_IMAGES/NEW_Banner_02_rr4hrr.png",
-  "https://res.cloudinary.com/epcorn/image/upload/v1762241442/Express_Pesticides_Website/HOMEPAGE_IMAGES/HERO_SECTION_IMAGES/NEW_Banner_03_kzivzx.png",
-  "https://res.cloudinary.com/epcorn/image/upload/v1762241443/Express_Pesticides_Website/HOMEPAGE_IMAGES/HERO_SECTION_IMAGES/NEW_Banner_04_nzdqzy.png",
-];
+
 
 export default function HeroSection() {
   const [current, setCurrent] = useState(0);
@@ -22,12 +18,7 @@ export default function HeroSection() {
 
   return (
     <section
-      className="
-        relative w-full 
-        aspect-video /* THIS IS THE FIX: Replaces all h-[...] classes */
-        bg-gray-50 flex items-center justify-center
-        overflow-hidden
-      "
+      className="mt-2 relative  aspect-video bg-gray-50 flex items-center justify-center overflow-hidden"
     >
       {images.map((img, index) => (
         <div
@@ -42,7 +33,7 @@ export default function HeroSection() {
               alt={`Slide ${index + 1}`}
               fill
               priority={index === 0}
-              className="object-cover object-top"
+              className="object-cover object-top w-auto h-auto"
               sizes="100vw"
             />
           </div>

@@ -4,12 +4,16 @@
 const nextConfig = {
   reactStrictMode: true,
   output:'standalone',
-  images: {
-    domains: ["res.cloudinary.com"],
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
+ images: {
+  remotePatterns: [
+    {
+      protocol: 'https',
+      hostname: 'res.cloudinary.com',
+      pathname: '/epcorn/**',
+    },
+  ],
+},
+
 };
 
 export default nextConfig;

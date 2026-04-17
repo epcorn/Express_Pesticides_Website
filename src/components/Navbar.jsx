@@ -30,7 +30,7 @@ export default function Navbar() {
         {/* --- Left Side: Links & Toggle --- */}
         <div className="flex items-center">
           {/* Desktop Links */}
-          <div className="hidden md:flex space-x-6">
+          <div className="hidden lg:flex space-x-6">
             {links.map((item) => (
               <Link
                 key={item}
@@ -46,7 +46,7 @@ export default function Navbar() {
           {/* Mobile Menu Toggle */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden ml-2 text-black focus:outline-none"
+            className="lg:hidden ml-2 text-black focus:outline-none"
             aria-label={isOpen ? "Close menu" : "Open menu"}
           >
             {isOpen ? <X size={26} /> : <Menu size={26} />}
@@ -58,7 +58,8 @@ export default function Navbar() {
             width={200}
             height={120}
             priority
-            className="object-contain h-12 md:h-16"
+            className="object-contain h-12 md:h-16 z-0"
+            style={{height:"auto", width:"auto"}}
           />
         {/* --- Right Side: Logo (constant size) --- */}
         <Link href="/" className="flex items-center space-x-2">
@@ -69,6 +70,7 @@ export default function Navbar() {
             height={120}
             priority
             className="object-contain h-12 md:h-16"
+            style={{height:"auto"}}
           />
         </Link>
       </div>

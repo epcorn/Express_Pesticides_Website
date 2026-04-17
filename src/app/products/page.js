@@ -72,7 +72,7 @@ export default function ProductsPage() {
   ];
 
   return (
-    <main className="pt-32"> {/* Adjusted padding for the tall navbar */}
+    <main className=""> {/* Adjusted padding for the tall navbar */}
       {/* Page Header */}
       <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-7xl mx-auto px-6 text-center">

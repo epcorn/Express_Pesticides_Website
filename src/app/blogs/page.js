@@ -1,12 +1,10 @@
 "use client";
-
 import Footer from "@/components/Footer";
 import { FaPenNib } from "react-icons/fa";
 
 export default function BlogsPage() {
   return (
-    <main className="pt-32"> {/* Padding for tall navbar */}
-      
+    <>
       {/* Page Header */}
       <section className="py-12 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6 text-center">
@@ -31,8 +29,7 @@ export default function BlogsPage() {
           </p>
         </div>
       </section>
-
       <Footer />
-    </main>
+    </>  
   );
 }

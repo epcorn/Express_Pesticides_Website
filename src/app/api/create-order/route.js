@@ -8,8 +8,8 @@ export async function POST(req) {
   
   // 2. Initialize Razorpay using your *secret* keys from .env.local
   const razorpay = new Razorpay({
-    key_id: process.env.RAZORPAY_KEY_ID,
-    key_secret: process.env.RAZORPAY_KEY_SECRET,
+    key_id: process.env.RAZORPAY_KEY_ID_TEST,
+    key_secret: process.env.RAZORPAY_KEY_SECRET_TEST,
   });
 
   // 3. Set up the order options
@@ -21,6 +21,7 @@ export async function POST(req) {
 
   try {
     // 4. Tell Razorpay's servers to create the order
+    console.log("payment procesing....")
     const order = await razorpay.orders.create(options);
     
     // 5. Send the order details (like the new 'order.id') back to the frontend
