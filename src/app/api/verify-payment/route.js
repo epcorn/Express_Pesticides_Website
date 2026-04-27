@@ -7,8 +7,7 @@ import Razorpay from "razorpay";
 
 // ✅ Hostinger SMTP configuration
 const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || "smtp.hostinger.com",
-  port: Number(process.env.SMTP_PORT) || 465,
+  service:"gmail",
   secure: true,
   auth: {
     user: process.env.EMAIL_USER,
@@ -48,6 +47,8 @@ function buildInvoiceHtml(formData, paymentDetails, status) {
   ]
     .filter(Boolean)
     .join(", ");
+
+    console.log(billingAddress)
     
   // Check if billing is same as service
   const isBillingSame = (billingAddress === serviceAddress);
@@ -86,9 +87,16 @@ function buildInvoiceHtml(formData, paymentDetails, status) {
 
   return `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #ddd; padding: 20px; border-radius: 8px;">
-      <h1 style="color: ${isSuccess ? "#22c55e" : "#ef4444"}; text-align: center;">
+      <div style="border-bottom: 1px solid lightgrey; display: flex; align-items: center; justify-content: space-between; padding: 1rem;">
+        <h1 style="color: ${isSuccess ? '#22c55e' : '#ef4444'}; margin: 0; font-family: sans-serif;">
         Payment ${status}
-      </h1>
+        </h1>
+        <img 
+          style="width: 200px; height: auto; margin-left:auto;" 
+          src="https://res.cloudinary.com/epcorn/image/upload/v1762003702/Express_Pesticides_Website/HOMEPAGE_IMAGES/Express_pestcide_logo_transparent_ra6ld9.png" 
+          alt="Express Pesticides Logo"
+        />
+      </div>
       <p style="font-size: 16px;">Hi ${formData.name},</p>
       <p style="font-size: 16px;">
         ${
@@ -130,7 +138,7 @@ function buildInvoiceHtml(formData, paymentDetails, status) {
       </table>
 
       <p style="margin-top: 30px; font-size: 12px; color: #777; text-align: center;">
-        If you have any questions, please contact us at info@expresspesticides.com.
+        If you have any questions, please contact us at info@expresspesticides.com. Thank You..
       </p>
     </div>
   `;
@@ -153,13 +161,14 @@ export async function POST(req) {
 
   // --- FIX: Now correctly destructuring 'cost' as well ---
   const { razorpay_order_id, razorpay_payment_id, razorpay_signature, formData, cost } = await req.json();
-  const key_secret = process.env.RAZORPAY_KEY_SECRET;
+  const key_secret = process.env.RAZORPAY_KEY_SECRET_TEST;
 
   if (!key_secret) {
     console.error("❌ Missing Razorpay key secret");
     return NextResponse.json({ error: "Server misconfigured" }, { status: 500 });
   }
 
+  console.log(razorpay_order_id, razorpay_payment_id, razorpay_signature, formData, cost)
   let paymentStatus = "";
   let emailSubject = "";
   let paymentDetails = {};
@@ -176,6 +185,7 @@ export async function POST(req) {
     console.log("Received:", razorpay_signature);
 
     if (expectedSignature === razorpay_signature) {
+      console.log(expectedSignature)
       console.log("✅ Signature verified successfully");
       paymentStatus = "Success";
       emailSubject = `Your Express Pesticides Service is Booked! (Order: ${razorpay_order_id})`;
@@ -222,7 +232,7 @@ export async function POST(req) {
       await transporter.sendMail({
         from: `"Express Pesticides" <${process.env.EMAIL_USER}>`,
         to: formData.email,
-        bcc: "info@expresspesticides.com",
+        bcc: "exteam.epcorn@gmail.com",
         subject: emailSubject,
         html: invoiceHtml,
       });
@@ -233,6 +243,7 @@ export async function POST(req) {
 
     // Step 3: Respond immediately
     if (paymentStatus === "Success") {
+      console.log(paymentStatus)
       console.log("✅ Payment verified completely");
       return NextResponse.json(
         { success: true, message: "Payment verified and email sent" },

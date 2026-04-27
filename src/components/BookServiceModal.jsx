@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import Script from "next/script";
 import { servicesData } from "../app/services/lib/ServiceData.js";
+import { mockPincodes } from "@/data/bookservicemodelData.js";
+import postalcodes from "postalcodes-india"
 
 export default function BookServiceModal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,49 +25,99 @@ export default function BookServiceModal() {
     name: "",
     email: "",
     phone: "",
+    dateOfService: "",
+    firstServiceDate: "",
+    preferredTime: "",
+    preferredDay: "",
+    area: "",
     // Service Address (Ship To)
     serviceAddress1: "",
     serviceAddress2: "",
     serviceAddress3: "",
     serviceLocation: "",
+    servicePincode: "",
     serviceCity: "",
     // Billing Address (Bill To)
+    billName: "",
+    billPhone: "",
+    billEmail: "",
     billingAddress1: "",
     billingAddress2: "",
     billingAddress3: "",
     billingLocation: "",
+    billingPincode: "",
     billingCity: "",
-    dateOfService: "",
-    firstServiceDate: "",
-    preferredDay: "",
-    preferredTime: "",
-    area: "",
   });
 
-  const mockPincodes = [
-    "400001", "400002", "400003", "400004", "400005", "400006", "400007", "400008", "400009", "400010",
-    "400011", "400012", "400013", "400014", "400015", "400016", "400017", "400018", "400019", "400020",
-    "400021", "400022", "400023", "400024", "400025", "400026", "400027", "400028", "400029", "400030",
-    "400031", "400032", "400033", "400034", "400035", "400036", "400037", "400038", "400039", "400040",
-    "400042", "400043", "400046", "400047", "400049", "400050", "400051", "400052", "400053", "400054",
-    "400055", "400056", "400057", "400058", "400059", "400060", "400061", "400062", "400063", "400064",
-    "400065", "400066", "400067", "400068", "400069", "400070", "400072", "400074", "400075", "400076",
-    "400077", "400078", "400079", "400080", "400081", "400082", "400083", "400084", "400085", "400086",
-    "400087", "400088", "400089", "400090", "400091", "400092", "400093", "400094", "400095", "400096",
-    "400097", "400098", "400099", "400101", "400102", "400103", "400104",
-    // Virar, Vasai, Nalasopara (401xxx)
-    "401101", "401102", "401103", "401104", "401201", "401202", "401203", "401204", "401205", "401206",
-    "401207", "401208", "401209", "401301", "401302", "401303", "401304", "401305", "401401", "401402",
-    "401403", "401404", "401405", "401501", "401502", "401503", "401504", "401601", "401602", "401603",
-    "401604", "401605", "401606", "401607", "401608", "401609", "401610", "401701", "401702", "401703",
-    "401704", "401705", "401708"
-  ];
   const handleChange = (e) => {
     const { name, value } = e.target;
+
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
+
+    if (name === "dateOfService" || name === "firstServiceDate") {
+      const now = new Date();
+      let tommorrow = new Date();
+      const checkMonday = new Date(value)
+
+      tommorrow.setDate(now.getDate() + 1);
+      tommorrow = tommorrow.toISOString().split("T")[0]
+
+      if (value === tommorrow && now.getHours() >= 14) {
+        setFormData((prev) => ({
+          ...prev,
+          dateOfService: "",
+          firstServiceDate: "",
+        }));
+        alert("Please select another day. after 2pm you cannot get appointment for next day");
+        return;
+      }
+      //monday if off
+      if (checkMonday.getDay() === 1) {
+        alert("Monday off, ready to go on Tuesday! Please select another day for your appointment.")
+        setFormData((prev) => ({
+          ...prev,
+          dateOfService: "",
+          firstServiceDate: "",
+        }));
+        return;
+      }
+    }
+    //conditions for pincodes
+    if (name === "servicePincode" && value.length === 6) {
+      //if pincode not available in Our DB
+      const res = postalcodes.find(value)
+      const info = Array.isArray(res) ? res[0] : res;
+
+      if (!mockPincodes.includes(value)) {
+        alert("Area is not servicable");
+        setFormData((prev) => ({
+          ...prev, servicePincode: "", serviceLocation: '', serviceCity: ""
+        }))
+        return;
+      }
+      // check for (pincode) and (servicepincode)
+      if (pincode !== value) {
+        const goAhead = confirm(`you checked for ${pincode} and you have entered ${value}. \nwanna proceed`);
+        if (!goAhead) return;
+        if (info) {
+        }
+        else {
+          setFormData((prev) => ({ ...prev, servicePincode: value }))
+          console.warn("Pincode details not found ")
+        }
+      }
+      console.log(res)
+      const city = info.subDistrict.split(" ")[0] === info.district ? info.place.split(" ")[0] : info.subDistrict.split(/[ \(]/)[0]
+      setFormData((prev) => ({
+        ...prev, serviceLocation: city, serviceCity: info.district,
+      }))
+      // else {
+      //   alert(`you checked for ${pincode} and you have entered ${value}`)
+      // }
+    }
   };
 
   const handlePincodeCheck = () => {
@@ -134,7 +186,7 @@ export default function BookServiceModal() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
+    setIsSubmitting(false);
     setSubmitMessage("");
 
     if (
@@ -148,12 +200,16 @@ export default function BookServiceModal() {
       return;
     }
 
+    console.log("subcategory: ", formData)
     if (calculatedCost <= 0) {
       setSubmitMessage("Please select valid service options.");
       setIsSubmitting(false);
       return;
     }
+    handlePayment();
+  };
 
+  const handlePayment = async () => {
     try {
       const orderRes = await fetch("/api/create-order", {
         method: "POST",
@@ -171,8 +227,12 @@ export default function BookServiceModal() {
         amount: orderData.amount,
         currency: "INR",
         name: "Express Pesticides",
+        image: "https://res.cloudinary.com/epcorn/image/upload/v1762003702/Express_Pesticides_Website/HOMEPAGE_IMAGES/Express_pestcide_logo_transparent_ra6ld9.png",
         description: `Payment for ${formData.category}`,
         order_id: orderData.id,
+        method: {
+          netbanking: true, upi: true, card: true, wallet: false, emi: false, paylater: false
+        },
         handler: async function (response) {
           setSubmitMessage("Verifying payment...");
           try {
@@ -200,8 +260,8 @@ export default function BookServiceModal() {
           }
           setIsSubmitting(false);
         },
-        modal:{
-          ondismiss: function(){
+        modal: {
+          ondismiss: function () {
             setSubmitMessage("Error: Payment was cancelled")
             setIsSubmitting(false);
           }
@@ -224,7 +284,7 @@ export default function BookServiceModal() {
       setSubmitMessage(`Error: ${error.message}`);
       setIsSubmitting(false);
     }
-  };
+  }
 
   const categories = Object.keys(servicesData);
   const bhkOptions =
@@ -244,12 +304,12 @@ export default function BookServiceModal() {
     "5–7 PM",
   ];
 
-  useEffect(()=>{
-    if(isOpen){
-      document.body.style.overflow="hidden"
-    }else 
-      document.body.style.overflow="auto"
-  },[isOpen])
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden"
+    } else
+      document.body.style.overflow = "auto"
+  }, [isOpen])
 
   return (
     <>
@@ -264,12 +324,12 @@ export default function BookServiceModal() {
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-            <div className="flex justify-between items-center p-4 border-b">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm dark:text-black">
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto scrollbar-hidden">
+            <div className="sticky top-0 bg-white  flex justify-between items-center p-4 border-b">
               <h2 className="text-2xl font-bold">Book Your Service</h2>
-              <button onClick={() => setIsOpen(false)}>
-                <X size={24} className="text-gray-500" />
+              <button onClick={() => setIsOpen(false)} className="border rounded-full p-1 text-red-700 hover:bg-red-600 hover:text-white cursor-pointer transition-all">
+                <X size={24} />
               </button>
             </div>
 
@@ -322,7 +382,6 @@ export default function BookServiceModal() {
                       name="category"
                       value={formData.category}
                       onChange={handleChange}
-                      required
                       className="w-full px-3 py-2 border rounded"
                     >
                       <option value="">-- Select Category --</option>
@@ -404,6 +463,7 @@ export default function BookServiceModal() {
                         type="date"
                         name="dateOfService"
                         value={formData.dateOfService}
+                        min={new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split("T")[0]}
                         onChange={handleChange}
                         className="w-full px-3 py-2 border rounded"
                         required
@@ -417,6 +477,7 @@ export default function BookServiceModal() {
                         </label>
                         <input
                           type="date"
+                          min={new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split("T")[0]}
                           name="firstServiceDate"
                           value={formData.firstServiceDate}
                           onChange={handleChange}
@@ -527,6 +588,15 @@ export default function BookServiceModal() {
                       className="border px-3 py-2 rounded w-full mb-2"
                     />
                     <input
+                      type="text"
+                      name="servicePincode"
+                      placeholder="Pincode"
+                      value={formData.servicePincode}
+                      onChange={handleChange}
+                      className="border px-3 py-2 rounded w-full mb-2"
+                      required
+                    />
+                    <input
                       name="serviceLocation"
                       placeholder="Location"
                       value={formData.serviceLocation}
@@ -534,14 +604,14 @@ export default function BookServiceModal() {
                       className="border px-3 py-2 rounded w-full mb-2"
                       required
                     />
-                    <input
-                      name="serviceLocation"
+                    {/* <input
+                      name="serviceLandmark"
                       placeholder="Landmark"
-                      value={formData.serviceLocation}
+                      value={formData.serviceLandmark}
                       onChange={handleChange}
                       className="border px-3 py-2 rounded w-full mb-2"
                       required
-                    />
+                    /> */}
                     <input
                       name="serviceCity"
                       placeholder="City"
@@ -572,25 +642,25 @@ export default function BookServiceModal() {
                     {!sameAsShipping && (
                       <>
                         <input
-                          name="name"
+                          name="billName"
                           placeholder="Full Name"
-                          value={formData.name}
+                          value={formData.billName}
                           onChange={handleChange}
                           className="border px-3 py-2 rounded w-full mb-2"
                           required
                         />
                         <input
-                          name="phone"
+                          name="billPhone"
                           placeholder="Phone Number"
-                          value={formData.phone}
+                          value={formData.billPhone}
                           onChange={handleChange}
                           className="border px-3 py-2 rounded w-full mb-2"
                           required
                         />
                         <input
-                          name="email"
+                          name="billEmail"
                           placeholder="Email Address"
-                          value={formData.email}
+                          value={formData.billEmail}
                           onChange={handleChange}
                           className="border px-3 py-2 rounded w-full mb-2"
                           required
@@ -618,6 +688,14 @@ export default function BookServiceModal() {
                           className="border px-3 py-2 rounded w-full mb-2"
                         />
                         <input
+                          name="billingPincode"
+                          placeholder="Pincode"
+                          value={formData.billingPincode}
+                          onChange={handleChange}
+                          className="border px-3 py-2 rounded w-full mb-2"
+                          required
+                        />
+                        <input
                           name="billingLocation"
                           placeholder="Location"
                           value={formData.billingLocation}
@@ -626,9 +704,9 @@ export default function BookServiceModal() {
                           required
                         />
                         <input
-                          name="billingLocation"
+                          name="billingLandmark"
                           placeholder="Landmark"
-                          value={formData.billingLocation}
+                          value={formData.billingLandmark}
                           onChange={handleChange}
                           className="border px-3 py-2 rounded w-full mb-2"
                           required
@@ -661,9 +739,9 @@ export default function BookServiceModal() {
                     {submitMessage && (
                       <p
                         className={`mt-3 text-center ${submitMessage.includes("failed") ||
-                            submitMessage.includes("Error")
-                            ? "text-red-600"
-                            : "text-green-600"
+                          submitMessage.includes("Error")
+                          ? "text-red-600"
+                          : "text-green-600"
                           }`}
                       >
                         {submitMessage}
@@ -708,7 +786,7 @@ export default function BookServiceModal() {
                       </p>
                     </div>
 
-                    
+
                   </div>
                 </form>
               )}

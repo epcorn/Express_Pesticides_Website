@@ -174,11 +174,11 @@ export default function ServiceDetailPage({
   const faqs = faqData[slug] || [];
 
   return (
-    <main className="pt-32">
+    <main className="">
       {/* ==== 1. HERO (logo on top, not covering) ==== */}
       <section className="relative h-96 md:h-[500px]">
         <Image
-          src={img.hero}
+          src={img?.hero}
           alt={`${name} hero`}
           fill
           className="object-cover"

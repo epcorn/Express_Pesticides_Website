@@ -5,7 +5,7 @@ import Razorpay from "razorpay";
 export async function POST(req) {
   // 1. Get the amount (e.g., 1000) from the modal's fetch request
   const { amount } = await req.json();
-  
+
   // 2. Initialize Razorpay using your *secret* keys from .env.local
   const razorpay = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID_TEST,
@@ -14,9 +14,10 @@ export async function POST(req) {
 
   // 3. Set up the order options
   const options = {
-    amount: amount * 100, // Razorpay needs the amount in the smallest unit (paise)
+    amount: amount * 100,
     currency: "INR",
-    receipt: `receipt_order_${new Date().getTime()}`, // A unique ID for your records
+    receipt: `receipt_order_${new Date().getTime()}`,
+    
   };
 
   try {

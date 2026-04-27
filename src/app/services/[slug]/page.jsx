@@ -6,8 +6,9 @@ import {servicesData} from "@/data/servicesData";
 
 
 
-export default function Page({ params }) {
-  const { slug } = params;
+export default async function Page({ params }) {
+  const { slug } = await params;
+  console.log("slug: ", slug)
   const service = servicesData[slug];
 
   if (!service) {

@@ -24,60 +24,64 @@ export default function Navbar() {
   };
 
   return (
-    // v important: explicit h-16 makes navbar height deterministic (64px)
-    <nav className="fixed top-0 left-0 right-0 z-50 h-16 backdrop-blur-lg bg-gray-50/90 shadow-lg transition-all duration-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-full flex items-center justify-between">
-        {/* --- Left Side: Links & Toggle --- */}
-        <div className="flex items-center">
-          {/* Desktop Links */}
-          <div className="hidden lg:flex space-x-6">
-            {links.map((item) => (
-              <Link
-                key={item}
-                href={getLinkPath(item)}
-                className="relative font-medium text-black group transition-colors duration-300"
-              >
-                {item}
-                <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
-              </Link>
-            ))}
-          </div>
-
+    <nav className="fixed top-0 left-0 right-0 z-50 h-16 backdrop-blur-lg bg-gray-50/90 shadow-lg">
+      <div className="mx-auto px-4 sm:px-6 h-full flex items-center justify-between gap-4">
+        
+        {/* --- Left Side: Mobile Toggle & Desktop Links --- */}
+        <div className="flex items-center flex-1">
           {/* Mobile Menu Toggle */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="lg:hidden ml-2 text-black focus:outline-none"
+            className="lg:hidden p-2 text-black focus:outline-none"
             aria-label={isOpen ? "Close menu" : "Open menu"}
           >
             {isOpen ? <X size={26} /> : <Menu size={26} />}
           </button>
+
+          {/* Desktop Links */}
+          <div className="hidden lg:flex items-center justify-start gap-6 xl:gap-8 whitespace-nowrap">
+            {links.map((item) => (
+              <Link
+                key={item}
+                href={getLinkPath(item)}
+                className="relative font-medium text-black group transition-colors duration-300 text-sm xl:text-base"
+              >
+                {item}
+                <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
+              </Link>
+            ))}
+          </div>
         </div>
-        <Image
-            src="https://res.cloudinary.com/epcorn/image/upload/v1762003511/Express_Pesticides_Website/HOMEPAGE_IMAGES/Be_sure_we_are_there_background_removed_qce4xf.png"
-            alt="Express Pesticides Logo"
-            width={200}
-            height={120}
-            priority
-            className="object-contain h-12 md:h-16 z-0"
-            style={{height:"auto", width:"auto"}}
-          />
-        {/* --- Right Side: Logo (constant size) --- */}
-        <Link href="/" className="flex items-center space-x-2">
-          <Image
-            src="https://res.cloudinary.com/epcorn/image/upload/v1762003702/Express_Pesticides_Website/HOMEPAGE_IMAGES/Express_pestcide_logo_transparent_ra6ld9.png"
-            alt="Express Pesticides Logo"
-            width={200}
-            height={120}
-            priority
-            className="object-contain h-12 md:h-16"
-            style={{height:"auto"}}
-          />
-        </Link>
+
+        {/* --- Right Side: Branding/Logos --- */}
+        <div className="flex py-1 items-center h-full ">
+          {/* Tagline Image */}
+          <div className="relative h-52 w-62 z-50">
+            <Image
+              src="https://res.cloudinary.com/epcorn/image/upload/v1762003511/Express_Pesticides_Website/HOMEPAGE_IMAGES/Be_sure_we_are_there_background_removed_qce4xf.png"
+              alt="Be Sure Tagline"
+              fill
+              priority
+              className="object-contain"
+            />
+          </div>
+
+          {/* Main Logo Link */}
+          <Link href="/" className="relative h-14 w-32 sm:w-40 md:w-48">
+            <Image
+              src="https://res.cloudinary.com/epcorn/image/upload/v1762003702/Express_Pesticides_Website/HOMEPAGE_IMAGES/Express_pestcide_logo_transparent_ra6ld9.png"
+              alt="Express Pesticides Logo"
+              fill
+              priority
+              className="object-contain"
+            />
+          </Link>
+        </div>
       </div>
 
       {/* --- Mobile Dropdown Menu --- */}
       <div
-        className={`md:hidden bg-white border-t border-gray-200 shadow-inner transition-all duration-300 overflow-hidden ${
+        className={`lg:hidden bg-white border-t border-gray-200 shadow-inner transition-all duration-300 overflow-hidden ${
           isOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
         }`}
       >
@@ -95,3 +99,4 @@ export default function Navbar() {
     </nav>
   );
 }
+
