@@ -109,7 +109,6 @@ export default function BookServiceModal() {
           console.warn("Pincode details not found ")
         }
       }
-      console.log(res)
       const city = info.subDistrict.split(" ")[0] === info.district ? info.place.split(" ")[0] : info.subDistrict.split(/[ \(]/)[0]
       setFormData((prev) => ({
         ...prev, serviceLocation: city, serviceCity: info.district,
@@ -175,30 +174,23 @@ export default function BookServiceModal() {
     if (sameAsShipping) {
       setFormData((prev) => ({
         ...prev,
+        billName: prev.name,
+        billPhone: prev.phone,
+        billEmail: prev.email,
         billingAddress1: prev.serviceAddress1,
         billingAddress2: prev.serviceAddress2,
         billingAddress3: prev.serviceAddress3,
         billingLocation: prev.serviceLocation,
+        billingPincode: prev.servicePincode,
         billingCity: prev.serviceCity,
       }));
     }
-  }, [sameAsShipping, formData.serviceAddress1, formData.serviceAddress2, formData.serviceAddress3, formData.serviceLocation, formData.serviceCity]);
+  }, [sameAsShipping, formData.serviceAddress1, formData.servicePincode, formData.phone, formData.serviceAddress2, formData.serviceAddress3, formData.serviceLocation, formData.serviceCity]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(false);
     setSubmitMessage("");
-
-    if (
-      !formData.name ||
-      !formData.email ||
-      !formData.phone ||
-      !formData.serviceAddress1
-    ) {
-      setSubmitMessage("Please fill all personal and address details.");
-      setIsSubmitting(false);
-      return;
-    }
 
     console.log("subcategory: ", formData)
     if (calculatedCost <= 0) {
@@ -311,6 +303,14 @@ export default function BookServiceModal() {
       document.body.style.overflow = "auto"
   }, [isOpen])
 
+  const anotherSubmit = (e) => {
+    e.preventDefault();
+
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (formData) console.log(formData)
+  }
+
   return (
     <>
       <Script src="https://checkout.razorpay.com/v1/checkout.js" />
@@ -359,7 +359,7 @@ export default function BookServiceModal() {
                   )}
                 </>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={anotherSubmit} className="space-y-4">
                   <div className="bg-green-50 border border-green-300 p-2 rounded">
                     <p>
                       Pincode: {pincode} (Serviceable){" "}
@@ -703,14 +703,14 @@ export default function BookServiceModal() {
                           className="border px-3 py-2 rounded w-full mb-2"
                           required
                         />
-                        <input
+                        {/* <input
                           name="billingLandmark"
                           placeholder="Landmark"
                           value={formData.billingLandmark}
                           onChange={handleChange}
                           className="border px-3 py-2 rounded w-full mb-2"
                           required
-                        />
+                        /> */}
                         <input
                           name="billingCity"
                           placeholder="City"

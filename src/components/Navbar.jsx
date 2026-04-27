@@ -56,7 +56,7 @@ export default function Navbar() {
         {/* --- Right Side: Branding/Logos --- */}
         <div className="flex py-1 items-center h-full ">
           {/* Tagline Image */}
-          <div className="relative h-52 w-62 z-50">
+          <div className="relative h-52 lg:52 w-36 lg:w-62 z-50">
             <Image
               src="https://res.cloudinary.com/epcorn/image/upload/v1762003511/Express_Pesticides_Website/HOMEPAGE_IMAGES/Be_sure_we_are_there_background_removed_qce4xf.png"
               alt="Be Sure Tagline"

@@ -54,31 +54,31 @@ export default function PriceCalculator() {
   }, [formData]);
 
   const categories = Object.keys(servicesData);
-    formData.category &&
+  formData.category &&
     typeof servicesData[formData.category] === "object" &&
     !servicesData[formData.category].perSqFt
-      ? Object.keys(servicesData[formData.category]).filter(
-          (key) =>
-            typeof servicesData[formData.category][key] === "object" &&
-            !servicesData[formData.category][key].perSqFt
-        )
-      : [];
+    ? Object.keys(servicesData[formData.category]).filter(
+      (key) =>
+        typeof servicesData[formData.category][key] === "object" &&
+        !servicesData[formData.category][key].perSqFt
+    )
+    : [];
 
   const bhkOptions =
     formData.category &&
     (formData.subcategory
       ? Object.keys(servicesData[formData.category][formData.subcategory] || {})
       : Object.keys(servicesData[formData.category] || {}).filter(
-          (key) => key.includes("BHK") || key.includes("RK")
-        ));
+        (key) => key.includes("BHK") || key.includes("RK")
+      ));
 
   return (
-<section className="py-10 sm:py-16 lg:py-20 bg-gray-50 px-4 sm:px-6 mt-0">
+    <section className="py-10 sm:py-16 lg:py-20 bg-gray-50 px-4 sm:px-6 mt-0 text-black">
       {/* Heading */}
       <div className="max-w-3xl mx-auto text-center mb-10">
-<h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black mb-3 sm:mb-4 border-2 border-solid border-[#00bfff] shadow-[0_0_15px_#00bfff] p-2">
-  Instant Quote
-</h2>
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black mb-3 sm:mb-4 border-2 border-solid border-[#00bfff] shadow-[0_0_15px_#00bfff] p-2">
+          Instant Quote
+        </h2>
 
         <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
           Get your instant price estimate.
@@ -118,7 +118,7 @@ export default function PriceCalculator() {
           </div>
 
           {/* Subcategory */}
-         
+
 
           {/* Area or BHK */}
           {formData.category === "Civil Work" ? (
@@ -161,7 +161,7 @@ export default function PriceCalculator() {
           {/* Service Type */}
           <div>
             <label className="block font-medium mb-1 text-sm sm:text-base">
-              Choose your contract 
+              Choose your contract
             </label>
             <select
               name="serviceType"
@@ -181,7 +181,7 @@ export default function PriceCalculator() {
             <div className="inline-block px-6 py-3 border border-blue-600 text-blue-600 rounded-full shadow-sm text-sm sm:text-base">
               <span className="font-medium">Estimated Price: </span>
               <span className="font-bold text-lg sm:text-xl">
-                ₹ {calculatedCost.toLocaleString("en-IN") + " + GST"} 
+                ₹ {calculatedCost.toLocaleString("en-IN") + " + GST"}
               </span>
             </div>
           </div>
