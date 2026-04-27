@@ -359,7 +359,7 @@ export default function BookServiceModal() {
                   )}
                 </>
               ) : (
-                <form onSubmit={anotherSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="bg-green-50 border border-green-300 p-2 rounded">
                     <p>
                       Pincode: {pincode} (Serviceable){" "}
