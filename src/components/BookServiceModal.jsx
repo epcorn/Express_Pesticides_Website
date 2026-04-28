@@ -198,7 +198,6 @@ export default function BookServiceModal() {
     setIsSubmitting(false);
     setSubmitMessage("");
 
-    console.log("subcategory: ", formData)
     if (calculatedCost <= 0) {
       setSubmitMessage("Please select valid service options.");
       setIsSubmitting(false);
@@ -333,11 +332,11 @@ export default function BookServiceModal() {
 
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed top-1/2 -translate-y-1/2 right-0 z-40 bg-blue-600 text-white font-bold py-3 px-5 rounded-l-lg shadow-lg hover:bg-blue-700 cursor-pointer transition-all"
+        className="fixed top-1/2 -translate-y-1/2 right-0 z-40 bg-blue-600 text-white font-bold py-5 px-3 lg:px-5 rounded-l-lg shadow-lg hover:bg-blue-700 cursor-pointer transition-all"
         style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
       >
         Book a Service
-      </button>
+      </button >
 
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm dark:text-black">
@@ -809,7 +808,8 @@ export default function BookServiceModal() {
             </div>
           </div>
         </div>
-      )}
+      )
+      }
     </>
   );
 }

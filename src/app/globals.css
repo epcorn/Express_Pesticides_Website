@@ -1,4 +1,6 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
   --background: #ffffff;
@@ -16,6 +18,19 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+  }
+}
+
+@layer utilities {
+  /* This targets older Safari and Chrome versions */
+  .rotate-x-12 {
+    transform: rotateX(12deg);
+  }
+  .rotate-x-45 {
+    transform: rotateX(45deg);
+  }
+  .rotate-x-90 {
+    transform: rotateX(90deg);
   }
 }
 

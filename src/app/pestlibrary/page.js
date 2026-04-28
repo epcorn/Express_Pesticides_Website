@@ -10,7 +10,7 @@ export default function PestLibraryPage() {
   return (
     <> {/* Adjusted padding for the tall navbar */}
       {/* Page Header */}
-      <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
+      <section className="py-20  bg-gradient-to-b from-gray-400 to-white">
         <div className="max-w-7xl mx-auto px-6 text-center">
           <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-12">
             Our <span className="text-blue-600">Pest Library</span>
@@ -22,7 +22,7 @@ export default function PestLibraryPage() {
       </section>
 
       {/* Pest Grid Section */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-gradient-to-b from-white to-gray-400">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-wrap gap-8 justify-center">
             {pests.map((pest) => (
