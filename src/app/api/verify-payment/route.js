@@ -4,10 +4,11 @@ import { NextResponse } from "next/server";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
 import Razorpay from "razorpay";
+import axios from "axios";
 
 // ✅ Hostinger SMTP configuration
 const transporter = nodemailer.createTransport({
-  service:"gmail",
+  service: "gmail",
   secure: true,
   auth: {
     user: process.env.EMAIL_USER,
@@ -23,9 +24,11 @@ const razorpay = new Razorpay({
 
 // ✅ Function to build the HTML invoice
 // --- THIS FUNCTION IS NOW UPDATED ---
+
 function buildInvoiceHtml(formData, paymentDetails, status) {
+  const { name, email, phone, serviceType, serviceLocation, serviceCity, bhkType, dateOfService, firstServiceDate } = formData;
   const isSuccess = status === "Success";
-  
+
   // --- FIX: Using the new 'serviceAddress' keys ---
   const serviceAddress = [
     formData.serviceAddress1,
@@ -36,7 +39,7 @@ function buildInvoiceHtml(formData, paymentDetails, status) {
   ]
     .filter(Boolean) // Removes any empty/null/undefined fields
     .join(", ");
-    
+
   // --- NEW: Read billing address ---
   const billingAddress = [
     formData.billingAddress1,
@@ -47,7 +50,7 @@ function buildInvoiceHtml(formData, paymentDetails, status) {
   ]
     .filter(Boolean)
     .join(", ");
-    
+
   // Check if billing is same as service
   const isBillingSame = formData.sameAsShipping;
   console.log("(verify-payment,ln-53)->isbiling same : ", isBillingSame)
@@ -98,11 +101,10 @@ function buildInvoiceHtml(formData, paymentDetails, status) {
       </div>
       <p style="font-size: 16px;">Hi ${formData.name},</p>
       <p style="font-size: 16px;">
-        ${
-          isSuccess
-            ? `Thank you for your booking! Your payment was successful and your service is confirmed.`
-            : `We're sorry, but your payment verification failed for Order ID: ${paymentDetails.order_id}. Please contact support.`
-        }
+        ${isSuccess
+      ? `Thank you for your booking! Your payment was successful and your service is confirmed.`
+      : `We're sorry, but your payment verification failed for Order ID: ${paymentDetails.order_id}. Please contact support.`
+    }
       </p>
 
       <h2 style="border-bottom: 2px solid #eee; padding-bottom: 5px; color: #333;">Order Summary</h2>
@@ -160,6 +162,9 @@ export async function POST(req) {
 
   // --- FIX: Now correctly destructuring 'cost' as well ---
   const { razorpay_order_id, razorpay_payment_id, razorpay_signature, formData, cost } = await req.json();
+
+  const { name, email, phone, serviceType, preferredDay, serviceLocation, serviceCity, bhkType, dateOfService, firstServiceDate } = formData;
+
   const key_secret = process.env.RAZORPAY_KEY_SECRET_TEST;
 
   if (!key_secret) {
@@ -191,13 +196,13 @@ export async function POST(req) {
       try {
         paymentDetails = await fetchPaymentWithTimeout(razorpay_payment_id);
         console.log("💰 Payment fetched:", paymentDetails.status);
-        
+
         // --- NEW: Server-side amount check ---
         if (paymentDetails.amount !== (cost * 100)) {
-           console.error("❌ Amount Mismatch! Frontend said:", cost * 100, "Razorpay said:", paymentDetails.amount);
-           // Handle this serious error, maybe flag for review
-           paymentStatus = "Amount Mismatch";
-           emailSubject = `Payment Alert: Amount Mismatch (Order: ${razorpay_order_id})`;
+          console.error("❌ Amount Mismatch! Frontend said:", cost * 100, "Razorpay said:", paymentDetails.amount);
+          // Handle this serious error, maybe flag for review
+          paymentStatus = "Amount Mismatch";
+          emailSubject = `Payment Alert: Amount Mismatch (Order: ${razorpay_order_id})`;
         }
 
       } catch (fetchError) {
@@ -225,6 +230,11 @@ export async function POST(req) {
 
     // Step 2: Build and send invoice email
     const invoiceHtml = buildInvoiceHtml(formData, paymentDetails, paymentStatus);
+    const SMSbody = `Hi! ${name},\nYou have booked ${serviceType.toUpperCase()} service for your ${bhkType}- ${serviceCity}, and Your service date is ${dateOfService || firstServiceDate} ${firstServiceDate ? ("On Every " + preferredDay + ".") : ""}.
+    Thanks for choosing Express Pesticides`;
+    const BASE_URL = 'https://api.textbee.dev/api/v1'
+    const API_KEY = process.env.TEXT_BEE_API
+    const DEVICE_ID = process.env.TEXT_BEE_DEVICE_ID
 
     try {
       await transporter.sendMail({
@@ -234,7 +244,19 @@ export async function POST(req) {
         subject: emailSubject,
         html: invoiceHtml,
       });
-      console.log("📧 Invoice email sent successfully to:", formData.email);
+
+      console.log("📧 Invoice email sent successfully to: ", email);
+
+      const response = await axios.post(
+        `${BASE_URL}/gateway/devices/${DEVICE_ID}/send-sms`,
+        {
+          recipients: [phone.toString()],
+          message: SMSbody,
+        },
+        { headers: { 'x-api-key': API_KEY } }
+      )
+      console.log("Sms sent successfully! ", response.data)
+
     } catch (emailErr) {
       console.error("❌ Email send failed:", emailErr);
     }
