@@ -178,7 +178,7 @@ export default function AboutPage() {
               {certificates.map((cert) => (
                 <div
                   key={cert.name}
-                  className="relative w-[300px] h-[380px] flex-shrink-0 rounded-lg overflow-hidden shadow-md bg-white hover:shadow-xl transition-shadow duration-300"
+                  className="relative w-72 h-96 shrink-0 rounded-lg overflow-hidden shadow-md bg-white hover:shadow-xl transition-shadow duration-300"
                 >
                   <Image
                     src={cert.src}

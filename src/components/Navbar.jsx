@@ -32,7 +32,7 @@ export default function Navbar() {
           {/* Mobile Menu Toggle */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="lg:hidden p-2 text-black focus:outline-none"
+            className="lg:hidden p-2 text-black focus:outline-none border rounded-lg border-gray-400 -shadow-2xs"
             aria-label={isOpen ? "Close menu" : "Open menu"}
           >
             {isOpen ? <X size={26} /> : <Menu size={26} />}
@@ -56,7 +56,7 @@ export default function Navbar() {
         {/* --- Right Side: Branding/Logos --- */}
         <div className="flex py-1 items-center h-full ">
           {/* Tagline Image */}
-          <div className="relative h-52 lg:52 w-36 lg:w-62 z-50">
+          <div className="relative h-52 lg:52 w-36 md:w-62 z-50">
             <Image
               src="https://res.cloudinary.com/epcorn/image/upload/v1762003511/Express_Pesticides_Website/HOMEPAGE_IMAGES/Be_sure_we_are_there_background_removed_qce4xf.png"
               alt="Be Sure Tagline"

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import Script from "next/script";
 import { servicesData } from "../app/services/lib/ServiceData.js";
-import { mockPincodes } from "@/data/bookservicemodelData.js";
+import { holidays, mockPincodes } from "@/data/bookservicemodelData.js";
 import postalcodes from "postalcodes-india"
 
 export default function BookServiceModal() {
@@ -38,6 +38,7 @@ export default function BookServiceModal() {
     servicePincode: "",
     serviceCity: "",
     // Billing Address (Bill To)
+    sameAsShipping,
     billName: "",
     billPhone: "",
     billEmail: "",
@@ -64,6 +65,11 @@ export default function BookServiceModal() {
 
       tommorrow.setDate(now.getDate() + 1);
       tommorrow = tommorrow.toISOString().split("T")[0]
+
+      // if(holidays)
+      if (holidays.includes(value.slice(5)))
+        return alert("OOps! Its holiday. Choose another date.")
+
 
       if (value === tommorrow && now.getHours() >= 14) {
         setFormData((prev) => ({
@@ -222,6 +228,15 @@ export default function BookServiceModal() {
         image: "https://res.cloudinary.com/epcorn/image/upload/v1762003702/Express_Pesticides_Website/HOMEPAGE_IMAGES/Express_pestcide_logo_transparent_ra6ld9.png",
         description: `Payment for ${formData.category}`,
         order_id: orderData.id,
+        notes: {
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          serviceAddress: `${formData.serviceAddress1}-${formData.serviceAddress2}-${formData.serviceAddress3}, ${formData.serviceLocation}, ${formData.serviceCity} - ${formData.servicePincode}`,
+          billingAddress: `${formData.billingAddress1}-${formData.billingAddress2}-${formData.billingAddress3}, ${formData.billingLocation}, ${formData.billingCity} - ${formData.billingPincode}`,
+          serviceType: formData.serviceType,
+          servicedate: formData.dateOfService || formData.firstServiceDate
+        },
         method: {
           netbanking: true, upi: true, card: true, wallet: false, emi: false, paylater: false
         },
@@ -303,9 +318,10 @@ export default function BookServiceModal() {
       document.body.style.overflow = "auto"
   }, [isOpen])
 
+
+  //testing purpose
   const anotherSubmit = (e) => {
     e.preventDefault();
-
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     if (formData) console.log(formData)
@@ -317,7 +333,7 @@ export default function BookServiceModal() {
 
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed top-1/2 -translate-y-1/2 right-0 z-40 bg-blue-600 text-white font-bold py-3 px-5 rounded-l-lg shadow-lg hover:bg-blue-700"
+        className="fixed top-1/2 -translate-y-1/2 right-0 z-40 bg-blue-600 text-white font-bold py-3 px-5 rounded-l-lg shadow-lg hover:bg-blue-700 cursor-pointer transition-all"
         style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
       >
         Book a Service

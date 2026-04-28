@@ -47,11 +47,10 @@ function buildInvoiceHtml(formData, paymentDetails, status) {
   ]
     .filter(Boolean)
     .join(", ");
-
-    console.log(billingAddress)
     
   // Check if billing is same as service
-  const isBillingSame = (billingAddress === serviceAddress);
+  const isBillingSame = formData.sameAsShipping;
+  console.log("(verify-payment,ln-53)->isbiling same : ", isBillingSame)
 
   const amountPaid = (paymentDetails.amount / 100).toLocaleString("en-IN");
 
@@ -168,7 +167,6 @@ export async function POST(req) {
     return NextResponse.json({ error: "Server misconfigured" }, { status: 500 });
   }
 
-  console.log(razorpay_order_id, razorpay_payment_id, razorpay_signature, formData, cost)
   let paymentStatus = "";
   let emailSubject = "";
   let paymentDetails = {};

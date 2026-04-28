@@ -14,7 +14,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   
   return (
-    <html lang="en">
+    <html lang="en" className="scrollbar-hidden">
       <body className="bg-white text-black overflow-x-hidden">
         <Navbar />
         <BookServiceModal />
