@@ -15,6 +15,7 @@ import {
   FaBuilding,
 } from "react-icons/fa";
 import Footer from "@/components/Footer";
+import Image from "next/image";
 
 export default function ServicesPage() {
   const services = [
@@ -58,16 +59,16 @@ export default function ServicesPage() {
                 className="flex flex-col items-center transform hover:-translate-y-2 transition duration-300"
               >
                 <div className="relative w-28 h-28 rounded-full overflow-hidden flex items-center justify-center bg-transparent">
-                  <img
-                    src={s.logo}
-                    alt={s.name}
-                    className="w-full h-full object-cover scale-[1.3]"
-                    style={{
-                      maskImage: "radial-gradient(circle, white 100%, transparent 100%)",
-                      WebkitMaskImage: "radial-gradient(circle, white 100%, transparent 100%)",
-                      backgroundColor: "transparent",
-                    }}
-                  />
+                 <Image
+                  src={s.logo}
+                  alt={s.name}
+                  // Using fill instead of hardcoded w/h for dynamic layouts
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  className="object-cover scale-[1.3]"
+                  // Priority helps load critical service logos faster on slow 4G/5G
+                  priority={true} 
+                />
                 </div>
                 <h3 className="text-gray-800 font-semibold text-lg mt-4 text-center">
                   {s.name}

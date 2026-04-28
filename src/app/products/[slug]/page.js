@@ -420,7 +420,7 @@ export default function ProductDetailPage() {
           <div className="max-w-7xl mx-auto px-6 text-center">
             <h1 className="text-4xl font-bold text-gray-900">Product Not Found</h1>
             <p className="text-lg text-gray-600 mt-4">
-              Sorry, we couldn't find the product you were looking for.
+              Sorry, we {`couldn't`} find the product you were looking for.
             </p>
           </div>
         </section>
