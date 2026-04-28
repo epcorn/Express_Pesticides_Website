@@ -343,7 +343,7 @@ export default function BookServiceModal() {
           <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto scrollbar-hidden">
             <div className="sticky top-0 bg-white  flex justify-between items-center p-4 border-b">
               <h2 className="text-2xl font-bold">Book Your Service</h2>
-              <button onClick={() => setIsOpen(false)} className="border rounded-full p-1 text-red-700 hover:bg-red-600 hover:text-white cursor-pointer transition-all">
+              <button onClick={() => setIsOpen(false)} className="border rounded-full p-1 text-red-600 hover:bg-red-200 hover:text-white cursor-pointer transition-all">
                 <X size={24} />
               </button>
             </div>
