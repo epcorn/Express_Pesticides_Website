@@ -1,0 +1,110 @@
+{
+  "pest_control_data": [
+    {
+      "pest_name": "Mosquitoes",
+      "category": "Vector Control",
+      "breeding_triggers": "Stagnant water, high humidity (>60%), temperatures 25°C-30°C",
+      "active_ingredients": [
+        {
+          "name": "Deltamethrin (1.25% EC / 2.5% WP)",
+          "use_case": "Space spraying and thermal fogging for adults",
+          "action": "Knockdown Pyrethroid"
+        },
+        {
+          "name": "Temephos (50% EC)",
+          "use_case": "Larvicide for stagnant water bodies",
+          "action": "Organophosphate"
+        },
+        {
+          "name": "Diflubenzuron (25% WP)",
+          "use_case": "Insect Growth Regulator (IGR) for long-term larval control",
+          "action": "Chitin Synthesis Inhibitor"
+        },
+        {
+          "name": "Bacillus thuringiensis (Bt)",
+          "use_case": "Biological control in clean/potable water",
+          "action": "Biological Larvicide"
+        }
+      ],
+      "application_methods": ["Thermal Fogging", "ULV Misting", "Indoor Residual Spray (IRS)"],
+      "precautions": ["Cover water tanks", "Avoid spraying near fish ponds (toxic to aquatic life)", "Ensure no humans/pets in the room during fogging"]
+    },
+    {
+      "pest_name": "Rodents",
+      "category": "Structural Pests",
+      "breeding_triggers": "Monsoon/Spring; presence of food waste and cluttered burrows",
+      "active_ingredients": [
+        {
+          "name": "Bromadiolone (0.005% RB)",
+          "use_case": "Indoor/Outdoor baiting blocks",
+          "action": "Second-gen Anticoagulant"
+        },
+        {
+          "name": "Zinc Phosphide (80%)",
+          "use_case": "Acute poisoning for heavy infestations (Burrow baiting)",
+          "action": "Acute Toxicant (Phosphine Gas)"
+        },
+        {
+          "name": "Coumatetralyl (0.0375%)",
+          "use_case": "Tracking powder or liquid baiting",
+          "action": "First-gen Anticoagulant"
+        }
+      ],
+      "application_methods": ["Bait Stations", "Glue Traps (Mechanical)", "Burrow Fumigation"],
+      "precautions": ["Use tamper-resistant bait stations", "Keep Vitamin K1 as antidote", "Dispose of carcasses strictly to prevent secondary poisoning of pets"]
+    },
+    {
+      "pest_name": "Bedbugs",
+      "category": "Structural/Public Health",
+      "breeding_triggers": "High human turnover, warm indoor temperatures, travel seasons",
+      "active_ingredients": [
+        {
+          "name": "Clothianidin (Sumi Pride)",
+          "use_case": "Residual spray on furniture and mattress seams",
+          "action": "Neonicotinoid"
+        },
+        {
+          "name": "Hydroprene (Gentrol)",
+          "use_case": "Mixing with spray to prevent nymphs from maturing",
+          "action": "Insect Growth Regulator (IGR)"
+        },
+        {
+          "name": "Propoxur (20% EC)",
+          "use_case": "Spot treatment for heavy infestations",
+          "action": "Carbamate (High Knockdown)"
+        },
+        {
+          "name": "Silica Gel / Diatomaceous Earth",
+          "use_case": "Dusting in wall voids and electrical outlets",
+          "action": "Desiccant (Physical Kill)"
+        }
+      ],
+      "application_methods": ["Crack & Crevice Injection", "Steam Treatment", "Residual Spraying"],
+      "precautions": ["Wash linen at >60°C", "Do not spray directly on skin-contact surfaces of mattresses without proper drying", "Seal treated rooms for 4-6 hours"]
+    },
+    {
+      "pest_name": "Honey Bees",
+      "category": "Beneficial Insects / Pollinators",
+      "breeding_triggers": "Spring/Flowering seasons",
+      "active_ingredients": [
+        {
+          "name": "N/A (Relocation Preferred)",
+          "use_case": "Safe removal of hives to prevent stinging hazards",
+          "action": "Mechanical Removal"
+        },
+        {
+          "name": "Essential Oils (Menthol/Thymol)",
+          "use_case": "Temporary repellent to prevent hive building",
+          "action": "Natural Repellent"
+        }
+      ],
+      "application_methods": ["Smoke pacification", "Manual hive relocation", "Bee-proofing (seal entry points)"],
+      "precautions": ["DO NOT USE PESTICIDES unless there is an immediate life threat (Anaphylaxis)", "Contact a local beekeeper first", "Use full protective bee suits"]
+    }
+  ],
+  "technical_metadata": {
+    "version": "1.2.0",
+    "region_standard": "CIBRC (India) / EPA (Global)",
+    "last_updated": "2026-05-02"
+  }
+}

@@ -7,7 +7,7 @@ import { servicesData } from "../app/services/lib/ServiceData.js";
 import { holidays, mockPincodes } from "@/data/bookservicemodelData.js";
 import postalcodes from "postalcodes-india"
 
-export default function BookServiceModal() {
+function BookServiceModal() {
   const [isOpen, setIsOpen] = useState(false);
   const [pincode, setPincode] = useState("");
   const [isPincodeValid, setIsPincodeValid] = useState(false);
@@ -317,7 +317,6 @@ export default function BookServiceModal() {
       document.body.style.overflow = "auto"
   }, [isOpen])
 
-
   //testing purpose
   const anotherSubmit = (e) => {
     e.preventDefault();
@@ -325,6 +324,7 @@ export default function BookServiceModal() {
     setFormData((prev) => ({ ...prev, [name]: value }));
     if (formData) console.log(formData)
   }
+
 
   return (
     <>
@@ -337,7 +337,7 @@ export default function BookServiceModal() {
       >
         Book a Service
       </button >
-      
+
 
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm dark:text-black">
@@ -354,6 +354,7 @@ export default function BookServiceModal() {
                 <>
                   <label className="font-medium">Enter Pincode:</label>
                   <input
+                    type="number"
                     value={pincode}
                     onChange={(e) => setPincode(e.target.value)}
                     className="w-full px-3 py-2 border rounded"
@@ -567,6 +568,7 @@ export default function BookServiceModal() {
                     />
                     <input
                       name="phone"
+                      type="tel"
                       placeholder="Phone Number"
                       value={formData.phone}
                       onChange={handleChange}
@@ -575,6 +577,7 @@ export default function BookServiceModal() {
                     />
                     <input
                       name="email"
+                      type="email"
                       placeholder="Email Address"
                       value={formData.email}
                       onChange={handleChange}
@@ -583,6 +586,7 @@ export default function BookServiceModal() {
                     />
                     <input
                       name="serviceAddress1"
+                      type="text"
                       placeholder="Address Line 1 (Building/Office Name)"
                       value={formData.serviceAddress1}
                       onChange={handleChange}
@@ -604,7 +608,7 @@ export default function BookServiceModal() {
                       className="border px-3 py-2 rounded w-full mb-2"
                     />
                     <input
-                      type="text"
+                      type="number"
                       name="servicePincode"
                       placeholder="Pincode"
                       value={formData.servicePincode}
@@ -659,6 +663,7 @@ export default function BookServiceModal() {
                       <>
                         <input
                           name="billName"
+                          type="text"
                           placeholder="Full Name"
                           value={formData.billName}
                           onChange={handleChange}
@@ -667,6 +672,7 @@ export default function BookServiceModal() {
                         />
                         <input
                           name="billPhone"
+                          type="tel"
                           placeholder="Phone Number"
                           value={formData.billPhone}
                           onChange={handleChange}
@@ -675,6 +681,7 @@ export default function BookServiceModal() {
                         />
                         <input
                           name="billEmail"
+                          type="email"
                           placeholder="Email Address"
                           value={formData.billEmail}
                           onChange={handleChange}
@@ -705,6 +712,7 @@ export default function BookServiceModal() {
                         />
                         <input
                           name="billingPincode"
+                          type="number"
                           placeholder="Pincode"
                           value={formData.billingPincode}
                           onChange={handleChange}
@@ -814,3 +822,6 @@ export default function BookServiceModal() {
     </>
   );
 }
+
+
+export default BookServiceModal;
