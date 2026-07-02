@@ -1,10 +1,10 @@
 "use client";
-import PestData from "@/components/PestData";
+// import PestData from "@/components/PestData";
 
 function page() {
   return (
     <div>
-      <PestData />
+      {/* <PestData /> */}
     </div>
   );
 }
