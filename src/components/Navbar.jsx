@@ -37,20 +37,23 @@ export default function Navbar() {
     {
       name: "Products",
       links: [
-        { name: 'Birdrid brochure', link: "../assets/products/Birdrid brochure.pdf" },
-        { name: 'Crack Selling brochure', link: "../assets/products/Crack Selling brochure.pdf" },
-        { name: 'Reptout Repellent brochure', link: "../assets/products/Reptout Repellent brochure.pdf" },
-        { name: 'Rodein Bait station brochure', link: "../assets/products/Rodein Bait station brochure.pdf" },
-        { name: 'Rodent Repellent  brochure', link: "../assets/products/Rodent Repellent  brochure.pdf" },
-        { name: 'SNAPPER Electric Catcher brochure', link: "../assets/products/SNAPPER Electric Catcher brochure.pdf" },
+        { name: 'Birdrid brochure', link: "/assets/products/Birdrid brochure.pdf" },
+        { name: 'Crack Selling brochure', link: "/assets/products/Crack Selling brochure.pdf" },
+        { name: 'Reptout Repellent brochure', link: "/assets/products/Reptout Repellent brochure.pdf" },
+        { name: 'Rodein Bait station brochure', link: "/assets/products/Rodein Bait station brochure.pdf" },
+        { name: 'Rodent Repellent  brochure', link: "/assets/products/Rodent Repellent  brochure.pdf" },
+        { name: 'SNAPPER Electric Catcher brochure', link: "/assets/products/SNAPPER Electric Catcher brochure.pdf" },
       ]
     },
     {
       name: "Company Data",
       links: [
-        { name: ' ', link: " " },
-        { name: ' ', link: " " },
-        { name: ' ', link: " " }
+        { name: 'GST Certificate', link: "/assets/company_data/GST Certificate.pdf" },
+        { name: 'IGBC Certificate 2026', link: "/assets/company_data/IGBC Certificate 2026.pdf" },
+        { name: 'ISO 14001 2015 Certificate', link: "/assets/company_data/ISO 14001 2015 Certificate.pdf" },
+        { name: 'ISO 45001 2018 Certificate', link: "/assets/company_data/ISO 45001 2018 Certificate.pdf" },
+        { name: 'ISO 9001 2015 Certificate', link: "/assets/company_data/ISO 9001 2015 Certificate.pdf" },
+        { name: 'MSME Certificate', link: "/assets/company_data/MSME Certificate.pdf" },
       ]
     }
   ];
@@ -96,14 +99,13 @@ export default function Navbar() {
                             <ChevronRight className="w-4 h-4 text-gray-400 group-hover/sub:text-blue-600" />
 
                             {/* Dropdown level 2 */}
-                            {/* FIX: Left margin set to 0 with a transparent left padding to close the horizontal gap hitbox seamlessly */}
-                            <ul className="absolute top-0 left-full z-50 min-w-[200px] bg-white border border-gray-100 shadow-lg rounded-md py-1 pl-1 -ml-1 hidden group-hover/sub:block">
+                            <ul className="absolute top-0 left-full z-50 min-w-[250px] bg-white border border-gray-100 shadow-lg rounded-md py-1 pl-1 -ml-1 hidden group-hover/sub:block">
                               {s.links.map((subLink, subIdx) => (
                                 <li key={subIdx}>
                                   <a
                                     href={subLink.link}
                                     download={`${subLink.name}.pdf`}
-                                    className="block px-4 py-3 text-xs text-gray-600 hover:bg-gray-50 hover:text-black transition-colors normal-case whitespace-normal"
+                                    className="block px-4 py-3  text-gray-600 hover:bg-gray-50 hover:text-black transition-colors normal-case whitespace-normal"
                                   >
                                     {subLink.name}
                                   </a>
