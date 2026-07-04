@@ -1,35 +1,49 @@
 import { NextResponse } from "next/server";
 import Razorpay from "razorpay";
 
-// This POST function runs when your frontend calls '/api/create-order'
 export async function POST(req) {
-  // 1. Get the amount (e.g., 1000) from the modal's fetch request
-  const { amount } = await req.json();
-
-  // 2. Initialize Razorpay using your *secret* keys from .env.local
-  const razorpay = new Razorpay({
-    key_id: process.env.RAZORPAY_KEY_ID_TEST,
-    key_secret: process.env.RAZORPAY_KEY_SECRET_TEST,
-  });
-
-  // 3. Set up the order options
-  const options = {
-    amount: amount * 100,
-    currency: "INR",
-    receipt: `receipt_order_${new Date().getTime()}`,
-    
-  };
-
   try {
-    // 4. Tell Razorpay's servers to create the order
-    console.log("payment procesing....")
+    // 1. Read the text body first to handle empty requests safely
+    const text = await req.text();
+    if (!text) {
+      return NextResponse.json(
+        { error: "Empty request body received" },
+        { status: 400 },
+      );
+    }
+
+    const { amount } = JSON.parse(text);
+
+    if (!amount) {
+      return NextResponse.json(
+        { error: "Amount parameter is required" },
+        { status: 400 },
+      );
+    }
+
+    const razorpay = new Razorpay({
+      key_id: process.env.RAZORPAY_KEY_ID_TEST,
+      key_secret: process.env.RAZORPAY_KEY_SECRET_TEST,
+    });
+
+    const options = {
+      amount: Math.round(amount * 100),
+      currency: "INR",
+      receipt: `receipt_order_${new Date().getTime()}`,
+    };
+
+    console.log("💳 Live payment processing initiated for amount:", amount);
     const order = await razorpay.orders.create(options);
-    
-    // 5. Send the order details (like the new 'order.id') back to the frontend
+
     return NextResponse.json(order, { status: 200 });
   } catch (error) {
-    // Handle any errors
-    console.error(error);
-    return NextResponse.json({ error: "Failed to create order" }, { status: 500 });
+    console.error("❌ Live Order Creation Error:", error);
+    return NextResponse.json(
+      { error: "Failed to process order setup" },
+      { status: 500 },
+    );
   }
 }
+
+// key_id: process.env.RAZORPAY_KEY_ID_TEST,
+// key_secret: process.env.RAZORPAY_KEY_SECRET_TEST,

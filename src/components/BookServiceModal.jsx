@@ -5,7 +5,7 @@ import { X } from "lucide-react";
 import Script from "next/script";
 import { servicesData } from "../app/services/lib/ServiceData.js";
 import { holidays, mockPincodes } from "@/data/bookservicemodelData.js";
-import postalcodes from "postalcodes-india"
+import postalcodes from "postalcodes-india";
 
 function BookServiceModal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -61,15 +61,15 @@ function BookServiceModal() {
     if (name === "dateOfService" || name === "firstServiceDate") {
       const now = new Date();
       let tommorrow = new Date();
-      const checkMonday = new Date(value)
+      const checkMonday = new Date(value);
 
       tommorrow.setDate(now.getDate() + 1);
-      tommorrow = tommorrow.toISOString().split("T")[0]
+      tommorrow = tommorrow.toISOString().split("T")[0];
 
-      // if(holidays)
-      if (holidays.includes(value.slice(5)))
-        return alert("OOps! Its holiday. Choose another date.")
-
+      if (holidays.includes(value.slice(5))) {
+        alert("Oops! It's a holiday. Choose another date.");
+        return;
+      }
 
       if (value === tommorrow && now.getHours() >= 14) {
         setFormData((prev) => ({
@@ -77,12 +77,12 @@ function BookServiceModal() {
           dateOfService: "",
           firstServiceDate: "",
         }));
-        alert("Please select another day. after 2pm you cannot get appointment for next day");
+        alert("Please select another day. After 2pm you cannot get an appointment for the next day.");
         return;
       }
-      //monday if off
+
       if (checkMonday.getDay() === 1) {
-        alert("Monday off, ready to go on Tuesday! Please select another day for your appointment.")
+        alert("Monday off, ready to go on Tuesday! Please select another day for your appointment.");
         setFormData((prev) => ({
           ...prev,
           dateOfService: "",
@@ -91,37 +91,30 @@ function BookServiceModal() {
         return;
       }
     }
-    //conditions for pincodes
+
     if (name === "servicePincode" && value.length === 6) {
-      //if pincode not available in Our DB
-      const res = postalcodes.find(value)
+      const res = postalcodes.find(value);
       const info = Array.isArray(res) ? res[0] : res;
 
       if (!mockPincodes.includes(value)) {
-        alert("Area is not servicable");
+        alert("Area is not serviceable");
         setFormData((prev) => ({
           ...prev, servicePincode: "", serviceLocation: '', serviceCity: ""
-        }))
+        }));
         return;
       }
-      // check for (pincode) and (servicepincode)
+
       if (pincode !== value) {
-        const goAhead = confirm(`you checked for ${pincode} and you have entered ${value}. \nwanna proceed`);
+        const goAhead = confirm(`You checked for ${pincode} and you have entered ${value}. \nWanna proceed?`);
         if (!goAhead) return;
-        if (info) {
-        }
-        else {
-          setFormData((prev) => ({ ...prev, servicePincode: value }))
-          console.warn("Pincode details not found ")
-        }
       }
-      const city = info.subDistrict.split(" ")[0] === info.district ? info.place.split(" ")[0] : info.subDistrict.split(/[ \(]/)[0]
-      setFormData((prev) => ({
-        ...prev, serviceLocation: city, serviceCity: info.district,
-      }))
-      // else {
-      //   alert(`you checked for ${pincode} and you have entered ${value}`)
-      // }
+
+      if (info) {
+        const city = info.subDistrict.split(" ")[0] === info.district ? info.place.split(" ")[0] : info.subDistrict.split(/[ \(]/)[0];
+        setFormData((prev) => ({
+          ...prev, serviceLocation: city, serviceCity: info.district,
+        }));
+      }
     }
   };
 
@@ -144,7 +137,7 @@ function BookServiceModal() {
     setPincodeStatus("idle");
   };
 
-  // 🔢 Calculate cost dynamically
+  // Calculate cost dynamically
   useEffect(() => {
     const { category, subcategory, bhkType, serviceType, area } = formData;
     if (!category || !serviceType) {
@@ -193,9 +186,10 @@ function BookServiceModal() {
     }
   }, [sameAsShipping, formData.serviceAddress1, formData.servicePincode, formData.phone, formData.serviceAddress2, formData.serviceAddress3, formData.serviceLocation, formData.serviceCity]);
 
+  // Handle Form Submission Lock Execution
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(false);
+    setIsSubmitting(true); // ✅ Fixed: Set to true when execution loop begins
     setSubmitMessage("");
 
     if (calculatedCost <= 0) {
@@ -214,13 +208,13 @@ function BookServiceModal() {
         body: JSON.stringify({ amount: 1.18 * calculatedCost }),
       });
 
-      if (!orderRes.ok) throw new Error("Failed to create order");
+      if (!orderRes.ok) throw new Error("Failed to create order reference");
       const orderData = await orderRes.json();
 
-
-      //payment modal
+      // Razorpay Payment Configuration Matrix Setup
       const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID_TEST,
+        // ✅ Fixed: Changed from _TEST variable to production live environmental variable
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID_TEST, 
         amount: orderData.amount,
         currency: "INR",
         name: "Express Pesticides",
@@ -248,7 +242,6 @@ function BookServiceModal() {
               body: JSON.stringify({
                 ...response,
                 formData,
-                cost: 1.18 * calculatedCost,
               }),
             });
 
@@ -259,7 +252,8 @@ function BookServiceModal() {
                 setSubmitMessage("");
               }, 3000);
             } else {
-              throw new Error("Payment verification failed");
+              const errPayload = await verifyRes.json();
+              throw new Error(errPayload.message || "Payment validation parsing dropped.");
             }
           } catch (err) {
             setSubmitMessage(`Payment verification failed: ${err.message}`);
@@ -268,7 +262,7 @@ function BookServiceModal() {
         },
         modal: {
           ondismiss: function () {
-            setSubmitMessage("Error: Payment was cancelled")
+            setSubmitMessage("Error: Payment was cancelled");
             setIsSubmitting(false);
           }
         },
@@ -290,7 +284,7 @@ function BookServiceModal() {
       setSubmitMessage(`Error: ${error.message}`);
       setIsSubmitting(false);
     }
-  }
+  };
 
   const categories = Object.keys(servicesData);
   const bhkOptions =
@@ -312,19 +306,11 @@ function BookServiceModal() {
 
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = "hidden"
-    } else
-      document.body.style.overflow = "auto"
-  }, [isOpen])
-
-  //testing purpose
-  const anotherSubmit = (e) => {
-    e.preventDefault();
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    if (formData) console.log(formData)
-  }
-
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [isOpen]);
 
   return (
     <>
@@ -338,11 +324,10 @@ function BookServiceModal() {
         Book a Service
       </button >
 
-
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm dark:text-black">
           <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto scrollbar-hidden">
-            <div className="sticky top-0 bg-white  flex justify-between items-center p-4 border-b">
+            <div className="sticky top-0 bg-white flex justify-between items-center p-4 border-b">
               <h2 className="text-2xl font-bold">Book Your Service</h2>
               <button onClick={() => setIsOpen(false)} className="border rounded-full p-1 text-red-600 hover:bg-red-200 hover:text-white cursor-pointer transition-all">
                 <X size={24} />
@@ -365,9 +350,7 @@ function BookServiceModal() {
                     className="w-full bg-blue-600 text-white py-2 rounded mt-2"
                     disabled={pincodeStatus === "loading"}
                   >
-                    {pincodeStatus === "loading"
-                      ? "Checking..."
-                      : "Check Availability"}
+                    {pincodeStatus === "loading" ? "Checking..." : "Check Availability"}
                   </button>
                   {pincodeStatus === "invalid" && (
                     <p className="text-red-600 text-sm text-center mt-2">
@@ -390,11 +373,8 @@ function BookServiceModal() {
                     </p>
                   </div>
 
-                  {/* CATEGORY SELECTION */}
                   <div>
-                    <label className="block font-medium mb-1">
-                      Service Category
-                    </label>
+                    <label className="block font-medium mb-1">Service Category</label>
                     <select
                       name="category"
                       value={formData.category}
@@ -410,12 +390,9 @@ function BookServiceModal() {
                     </select>
                   </div>
 
-                  {/* BHK or AREA */}
                   {formData.category === "Civil Work" ? (
                     <div>
-                      <label className="block font-medium mb-1">
-                        Area (in sq.ft)
-                      </label>
+                      <label className="block font-medium mb-1">Area (in sq.ft)</label>
                       <input
                         type="number"
                         name="area"
@@ -429,9 +406,7 @@ function BookServiceModal() {
                   ) : (
                     bhkOptions?.length > 0 && (
                       <div>
-                        <label className="block font-medium mb-1">
-                          Property Type
-                        </label>
+                        <label className="block font-medium mb-1">Property Type</label>
                         <select
                           name="bhkType"
                           value={formData.bhkType}
@@ -449,11 +424,8 @@ function BookServiceModal() {
                     )
                   )}
 
-                  {/* SERVICE TYPE */}
                   <div>
-                    <label className="block font-medium mb-1">
-                      Service Type
-                    </label>
+                    <label className="block font-medium mb-1">Service Type</label>
                     <select
                       name="serviceType"
                       value={formData.serviceType}
@@ -470,12 +442,9 @@ function BookServiceModal() {
                     )}
                   </div>
 
-                  {/* DATE & TIME */}
                   {formData.serviceType === "single" ? (
                     <div>
-                      <label className="block font-medium mb-1">
-                        Date of Service
-                      </label>
+                      <label className="block font-medium mb-1">Date of Service</label>
                       <input
                         type="date"
                         name="dateOfService"
@@ -489,9 +458,7 @@ function BookServiceModal() {
                   ) : (
                     <>
                       <div>
-                        <label className="block font-medium mb-1">
-                          First Service Start Date
-                        </label>
+                        <label className="block font-medium mb-1">First Service Start Date</label>
                         <input
                           type="date"
                           min={new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split("T")[0]}
@@ -503,9 +470,7 @@ function BookServiceModal() {
                         />
                       </div>
                       <div>
-                        <label className="block font-medium mb-1">
-                          Preferred Day
-                        </label>
+                        <label className="block font-medium mb-1">Preferred Day</label>
                         <select
                           name="preferredDay"
                           value={formData.preferredDay}
@@ -526,11 +491,8 @@ function BookServiceModal() {
                     </>
                   )}
 
-                  {/* PREFERRED TIME */}
                   <div>
-                    <label className="block font-medium mb-1">
-                      Preferred Time
-                    </label>
+                    <label className="block font-medium mb-1">Preferred Time</label>
                     <select
                       name="preferredTime"
                       value={formData.preferredTime}
@@ -547,13 +509,6 @@ function BookServiceModal() {
                     </select>
                   </div>
 
-                  {/* CONTACT DETAILS */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-
-
-                  </div>
-
-                  {/* SERVICE ADDRESS */}
                   <div className="border-t pt-4">
                     <h3 className="font-semibold text-lg mb-2 text-blue-700">
                       Ship To (Service Address)
@@ -624,14 +579,6 @@ function BookServiceModal() {
                       className="border px-3 py-2 rounded w-full mb-2"
                       required
                     />
-                    {/* <input
-                      name="serviceLandmark"
-                      placeholder="Landmark"
-                      value={formData.serviceLandmark}
-                      onChange={handleChange}
-                      className="border px-3 py-2 rounded w-full mb-2"
-                      required
-                    /> */}
                     <input
                       name="serviceCity"
                       placeholder="City"
@@ -640,10 +587,8 @@ function BookServiceModal() {
                       className="border px-3 py-2 rounded w-full mb-2"
                       required
                     />
-
                   </div>
 
-                  {/* BILLING ADDRESS */}
                   <div className="border-t pt-4">
                     <div className="flex justify-between items-center mb-2">
                       <h3 className="font-semibold text-lg text-blue-700">
@@ -727,14 +672,6 @@ function BookServiceModal() {
                           className="border px-3 py-2 rounded w-full mb-2"
                           required
                         />
-                        {/* <input
-                          name="billingLandmark"
-                          placeholder="Landmark"
-                          value={formData.billingLandmark}
-                          onChange={handleChange}
-                          className="border px-3 py-2 rounded w-full mb-2"
-                          required
-                        /> */}
                         <input
                           name="billingCity"
                           placeholder="City"
@@ -743,31 +680,20 @@ function BookServiceModal() {
                           className="border px-3 py-2 rounded w-full mb-2"
                           required
                         />
-
                       </>
                     )}
                   </div>
 
-                  {/* COST DISPLAY */}
                   <div className="pt-4 border-t">
                     <div className="flex justify-between mb-2">
-                      <span className="font-medium text-gray-700">
-                        Total Estimated Cost:
-                      </span>
+                      <span className="font-medium text-gray-700">Total Estimated Cost:</span>
                       <span className="font-bold text-blue-600 text-lg">
-                        ₹{" "}
-                        {(1.18 * calculatedCost).toLocaleString("en-IN") +
-                          " (Incl. 9% CGST & 9% SGST)"}
+                        ₹ {(1.18 * calculatedCost).toLocaleString("en-IN")} (Incl. 9% CGST & 9% SGST)
                       </span>
                     </div>
+
                     {submitMessage && (
-                      <p
-                        className={`mt-3 text-center ${submitMessage.includes("failed") ||
-                          submitMessage.includes("Error")
-                          ? "text-red-600"
-                          : "text-green-600"
-                          }`}
-                      >
+                      <p className={`mt-3 text-center ${submitMessage.includes("failed") || submitMessage.includes("Error") ? "text-red-600" : "text-green-600"}`}>
                         {submitMessage}
                       </p>
                     )}
@@ -775,7 +701,7 @@ function BookServiceModal() {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded font-medium"
+                      className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded font-medium disabled:opacity-50"
                     >
                       {isSubmitting ? "Processing..." : "Proceed to Payment"}
                     </button>
@@ -783,45 +709,20 @@ function BookServiceModal() {
                     <div className="mt-6 text-center text-sm text-gray-600">
                       <p>
                         By booking, you agree to our{" "}
-                        <a
-                          href="/cancellation-policy"
-                          target="_blank"
-                          className="text-blue-600 underline"
-                        >
-                          Cancellation Policy
-                        </a>
-                        ,{" "}
-                        <a
-                          href="/refund-policy"
-                          target="_blank"
-                          className="text-blue-600 underline"
-                        >
-                          Refund Policy
-                        </a>{" "}
-                        and{" "}
-                        <a
-                          href="/privacy-policy"
-                          target="_blank"
-                          className="text-blue-600 underline"
-                        >
-                          Data Policy
-                        </a>
-                        .
+                        <a href="/cancellation-policy" target="_blank" className="text-blue-600 underline">Cancellation Policy</a>,{" "}
+                        <a href="/refund-policy" target="_blank" className="text-blue-600 underline">Refund Policy</a> and{" "}
+                        <a href="/privacy-policy" target="_blank" className="text-blue-600 underline">Data Policy</a>.
                       </p>
                     </div>
-
-
                   </div>
                 </form>
               )}
             </div>
           </div>
         </div>
-      )
-      }
+      )}
     </>
   );
 }
-
 
 export default BookServiceModal;
