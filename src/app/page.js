@@ -5,6 +5,7 @@ import OurClients from "@/components/OurClients";
 import FAQ from "@/components/FAQ";
 import Footer from "@/components/Footer";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export default function HomePage() {
   return (
@@ -15,7 +16,8 @@ export default function HomePage() {
       <OurClients />
       <FAQ />
       <Footer />
-      <Analytics />
+      <Analytics /> {/* vercel analytics */}
+      <SpeedInsights /> {/* vercel analytics */}
     </div>
   );
 }
