@@ -4,16 +4,18 @@ import WhyChooseUs from "@/components/WhyChooseUs";
 import OurClients from "@/components/OurClients";
 import FAQ from "@/components/FAQ";
 import Footer from "@/components/Footer";
+import { Analytics } from "@vercel/analytics/next";
 
 export default function HomePage() {
   return (
     <div>
       <HeroSection />
-      <PriceCalculator/>
-      <WhyChooseUs/>
-      <OurClients/>
-      <FAQ/>
-      <Footer/>
+      <PriceCalculator />
+      <WhyChooseUs />
+      <OurClients />
+      <FAQ />
+      <Footer />
+      <Analytics />
     </div>
   );
 }
