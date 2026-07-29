@@ -4,40 +4,31 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { images } from "@/data/herosectionData";
 
-
-
 export default function HeroSection() {
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {
+    if (images.length <= 1) return;
+
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % images.length);
     }, 4000);
+
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <section
-      className="mt-0 relative  aspect-video bg-gray-50 flex items-center justify-center overflow-hidden"
-    >
-      {images.map((img, index) => (
-        <div
-          key={index}
-          className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === current ? "opacity-100 z-10" : "opacity-0 z-0"
-            }`}
-        >
-          <div className="relative w-full h-full">
-            <Image
-              src={img}
-              alt={`Slide ${index + 1}`}
-              fill
-              priority={index === 0}
-              className="object-cover object-top w-auto h-auto"
-              sizes="100vw"
-            />
-          </div>
-        </div>
-      ))}
+    <section className="w-full overflow-hidden">
+      <Image
+        key={current}
+        src={images[current]}
+        alt={`Slide ${current + 1}`}
+        width={1920}
+        height={1080}
+        priority
+        className="w-full h-auto object-cover transition-all duration-700"
+        sizes="100vw"
+      />
     </section>
   );
 }
