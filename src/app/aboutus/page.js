@@ -2,8 +2,14 @@
 
 import Image from "next/image";
 import Footer from "@/components/Footer";
-import { FaShieldAlt, FaLeaf, FaStar, FaEye, FaBullseye, FaFlag } from "react-icons/fa";
-
+import {
+  FaShieldAlt,
+  FaLeaf,
+  FaStar,
+  FaEye,
+  FaBullseye,
+  FaFlag,
+} from "react-icons/fa";
 
 export default function AboutPage() {
   const coreValues = [
@@ -11,7 +17,10 @@ export default function AboutPage() {
     { name: "Innovation", desc: "Adopting modern, science-based solutions." },
     { name: "Sustainability", desc: "Caring for people and the planet." },
     { name: "Excellence", desc: "Delivering results continuously." },
-    { name: "Trust", desc: "Building long-term relationships through transparency." },
+    {
+      name: "Trust",
+      desc: "Building long-term relationships through transparency.",
+    },
   ];
 
   const processSteps = [
@@ -34,10 +43,19 @@ export default function AboutPage() {
 
   const whyChoosePoints = [
     { name: "Expert Team", desc: "Trained and certified professionals." },
-    { name: "Safe-Eco Solutions", desc: "Safe for people, pets, and the planet." },
-    { name: "Advanced Technology", desc: "Digital reports, QR tracking & smart monitoring." },
+    {
+      name: "Safe-Eco Solutions",
+      desc: "Safe for people, pets, and the planet.",
+    },
+    {
+      name: "Advanced Technology",
+      desc: "Digital reports, QR tracking & smart monitoring.",
+    },
     { name: "Customized Plans", desc: "Customized treatments for every need." },
-    { name: "Dependable Service", desc: "Proven results and long-term protection." },
+    {
+      name: "Dependable Service",
+      desc: "Proven results and long-term protection.",
+    },
   ];
 
   const certificates = [
@@ -76,9 +94,9 @@ export default function AboutPage() {
   ];
 
   return (
-    <main className="pt-32">
+    <main className="">
       {/* Section 1: About Us */}
-      <section className="py-16">
+      <section className="pt-20">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div>
             <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6">
@@ -86,21 +104,22 @@ export default function AboutPage() {
             </h1>
             <p className="text-lg text-gray-700 leading-relaxed mb-4">
               At Express Pesticides, we believe that true progress begins with
-              protection — protection of health, homes, and habitats. Founded with
-              a vision to redefine pest management through innovation and
+              protection — protection of health, homes, and habitats. Founded
+              with a vision to redefine pest management through innovation and
               integrity, Express Pesticides stands at the forefront of smart-eco
               solutions designed for a dependable, safer, and healthier world.
             </p>
             <p className="text-lg text-gray-700 leading-relaxed mb-4">
-              With years of expertise and a commitment to excellence, we focus on
-              a comprehensive integrated pest management approach through the
-              offered services to residential, commercial, and industrial clients
-              across India.
+              With years of expertise and a commitment to excellence, we focus
+              on a comprehensive integrated pest management approach through the
+              offered services to residential, commercial, and industrial
+              clients across India.
             </p>
             <p className="text-lg text-gray-700 leading-relaxed">
-              Our team of constantly trained professionals, certified applicators,
-              and quality assurance specialists work hand-in-hand to uphold
-              Express {`Pesticide's`} pledge: Zero compromise on safety, service, and satisfaction.
+              Our team of constantly trained professionals, certified
+              applicators, and quality assurance specialists work hand-in-hand
+              to uphold Express {`Pesticide's`} pledge: Zero compromise on
+              safety, service, and satisfaction.
             </p>
           </div>
           <div className="w-full h-96 relative rounded-lg overflow-hidden shadow-lg shadow-zinc-600">
@@ -131,10 +150,10 @@ export default function AboutPage() {
               <span className="text-blue-600">Express Pesticides</span>
             </h2>
             <p className="text-lg text-gray-700 leading-relaxed mb-4">
-              At Express Pesticides, sustainability is not just a practice — it’s
-              our purpose. We are dedicated to reducing environmental impact
-              through responsible pest management solutions that balance efficacy
-              with ecology.
+              At Express Pesticides, sustainability is not just a practice —
+              it’s our purpose. We are dedicated to reducing environmental
+              impact through responsible pest management solutions that balance
+              efficacy with ecology.
             </p>
             <p className="text-lg text-gray-700 leading-relaxed">
               Our integrated pest management approach emphasizes prevention,
@@ -148,7 +167,9 @@ export default function AboutPage() {
       {/* Section 3: Commitment */}
       <section className="py-16 bg-blue-600 text-white">
         <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-center mb-10">Our Commitment</h2>
+          <h2 className="text-3xl font-bold text-center mb-10">
+            Our Commitment
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <div>
               <FaShieldAlt className="text-5xl mx-auto mb-4" />
@@ -178,8 +199,7 @@ export default function AboutPage() {
               {certificates.map((cert) => (
                 <div
                   key={cert.name}
-                  className="relative w-72 h-96 shrink-0 rounded-lg overflow-hidden shadow-md bg-white hover:shadow-xl transition-shadow duration-300"
-                >
+                  className="relative w-72 h-96 shrink-0 rounded-lg overflow-hidden shadow-md bg-white hover:shadow-xl transition-shadow duration-300">
                   <Image
                     src={cert.src}
                     alt={cert.name}
@@ -188,7 +208,9 @@ export default function AboutPage() {
                     className="object-contain p-4"
                   />
                   <div className="absolute bottom-3 left-3 right-3 bg-white/90 p-2 text-center rounded">
-                    <p className="font-semibold text-gray-800 text-sm">{cert.name}</p>
+                    <p className="font-semibold text-gray-800 text-sm">
+                      {cert.name}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -202,36 +224,43 @@ export default function AboutPage() {
       </section>
 
       {/* Section 5: Vision */}
-      <section className="py-16">
-        <div className="max-w-5xl mx-auto text-center px-6">
-          <FaEye className="text-5xl text-blue-600 mx-auto mb-4" />
-          <h2 className="text-3xl font-bold mb-4 text-gray-900">Our Vision</h2>
-          <p className="text-lg text-gray-700 leading-relaxed">
-            To be a leading provider of sustainable pest management and hygiene
-            solutions in India by integrating technology, science, and
-            environmental responsibility.
-          </p>
+      <section className="grid grid-cols-1 sm:grid-cols-2 gap-5 px-5 bg-neutral-50 *:shadow-md">
+        <div className="py-16 bg-white">
+          <div className="max-w-5xl mx-auto text-center px-6">
+            <FaEye className="text-5xl text-blue-600 mx-auto mb-4" />
+            <h2 className="text-3xl font-bold mb-4 text-gray-900">
+              Our Vision
+            </h2>
+            <p className="text-lg text-gray-700 leading-relaxed">
+              To be a leading provider of sustainable pest management and
+              hygiene solutions in India by integrating technology, science, and
+              environmental responsibility.
+            </p>
+          </div>
+        </div>
+
+        {/* Section 6: Mission */}
+        <div className="py-16 bg-white">
+          <div className="max-w-5xl mx-auto text-center px-6">
+            <FaBullseye className="text-5xl text-blue-600 mx-auto mb-4" />
+            <h2 className="text-3xl font-bold mb-4 text-gray-900">
+              Our Mission
+            </h2>
+            <p className="text-lg text-gray-700 leading-relaxed">
+              To deliver reliable, effective, and environmentally conscious pest
+              control services that safeguard communities while promoting
+              health, hygiene, and sustainability.
+            </p>
+          </div>
         </div>
       </section>
-
-      {/* Section 6: Mission */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-5xl mx-auto text-center px-6">
-          <FaBullseye className="text-5xl text-blue-600 mx-auto mb-4" />
-          <h2 className="text-3xl font-bold mb-4 text-gray-900">Our Mission</h2>
-          <p className="text-lg text-gray-700 leading-relaxed">
-            To deliver reliable, effective, and environmentally conscious pest
-            control services that safeguard communities while promoting health,
-            hygiene, and sustainability.
-          </p>
-        </div>
-      </section>
-
       {/* Section 7: Process Steps */}
       <section className="py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <span className="text-blue-600 font-bold tracking-widest uppercase text-sm">How we work</span>
+            <span className="text-blue-600 font-bold tracking-widest uppercase text-sm">
+              How we work
+            </span>
             <h2 className="text-4xl font-bold mt-2 text-slate-900">
               The Express Approach
             </h2>
@@ -245,8 +274,7 @@ export default function AboutPage() {
             {processSteps.map((step, index) => (
               <div
                 key={step.step}
-                className="relative group bg-white rounded-2xl shadow-sm border border-slate-100 p-10 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 z-10"
-              >
+                className="relative group bg-white rounded-2xl shadow-sm border border-slate-100 p-10 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 z-10">
                 {/* Step Number Circle */}
                 <div className="absolute -top-6 left-10 w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-xl shadow-lg ring-4 ring-white">
                   {step.step}
@@ -267,13 +295,14 @@ export default function AboutPage() {
       {/* Section 8: Why Choose Us */}
       <section className="py-16 bg-blue-600 text-white">
         <div className="max-w-7xl mx-auto px-6 text-center">
-          <h2 className="text-3xl font-bold mb-10">Why Choose Express Pesticides?</h2>
+          <h2 className="text-3xl font-bold mb-10">
+            Why Choose Express Pesticides?
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {whyChoosePoints.map((point) => (
               <div
                 key={point.name}
-                className="bg-blue-500 rounded-lg p-6 shadow hover:bg-blue-400 transition"
-              >
+                className="bg-blue-500 rounded-lg p-6 shadow hover:bg-blue-400 transition">
                 <h3 className="text-xl font-semibold mb-2">{point.name}</h3>
                 <p className="text-base">{point.desc}</p>
               </div>
@@ -287,11 +316,16 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b border-gray-100 pb-8">
             <div className="max-w-2xl">
-              <h2 className="text-blue-600 font-bold tracking-widest uppercase text-sm mb-3">Foundations</h2>
-              <h3 className="text-4xl font-extrabold text-slate-900">Our Core Values</h3>
+              <h2 className="text-blue-600 font-bold tracking-widest uppercase text-sm mb-3">
+                Foundations
+              </h2>
+              <h3 className="text-4xl font-extrabold text-slate-900">
+                Our Core Values
+              </h3>
             </div>
             <p className="text-slate-500 mt-4 md:mt-0 max-w-sm">
-              The principles that guide every technician, every treatment, and every customer interaction.
+              The principles that guide every technician, every treatment, and
+              every customer interaction.
             </p>
           </div>
 
@@ -299,8 +333,7 @@ export default function AboutPage() {
             {coreValues.map((value) => (
               <div
                 key={value.name}
-                className="group relative bg-slate-50 rounded-2xl p-8 hover:bg-blue-600 transition-all duration-500 ease-in-out shadow-sm hover:shadow-2xl hover:-translate-y-2"
-              >
+                className="group relative bg-slate-50 rounded-2xl p-8 hover:bg-blue-600 transition-all duration-500 ease-in-out shadow-sm hover:shadow-2xl hover:-translate-y-2">
                 {/* Subtle Icon/Number background */}
                 <div className="mb-6 inline-flex items-center justify-center w-14 h-14 rounded-xl bg-white text-blue-600 shadow-sm group-hover:bg-blue-500 group-hover:text-white transition-colors duration-300">
                   {/* You can replace this with an actual Lucide or FontAwesome icon */}

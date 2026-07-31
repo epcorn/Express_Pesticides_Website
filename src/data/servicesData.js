@@ -31,11 +31,7 @@ export const servicePestImages = {
       "https://res.cloudinary.com/epcorn/image/upload/v1761890422/Express_Pesticides_Website/SERVICES_IMAGES/Green%20shield/ant_rfwaxe.webp",
       "https://res.cloudinary.com/epcorn/image/upload/v1761890423/Express_Pesticides_Website/SERVICES_IMAGES/Green%20shield/silverfish_fg7qbk.webp",
     ],
-    gallery: [
-      "https://res.cloudinary.com/epcorn/image/upload/v1761890549/Express_Pesticides_Website/SERVICES_IMAGES/Green%20shield/WhatsApp_Image_2025-10-24_at_1.02.20_PM_scuyzu.jpg",
-      "https://res.cloudinary.com/epcorn/image/upload/v1761890586/Express_Pesticides_Website/SERVICES_IMAGES/Green%20shield/WhatsApp_Image_2025-10-24_at_1.02.21_PM_dd7emq.jpg",
-      "https://res.cloudinary.com/epcorn/image/upload/v1761890572/Express_Pesticides_Website/SERVICES_IMAGES/Green%20shield/WhatsApp_Image_2025-10-24_at_1.02.21_PM_1_hy7qzp.jpg",
-    ],
+    gallery: [],
   },
   "rat-rid": {
     hero: "https://res.cloudinary.com/epcorn/image/upload/v1761890434/Express_Pesticides_Website/SERVICES_IMAGES/Ratrid/pexels-denitsa-kireva-2915302-9783103_gq1c6s.jpg",
@@ -46,8 +42,6 @@ export const servicePestImages = {
     gallery: [
       "/assets/service_icons/Service_Gallery/Ratrid_2.jpg",
       "/assets/service_icons/Service_Gallery/Ratrid_1.png",
-      "https://res.cloudinary.com/epcorn/image/upload/v1761890671/Express_Pesticides_Website/SERVICES_IMAGES/Ratrid/WhatsApp_Image_2025-10-24_at_12.05.04_PM_owsbe0.jpg",
-      "https://res.cloudinary.com/epcorn/image/upload/v1761890668/Express_Pesticides_Website/SERVICES_IMAGES/Ratrid/WhatsApp_Image_2025-10-24_at_12.03.14_PM_gbjv4t.jpg",
     ],
   },
   "anti-termite-treatment": {
@@ -70,10 +64,6 @@ export const servicePestImages = {
     gallery: [
       "/assets/service_icons/Service_Gallery/Mosquito_1.jpg",
       "/assets/service_icons/Service_Gallery/Mosquito_2.jpg",
-      "https://res.cloudinary.com/epcorn/image/upload/v1761890628/Express_Pesticides_Website/SERVICES_IMAGES/Mosquit/WhatsApp_Image_2025-10-24_at_12.12.33_PM_rxdslr.jpg",
-      "https://res.cloudinary.com/epcorn/image/upload/v1761890635/Express_Pesticides_Website/SERVICES_IMAGES/Mosquit/WhatsApp_Image_2025-10-24_at_12.47.24_PM_lzi3ae.jpg",
-      "https://res.cloudinary.com/epcorn/image/upload/v1761890617/Express_Pesticides_Website/SERVICES_IMAGES/Mosquit/WhatsApp_Image_2025-10-24_at_12.11.19_PM_ci6ili.jpg",
-      "https://res.cloudinary.com/epcorn/image/upload/v1761890631/Express_Pesticides_Website/SERVICES_IMAGES/Mosquit/WhatsApp_Image_2025-10-24_at_12.13.43_PM_l57ial.jpg",
     ],
   },
   flyban: {
@@ -91,7 +81,7 @@ export const servicePestImages = {
     ],
     gallery: [
       "/assets/service_icons/Service_Gallery/Termiproof_1.webp",
-      "/assets/service_icons/Service_Gallery/Termiproof_2.jpg"
+      "/assets/service_icons/Service_Gallery/Termiproof_2.jpg",
     ],
   },
   "bug-free": {
@@ -117,6 +107,11 @@ export const servicePestImages = {
       "/assets/service_icons/Service_Gallery/Woodsafe_1.jpg",
       "/assets/service_icons/Service_Gallery/Woodsafe_2.jpg",
     ],
+  },
+  rapron: {
+    hero: "/public/assets/service_icons/Repron.png",
+    signs: [],
+    gallery: [],
   },
 };
 

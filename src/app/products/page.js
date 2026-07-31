@@ -7,9 +7,6 @@ import Footer from "@/components/Footer";
 
 export default function ProductsPage() {
 
-  // Products grouped by category
-  
-
   return (
     <main className=""> {/* Adjusted padding for the tall navbar */}
       {/* Page Header */}

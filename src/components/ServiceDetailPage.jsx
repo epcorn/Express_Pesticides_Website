@@ -23,9 +23,12 @@ const fallback = {
 function getImages(slug) {
   const img = servicePestImages[slug] || {};
   return {
-    hero: img.hero || fallback.hero,
-    signs: img.signs?.length ? img.signs : fallback.signs,
-    gallery: img.gallery?.length ? img.gallery : fallback.gallery,
+    hero: img?.hero || "",
+    signs: img?.signs?.length ? img.signs : "",
+    gallery: img?.gallery?.length ? img.gallery : "",
+    // hero: img.hero || fallback.hero,
+    // signs: img.signs?.length ? img.signs : fallback.signs,
+    // gallery: img.gallery?.length ? img.gallery : fallback.gallery,
   };
 }
 
@@ -86,7 +89,7 @@ export default function ServiceDetailPage({
       </section>
 
       {/* ==== 3. SIGNS OF INFESTATION – RIGHT SIDE SWIPER ==== */}
-      {(img.signs.length > 0 || signs.length > 0) && (
+      {(img?.signs?.length > 0 || signs?.length > 0) && (
         <section className="py-16 bg-gray-50">
           <div className="max-w-7xl mx-auto px-6">
             <h2 className="text-3xl font-bold text-gray-900 text-center mb-10">
@@ -95,7 +98,7 @@ export default function ServiceDetailPage({
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
               {/* Text List */}
               <ul className="space-y-4">
-                {signs.map((s, i) => (
+                {signs?.map((s, i) => (
                   <li key={i} className="flex items-start">
                     <FaCheckCircle className="text-green-500 w-6 h-6 mr-3 mt-1 flex-shrink-0" />
                     <span className="text-lg text-gray-800">{s}</span>
@@ -115,7 +118,7 @@ export default function ServiceDetailPage({
                   loop
                   className="rounded-xl overflow-hidden shadow-lg"
                 >
-                  {img.signs.map((src, i) => (
+                  {img?.signs?.length > 0 && img?.signs?.map((src, i) => (
                     <SwiperSlide key={i}>
                       <div className="relative h-80">
                         <Image
@@ -135,14 +138,14 @@ export default function ServiceDetailPage({
       )}
 
       {/* ==== 4. BENEFITS ==== */}
-      {benefits.length > 0 && (
+      {benefits?.length > 0 && (
         <section className="py-16 bg-blue-50">
           <div className="max-w-4xl mx-auto px-6">
             <h2 className="text-3xl font-bold text-gray-900 text-center mb-10">
               Benefits of {name}
             </h2>
             <ul className="space-y-4">
-              {benefits.map((b, i) => (
+              {benefits?.map((b, i) => (
                 <li key={i} className="flex items-start">
                   <FaCheckCircle className="text-green-500 w-6 h-6 mr-3 mt-1 flex-shrink-0" />
                   <span className="text-lg text-gray-800">{b}</span>
@@ -154,14 +157,14 @@ export default function ServiceDetailPage({
       )}
 
       {/* ==== 5. TYPES ==== */}
-      {types.length > 0 && (
+      {types?.length > 0 && (
         <section className="py-16">
           <div className="max-w-7xl mx-auto px-6">
             <h2 className="text-3xl font-bold text-gray-900 text-center mb-10">
               Types of {name}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {types.map((t, i) => (
+              {types?.map((t, i) => (
                 <div
                   key={i}
                   className="bg-white p-6 rounded-lg shadow-md border border-gray-100 text-center"
