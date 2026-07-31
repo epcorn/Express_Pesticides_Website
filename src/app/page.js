@@ -17,7 +17,7 @@ export default function HomePage() {
       <FAQ />
       <Footer />
       <Analytics /> {/* vercel analytics */}
-      <SpeedInsights /> {/* vercel analytics */}
+      {/* <SpeedInsights /> vercel analytics */}
     </div>
   );
 }

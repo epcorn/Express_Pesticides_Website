@@ -5,7 +5,7 @@ function loading() {
     
     <div className="flex items-center justify-center h-dvh w-dvw">
       
-    <div className="w-16 aspect-square border-y-4 animate-spin rounded-full"></div>
+    <div className="w-16 aspect-square border-y-4 border-black animate-spin rounded-full"></div>
     </div>
   )
 }

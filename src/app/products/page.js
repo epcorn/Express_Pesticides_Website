@@ -1,75 +1,14 @@
 "use client";
 
 import ServiceCard from "@/components/ServiceCard"; // Re-using the same card component
+import { productCategories } from "@/data/productData";
 import Link from "next/link";
 import Footer from "@/components/Footer";
 
 export default function ProductsPage() {
 
   // Products grouped by category
-  const productCategories = [
-    {
-      title: "Rodent Control",
-      products: [
-        { 
-          name: "SOTO Rodent Repellent", 
-          logo: "https://res.cloudinary.com/epcorn/image/upload/v1761738048/Express_Pesticides_Website/Rodent_Repellent_Product_e16igr.png"
-        },
-        { 
-          name: "Rodent Smart Bait Station", 
-          logo: "https://res.cloudinary.com/epcorn/image/upload/v1761738394/Express_Pesticides_Website/Rodent_Bait_station_Product_e4bkpu.png"
-        },
-        { 
-          name: "Rat Guard", 
-          logo: "https://res.cloudinary.com/epcorn/image/upload/v1761738402/Express_Pesticides_Website/Rat_Guard_Product_z0xfc3.png"
-        },
-      ],
-    },
-    {
-      title: "Insect Control",
-      products: [
-        { 
-          name: "Cockroach Trap", 
-          logo: "https://res.cloudinary.com/epcorn/image/upload/v1761738214/Express_Pesticides_Website/Cockroach_Trap_Product_n8esto.png"
-        },
-        { 
-          name: "Snapper", 
-          logo: "https://res.cloudinary.com/epcorn/image/upload/v1761738225/Express_Pesticides_Website/Snapper_Product_suka9f.png"
-        },
-        { 
-          name: "Tuffbait", 
-          logo: "https://res.cloudinary.com/epcorn/image/upload/v1761738355/Express_Pesticides_Website/Tuff_bait_product_ktycdf.png"
-        },
-      ],
-    },
-    {
-      title: "Termite Control",
-      products: [
-        { 
-          name: "Termida", 
-          logo: "https://res.cloudinary.com/epcorn/image/upload/v1761738316/Express_Pesticides_Website/Termida_Product_viy4i8.png"
-        },
-      ],
-    },
-    {
-      title: "Reptile Control",
-      products: [
-        { 
-          name: "SOTO Reptout", 
-          logo: "https://res.cloudinary.com/epcorn/image/upload/v1761738470/Express_Pesticides_Website/Repout_Repellent_Product_gl6yjg.png"
-        },
-      ],
-    },
-    {
-      title: "Bird Control",
-      products: [
-        { 
-          name: "SOTO Bird Repellent", 
-          logo: "https://res.cloudinary.com/epcorn/image/upload/v1761738141/Express_Pesticides_Website/Bird_Repellent_Product_bkoe7f.png"
-        },
-      ],
-    },
-  ];
+  
 
   return (
     <main className=""> {/* Adjusted padding for the tall navbar */}
