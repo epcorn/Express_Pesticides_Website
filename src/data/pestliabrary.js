@@ -1,39 +1,39 @@
 export  const pests = [
     { 
       name: "Ant", 
-      logo: "https://res.cloudinary.com/epcorn/image/upload/v1761804700/Express_Pesticides_Website/PEST_INSIGHTS_IMAGES/PEST_VECTOR_IMAGES/Ant_czljgk.png"
+      logo: "/assets/Pest_library_icons/Ant.png"
     },
     { 
       name: "Rat", 
-      logo: "https://res.cloudinary.com/epcorn/image/upload/v1761804702/Express_Pesticides_Website/PEST_INSIGHTS_IMAGES/PEST_VECTOR_IMAGES/Rat_jcz3di.png"
+      logo: "/assets/Pest_library_icons/Rodent.png"
     },
     { 
       name: "Cockroach", 
-      logo: "https://res.cloudinary.com/epcorn/image/upload/v1761804701/Express_Pesticides_Website/PEST_INSIGHTS_IMAGES/PEST_VECTOR_IMAGES/Cockroach_rokrlj.png"
+      logo: "/assets/Pest_library_icons/cockroach.png"
     },
     { 
       name: "Termite", 
-      logo: "https://res.cloudinary.com/epcorn/image/upload/v1761804702/Express_Pesticides_Website/PEST_INSIGHTS_IMAGES/PEST_VECTOR_IMAGES/Termite_whu5uj.png"
+      logo: "/assets/Pest_library_icons/Termite.png"
     },
     { 
       name: "Mosquito", 
-      logo: "https://res.cloudinary.com/epcorn/image/upload/v1761804701/Express_Pesticides_Website/PEST_INSIGHTS_IMAGES/PEST_VECTOR_IMAGES/Mosquitos_jnw16v.png"
+      logo: "/assets/Pest_library_icons/Mosquito.png"
     },
     { 
       name: "Flies", 
-      logo: "https://res.cloudinary.com/epcorn/image/upload/v1761804700/Express_Pesticides_Website/PEST_INSIGHTS_IMAGES/PEST_VECTOR_IMAGES/Housefly_vt153s.png"
+      logo: "/assets/Pest_library_icons/fly.png"
     },
     { 
       name: "Silverfish", 
-      logo: "https://res.cloudinary.com/epcorn/image/upload/v1761804702/Express_Pesticides_Website/PEST_INSIGHTS_IMAGES/PEST_VECTOR_IMAGES/Silverfish_xldj0a.png"
+      logo: "/assets/Pest_library_icons/Silverfish.png"
     },
     { 
       name: "Lizard", 
-      logo: "https://res.cloudinary.com/epcorn/image/upload/v1761804701/Express_Pesticides_Website/PEST_INSIGHTS_IMAGES/PEST_VECTOR_IMAGES/Lizard_apbydc.png"
+      logo: "/assets/Pest_library_icons/Lizard.png"
     },
     { 
       name: "Bedbug", 
-      logo: "https://res.cloudinary.com/epcorn/image/upload/v1761804701/Express_Pesticides_Website/PEST_INSIGHTS_IMAGES/PEST_VECTOR_IMAGES/Bedbug_am4fgb.png"
+      logo: "/assets/Pest_library_icons/bedbug.png"
     },
   ];
 
@@ -46,7 +46,7 @@ export  const pests = [
     commonName: "American Cockroach",
     scientificName: "Periplaneta americana",
     type: "Crawling Insect",
-    mainImage: "https://res.cloudinary.com/epcorn/image/upload/v1761804701/Express_Pesticides_Website/PEST_INSIGHTS_IMAGES/PEST_VECTOR_IMAGES/Cockroach_rokrlj.png",
+    mainImage: "/assets/Pest_library_icons/cockroach.png",
     overview: "The cockroach is one of the most ancient and adaptable pests on Earth... Known for their reddish-brown color and oval-shaped bodies, these insects measure about 1.5 inches in length...",
     habitatBehavior: "Cockroaches thrive in environments that provide food, moisture, and warmth. Common hiding areas include kitchens, bathrooms, basements... They are primarily nocturnal... Cockroaches reproduce at an alarming rate...",
     lifecycleText: "The life cycle consists of three main stages: egg, nymph, and adult. Females lay egg capsules (oothecae). Nymphs resemble smaller adults and undergo several molts. Adults develop wings and live for around one year.",
@@ -74,7 +74,7 @@ export  const pests = [
     commonName: "White Ant / Deemak",
     scientificName: "Isoptera",
     type: "Wood-Destroying Insect",
-    mainImage: "https://res.cloudinary.com/epcorn/image/upload/v1761804702/Express_Pesticides_Website/PEST_INSIGHTS_IMAGES/PEST_VECTOR_IMAGES/Termite_whu5uj.png",
+    mainImage: "/assets/Pest_library_icons/Termite.png",
     overview: "Termites are small, soft-bodied, pale insects that feed primarily on cellulose found in wood and paper... They cause billions in structural damage yearly... Unlike ants, they avoid light and remain hidden...",
     habitatBehavior: "Termites live in large, organized colonies... Typical habitats include foundations, wooden beams, furniture, gardens... They thrive in warm, humid environments... Subterranean termites build mud tubes...",
     lifecycleText: "Termites undergo incomplete metamorphosis (egg, nymph, adult). The queen lays thousands of eggs. Nymphs develop into workers, soldiers, or swarmers. Workers gather food, soldiers defend, and swarmers start new colonies.",
@@ -104,7 +104,7 @@ export  const pests = [
     commonName: "Rat / Mouse",
     scientificName: "Rattus rattus, Rattus norvegicus, Mus musculus",
     type: "Commensal Pest",
-    mainImage: "https://res.cloudinary.com/epcorn/image/upload/v1761804702/Express_Pesticides_Website/PEST_INSIGHTS_IMAGES/PEST_VECTOR_IMAGES/Rat_jcz3di.png",
+    mainImage: "/assets/Pest_library_icons/Rodent.png",
     overview: "Rodents are among the most destructive pests... constantly gnawing on materials including wood, plastic, wires... causing property damage and fire hazards... Common types include Roof Rats, Norway Rats, and House Mice...",
     habitatBehavior: "Highly adaptive, living in sewers, warehouses, kitchens... Roof Rats climb, Norway Rats burrow, House Mice explore small spaces... Exceptional sense of smell, taste, hearing; can squeeze through tiny gaps...",
     lifecycleText: "Rodents reproduce rapidly year-round. Gestation is about 21 days. Females have 6-12 pups per litter, up to 7 litters a year. Young mature in 8-12 weeks. Lifespan is 9-12 months.",
@@ -135,7 +135,7 @@ export  const pests = [
     commonName: "Mosquito",
     scientificName: "Culicidae",
     type: "Flying Insect / Vector Pest",
-    mainImage: "https://res.cloudinary.com/epcorn/image/upload/v1761804701/Express_Pesticides_Website/PEST_INSIGHTS_IMAGES/PEST_VECTOR_IMAGES/Mosquitos_jnw16v.png",
+    mainImage: "/assets/Pest_library_icons/Mosquito.png",
     overview: "Mosquitoes are among the most dangerous pests, vectors of deadly diseases like dengue, malaria, chikungunya... India's climate provides ideal breeding conditions... Breed in small amounts of stagnant water...",
     habitatBehavior: "Thrive in warm, moist environments with stagnant water... Breeding sites include flower pots, gutters, water tanks, puddles... Only females bite (need blood for eggs)... Activity time varies by species (Aedes=day, Anopheles=night, Culex=dusk/night)...",
     lifecycleText: "Four stages: Egg (laid on/near water), Larva ('wigglers' in water), Pupa (transitional stage), Adult (emerges to feed/breed). Cycle takes 7-10 days in warm conditions.",
@@ -166,7 +166,7 @@ export  const pests = [
     commonName: "Housefly",
     scientificName: "Musca domestica",
     type: "Flying Insect",
-    mainImage: "https://res.cloudinary.com/epcorn/image/upload/v1761804700/Express_Pesticides_Website/PEST_INSIGHTS_IMAGES/PEST_VECTOR_IMAGES/Housefly_vt153s.png",
+    mainImage: "/assets/Pest_library_icons/fly.png",
     overview: "Flies are common pests, especially the housefly... Thrives in human habitations, major carrier of diseases... Greyish, 6-7mm long, large reddish eyes... Presence indicates poor sanitation or decaying matter nearby...",
     habitatBehavior: "Found near food, waste, organic material... Breeding sites include garbage bins, animal waste, food areas... Rapid life cycle (egg to adult in a week)... Feed by liquefying food, spreading pathogens...",
     lifecycleText: "Complete metamorphosis: Egg (hatches quickly), Larva (maggot, feeds on decaying matter), Pupa (transforms in a casing), Adult (emerges to feed and reproduce).",
@@ -198,7 +198,7 @@ export  const pests = [
     commonName: "Bed Bug",
     scientificName: "Cimex lectularius",
     type: "Crawling Insect",
-    mainImage: "https://res.cloudinary.com/epcorn/image/upload/v1761804701/Express_Pesticides_Website/PEST_INSIGHTS_IMAGES/PEST_VECTOR_IMAGES/Bedbug_am4fgb.png",
+    mainImage: "/assets/Pest_library_icons/bedbug.png",
     overview: "Small, flat, reddish-brown insects feeding on blood (primarily human)... Infest bedrooms, hotels, transport... Wingless, 4-5mm... Nocturnal, bite exposed skin during sleep, leaving itchy welts...",
     habitatBehavior: "Expert hitchhikers (luggage, clothing)... Hide in tight crevices near sleeping areas: mattress seams, furniture, wall cracks, behind wallpapers... Can survive months without feeding... Drawn by body heat and CO2...",
     lifecycleText: "Incomplete metamorphosis: Egg (tiny, whitish), Nymph (smaller versions, need blood meals to molt, 5 stages), Adult (lives several months, reproduces).",
@@ -228,7 +228,7 @@ export  const pests = [
     commonName: "Common House Gecko",
     scientificName: "Hemidactylus frenatus",
     type: "Crawling Pest / Nuisance Pest",
-    mainImage: "https://res.cloudinary.com/epcorn/image/upload/v1761804701/Express_Pesticides_Website/PEST_INSIGHTS_IMAGES/PEST_VECTOR_IMAGES/Lizard_apbydc.png",
+    mainImage: "/assets/Pest_library_icons/Lizard.png",
     overview: "Common visitors in homes, especially House Geckos... Feed on insects but presence indoors considered unpleasant/unhygienic... Light brown/grey, flat body, scaly skin... Nocturnal, active near lights...",
     habitatBehavior: "Prefer warm, sheltered areas with insects... Found on walls, ceilings, behind frames, near lights... Agile climbers (adhesive pads)... Cold-blooded, activity depends on temperature... Droppings can stain...",
     lifecycleText: "Life cycle: Egg (small, white, oval, laid in hidden spots), Hatchling (miniature version), Adult (grows over several months). Tail can detach (autotomy) as defense.",
@@ -258,7 +258,7 @@ export  const pests = [
     commonName: "Common Household Ants",
     scientificName: "Formicidae",
     type: "Crawling Insect",
-    mainImage: "https://res.cloudinary.com/epcorn/image/upload/v1761804700/Express_Pesticides_Website/PEST_INSIGHTS_IMAGES/PEST_VECTOR_IMAGES/Ant_czljgk.png",
+    mainImage: "/assets/Pest_library_icons/Ant.png",
     overview: "Small, social insects living in colonies... Highly adaptable... Household ants like Pharaoh ants and Carpenter ants can be persistent pests... 2-10mm, various colors... Known for organized colonies and foraging trails...",
     habitatBehavior: "Thrive near food, water, shelter... Indoors: kitchens, pantries... Outdoors: gardens, lawns... Carpenter ants nest in wood... Worker ants leave pheromone trails to food...",
     lifecycleText: "Complete metamorphosis: Egg, Larva (legless, grub-like), Pupa (transforms in cocoon), Adult (worker, soldier, queen). Development time varies by species and conditions.",
@@ -288,7 +288,7 @@ export  const pests = [
     commonName: "Silverfish",
     scientificName: "Lepisma saccharinum",
     type: "Crawling Insect",
-    mainImage: "https://res.cloudinary.com/epcorn/image/upload/v1761804702/Express_Pesticides_Website/PEST_INSIGHTS_IMAGES/PEST_VECTOR_IMAGES/Silverfish_xldj0a.png",
+    mainImage: "/assets/Pest_library_icons/Silverfish.png",
     overview: "Small, wingless insects with silvery-grey appearance and fish-like movements... 12-19mm long... Nocturnal, damage paper, fabrics, food... Thrive in damp, dark, humid areas (bathrooms, basements)...",
     habitatBehavior: "Prefer moist, cool, undisturbed areas: bathrooms, kitchens, basements, attics, inside books, behind wallpaper... Nocturnal, avoid light... Feed on starches, sugars, cellulose (books, glue, clothing, dried food)... Move rapidly...",
     lifecycleText: "Simple metamorphosis (egg, nymph, adult), long lifespan (up to 8 years). Eggs laid in hidden spots. Nymphs resemble small adults, molt multiple times. Adults continue to molt throughout life.",

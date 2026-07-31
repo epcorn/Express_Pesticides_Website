@@ -2,46 +2,12 @@
 "use client";
 
 import Link from "next/link";
-import {
-  FaHospital,
-  FaBriefcase,
-  FaHotel,
-  FaWarehouse,
-  FaSchool,
-  FaIndustry,
-  FaHome,
-  FaShoppingBag,
-  FaCapsules,
-  FaBuilding,
-} from "react-icons/fa";
+
 import Footer from "@/components/Footer";
 import Image from "next/image";
+import { servicesIcons, workAreas } from "@/data/servicesData";
 
 export default function ServicesPage() {
-  const services = [
-    { name: "Green Shield Service", slug: "green-shield", logo: "https://res.cloudinary.com/epcorn/image/upload/v1760682116/Express_Pesticides_Website/Green_Sheild_ghgou6.png" },
-    { name: "Ratrid Service", slug: "rat-rid", logo: "https://res.cloudinary.com/epcorn/image/upload/v1760682116/Express_Pesticides_Website/Ratrid_fpsjvx.png" },
-    { name: "Anti-Termite Treatment (Pre-Construction)", slug: "anti-termite-treatment", logo: "https://res.cloudinary.com/epcorn/image/upload/v1760682116/Express_Pesticides_Website/Anti_Termite_vhso7e.png" },
-    { name: "Mosquit Service", slug: "mosquit", logo: "https://res.cloudinary.com/epcorn/image/upload/v1760682116/Express_Pesticides_Website/Mosquit_pzudp3.png" },
-    { name: "Flyban Service", slug: "flyban", logo: "https://res.cloudinary.com/epcorn/image/upload/v1760682116/Express_Pesticides_Website/Flyban_cqavfk.png" },
-    { name: "TermiProof Service", slug: "termi-proof", logo: "https://res.cloudinary.com/epcorn/image/upload/v1760682116/Express_Pesticides_Website/Termiproof_n7gexz.png" },
-    { name: "BugFree Service", slug: "bug-free", logo: "https://res.cloudinary.com/epcorn/image/upload/v1761891012/Express_Pesticides_Website/Bugfree_Service_yt3rcu.png" },
-    { name: "Woodsafe Service", slug: "woodsafe", logo: "https://res.cloudinary.com/epcorn/image/upload/v1760682117/Express_Pesticides_Website/Woodsafe_z4lp1y.png" },
-  ];
-
-  const workAreas = [
-    { name: "Hospitals", icon: <FaHospital /> },
-    { name: "Offices", icon: <FaBriefcase /> },
-    { name: "Hotels & Restaurants", icon: <FaHotel /> },
-    { name: "Warehouses", icon: <FaWarehouse /> },
-    { name: "Schools & Colleges", icon: <FaSchool /> },
-    { name: "Factories", icon: <FaIndustry /> },
-    { name: "Residential Societies", icon: <FaHome /> },
-    { name: "Shopping Malls", icon: <FaShoppingBag /> },
-    { name: "Pharmaceutical Units", icon: <FaCapsules /> },
-    { name: "Corporate Buildings", icon: <FaBuilding /> },
-  ];
-
   return (
     <main className="">
       {/* Our Services */}
@@ -52,23 +18,20 @@ export default function ServicesPage() {
           </h2>
 
           <div className="grid gap-8 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 justify-items-center">
-            {services.map((s) => (
+            {servicesIcons?.map((s) => (
               <Link
                 key={s.slug}
                 href={`/services/${s.slug}`}
-                className="flex flex-col items-center transform hover:-translate-y-2 transition duration-300"
-              >
+                className="flex flex-col items-center transform hover:-translate-y-2 transition duration-300">
                 <div className="relative w-28 h-28 rounded-full overflow-hidden flex items-center justify-center bg-transparent">
-                 <Image
-                  src={s.logo}
-                  alt={s.name}
-                  // Using fill instead of hardcoded w/h for dynamic layouts
-                  fill
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                  className="object-cover scale-[1.3]"
-                  // Priority helps load critical service logos faster on slow 4G/5G
-                  priority={true} 
-                />
+                  <Image
+                    src={s.logo}
+                    alt={s.name}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    className="object-cover"
+                    priority={true}
+                  />
                 </div>
                 <h3 className="text-gray-800 font-semibold text-lg mt-4 text-center">
                   {s.name}
@@ -90,10 +53,11 @@ export default function ServicesPage() {
             {workAreas.map((area) => (
               <div
                 key={area.name}
-                className="bg-white rounded-2xl shadow-md hover:shadow-lg transition-transform duration-300 p-6 flex flex-col items-center border border-gray-100 hover:-translate-y-2"
-              >
+                className="bg-white rounded-2xl shadow-md hover:shadow-lg transition-transform duration-300 p-6 flex flex-col items-center border border-gray-100 hover:-translate-y-2">
                 <div className="text-blue-600 text-4xl mb-3">{area.icon}</div>
-                <p className="text-gray-800 font-semibold text-base">{area.name}</p>
+                <p className="text-gray-800 font-semibold text-base">
+                  {area.name}
+                </p>
               </div>
             ))}
           </div>

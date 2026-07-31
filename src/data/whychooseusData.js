@@ -5,12 +5,12 @@ export const features = [
     description: "Trained and certified professionals.",
   },
   {
-    logo: "https://res.cloudinary.com/epcorn/image/upload/v1761997364/Express_Pesticides_Website/WhyChooseUs/Igbc_logo_ebk7l6.jpg",
+    logo: "/assets/Why_choose_us/Safe_Eco_Friendly.png",
     name: "Safe-Eco Solutions",
     description: "Safe for people, pets, and the planet.",
   },
   {
-    logo: "https://res.cloudinary.com/epcorn/image/upload/v1761997367/Express_Pesticides_Website/WhyChooseUs/Reasarch_ozvfao.jpg",
+    logo: "/assets/Why_choose_us/Advance_Technology.jpg",
     name: "Advanced Technology",
     description: "Digital reports, QR tracking & smart monitoring.",
   },

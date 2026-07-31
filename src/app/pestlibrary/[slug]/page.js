@@ -33,9 +33,9 @@ export default function PestDetailPage() {
 
   // --- Main Pest Page Layout ---
   return (
-    <main className="pt-32"> {/* Adjusted padding */}
+    <main className="pt-16 lg:pt-26 bg-gray-50"> {/* Adjusted padding */}
       {/* 1. Pest Header */}
-      <section className="py-12 bg-gray-50">
+      <section className="py-12">
         <div className="max-w-7xl mx-auto px-6 text-center">
           <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900">
             {pest.name}

@@ -1,14 +1,11 @@
 export const servicesData = {
   "Green Shield (Cockroach)": {
-    
       "1 RK": { single: 1150, annual: 2300 },
       "1 BHK": { single: 1300, annual: 2700 },
       "2 BHK": { single: 1700, annual: 2900 },
       "3 BHK": { single: 2000, annual: 3300 },
       "4 BHK": { single: 2300, annual: 3700 },
       "5 BHK": { single: 2800, annual: 5300 },
-    
-
   },
   "Termiproof (Termites)": {
   

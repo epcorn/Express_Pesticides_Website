@@ -4,11 +4,14 @@ import ServiceCard from "@/components/ServiceCard"; // Re-using the same card co
 import Link from "next/link";
 import Footer from "@/components/Footer";
 import { pests } from "@/data/pestliabrary";
+import Image from "next/image";
 
 export default function PestLibraryPage() {
-
+  console.log(pests);
   return (
-    <> {/* Adjusted padding for the tall navbar */}
+    <>
+      {" "}
+      {/* Adjusted padding for the tall navbar */}
       {/* Page Header */}
       <section className="py-20  bg-gradient-to-b from-gray-400 to-white">
         <div className="max-w-7xl mx-auto px-6 text-center">
@@ -16,11 +19,11 @@ export default function PestLibraryPage() {
             Our <span className="text-blue-600">Pest Library</span>
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Learn more about common pests, their habitats , life cycle, and how to identify there infestation signs.
+            Learn more about common pests, their habitats , life cycle, and how
+            to identify there infestation signs.
           </p>
         </div>
       </section>
-
       {/* Pest Grid Section */}
       <section className="py-16 bg-gradient-to-b from-white to-gray-400">
         <div className="max-w-7xl mx-auto px-6">
@@ -29,15 +32,27 @@ export default function PestLibraryPage() {
               <Link
                 key={pest.name}
                 href={`/pestlibrary/${pest.name.toLowerCase().replace(/ /g, "-")}`}
-                className="transform hover:-translate-y-2 transition duration-300"
-              >
-                <ServiceCard {...pest} />
+                className="transform hover:-translate-y-1 transition duration-300 block text-center">
+                <div>
+                  {/* 1. Added relative and overflow-hidden to contain the circle */}
+                  <div className="relative w-44 h-44 rounded-full overflow-hidden bg-white shadow-md mx-auto">
+                    <Image
+                      src={pest.logo}
+                      alt={pest.name}
+                      fill
+                      sizes="192px"
+                      className="object-contain hover:scale-95 transition-all"
+                    />
+                  </div>
+                  <p className="mt-2 text-lg font-medium text-gray-800">
+                    {pest.name}
+                  </p>
+                </div>
               </Link>
             ))}
           </div>
         </div>
       </section>
-
       {/* Footer */}
       <Footer />
     </>
