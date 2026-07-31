@@ -6,6 +6,8 @@ import Script from "next/script";
 import { servicesData } from "../app/services/lib/ServiceData.js";
 import { holidays, mockPincodes } from "@/data/bookservicemodelData.js";
 import postalcodes from "postalcodes-india";
+import { toast } from "@/lib/toast.js";
+
 
 function BookServiceModal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -67,7 +69,12 @@ function BookServiceModal() {
       tommorrow = tommorrow.toISOString().split("T")[0];
 
       if (holidays.includes(value.slice(5))) {
-        alert("Oops! It's a holiday. Choose another date.");
+        toast.warning("Oops! It's a holiday. Choose another date.");
+        setFormData((prev) => ({
+          ...prev,
+          dateOfService: "",
+          firstServiceDate: "",
+        }));
         return;
       }
 
@@ -77,12 +84,12 @@ function BookServiceModal() {
           dateOfService: "",
           firstServiceDate: "",
         }));
-        alert("Please select another day. After 2pm you cannot get an appointment for the next day.");
+        toast.warning("Please select another day. After 2pm you cannot get an appointment for the next day.");
         return;
       }
 
       if (checkMonday.getDay() === 1) {
-        alert("Monday off, ready to go on Tuesday! Please select another day for your appointment.");
+        toast.warning("Monday off, ready to go on Tuesday! Please select another day for your appointment.");
         setFormData((prev) => ({
           ...prev,
           dateOfService: "",
@@ -214,7 +221,7 @@ function BookServiceModal() {
       // Razorpay Payment Configuration Matrix Setup
       const options = {
         // ✅ Fixed: Changed from _TEST variable to production live environmental variable
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID_TEST, 
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID_TEST,
         amount: orderData.amount,
         currency: "INR",
         name: "Express Pesticides",
@@ -251,6 +258,10 @@ function BookServiceModal() {
                 setIsOpen(false);
                 setSubmitMessage("");
               }, 3000);
+
+              toast.success("Payment successful! Your service is booked.");
+
+
             } else {
               const errPayload = await verifyRes.json();
               throw new Error(errPayload.message || "Payment validation parsing dropped.");

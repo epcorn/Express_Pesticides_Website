@@ -1,10 +1,14 @@
 "use client";
 
 import { toast } from "@/lib/toast";
+import { useRef } from "react";
 
-export default function Button({ children, msg = {}, onClick, type = "button" }) {
+export default function Button({ children, msg = {}, onClick, type = "button", throttleMs = 2000 }) {
+  const lastClickTime = useRef(0);
 
   const handleAction = (e) => {
+    const now = Date.now();
+    if (now - lastClickTime.current < throttleMs) return
     if (onClick) {
       onClick(e);
     }
@@ -15,6 +19,7 @@ export default function Button({ children, msg = {}, onClick, type = "button" })
     if (success) toast.success(success);
     if (error) toast.error(error);
     if (warning) toast.warning(warning);
+    lastClickTime.current = now
   };
 
   return (

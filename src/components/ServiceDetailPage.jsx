@@ -186,8 +186,8 @@ export default function ServiceDetailPage({
         />
         <div className="absolute inset-0 bg-black/50" />
         <div className="absolute top-8 left-1/2 -translate-x-1/2">
-          <div className="w-24 h-24 rounded-full overflow-hidden bg-white shadow-xl border-4 border-white">
-            <Image src={logo} alt={name} fill className="object-contain p-2" />
+          <div className="relative w-24 h-24 overflow-hidden rounded-full  bg-white shadow-xl p-2 border-4 border-yellow-500">
+            <Image src={logo} alt={name} fill className="absolute h-full w-full object-cover top-5 rounded-full scale-150" />
           </div>
         </div>
         <div className="absolute bottom-12 left-1/2 -translate-x-1/2 text-center text-white">
@@ -195,6 +195,7 @@ export default function ServiceDetailPage({
           <p className="mt-2 text-lg">{subtitle}</p>
         </div>
       </section>
+
 
       {/* ==== 2. INTRODUCTION ==== */}
       <section className="py-16">

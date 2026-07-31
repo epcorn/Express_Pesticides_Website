@@ -69,6 +69,7 @@ export default function ProductDetailPage() {
             </div>
             <Button
               onClick={() => {}}
+              throttleMs="1000"
               msg={{ info: "Product Will be available Soon" }}>
               Get Product
             </Button>
@@ -196,6 +197,7 @@ export default function ProductDetailPage() {
         </div>
         <Button
           onClick={() => {}}
+          throttleMs="1000"
           msg={{ info: "Product Will be available Soon" }}>
           Get Product
         </Button>
