@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { X } from "lucide-react";
-import Script from "next/script";
 import { servicesData } from "../app/services/lib/ServiceData.js";
 import { holidays, mockPincodes } from "@/data/bookservicemodelData.js";
 import postalcodes from "postalcodes-india";
@@ -261,7 +260,6 @@ function BookServiceModal() {
 
               toast.success("Payment successful! Your service is booked.");
 
-
             } else {
               const errPayload = await verifyRes.json();
               throw new Error(errPayload.message || "Payment validation parsing dropped.");
@@ -323,10 +321,10 @@ function BookServiceModal() {
     }
   }, [isOpen]);
 
+
   return (
     <>
-      <Script src="https://checkout.razorpay.com/v1/checkout.js" />
-
+      
       <button
         onClick={() => setIsOpen(true)}
         className="fixed top-1/2 -translate-y-1/2 right-0 z-40 bg-blue-600 text-white font-bold py-5 px-3 lg:px-5 rounded-l-lg shadow-lg hover:bg-blue-700 cursor-pointer transition-all"

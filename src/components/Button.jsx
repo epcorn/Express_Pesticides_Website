@@ -9,8 +9,10 @@ export default function Button({ children, msg = {}, onClick, type = "button", t
   const handleAction = (e) => {
     const now = Date.now();
     if (now - lastClickTime.current < throttleMs) return
+    lastClickTime.current = now;
+
     if (onClick) {
-      onClick(e);
+      onClick();
     }
 
     const { info, success, error, warning } = msg;
@@ -19,7 +21,6 @@ export default function Button({ children, msg = {}, onClick, type = "button", t
     if (success) toast.success(success);
     if (error) toast.error(error);
     if (warning) toast.warning(warning);
-    lastClickTime.current = now
   };
 
   return (

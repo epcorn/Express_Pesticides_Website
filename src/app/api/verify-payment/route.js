@@ -5,8 +5,8 @@ import nodemailer from "nodemailer";
 import Razorpay from "razorpay";
 import axios from "axios";
 import { servicesData } from "@/app/services/lib/ServiceData";
-
-// 🛡️ IMPORT YOUR BACKEND PRICING CONFIGURATION FILE HERE
+import dbConnect from "@/lib/dbConn";
+import ServiceBooking from "@/model/serviceBookingModal";
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -17,23 +17,14 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// ✅ Updated to Live Environment Keys
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID_TEST,
   key_secret: process.env.RAZORPAY_KEY_SECRET_TEST,
 });
 
 function buildInvoiceHtml(formData, paymentDetails, status) {
-  const {
-    name,
-    email,
-    phone,
-    serviceType,
-    serviceCity,
-    bhkType,
-    dateOfService,
-    firstServiceDate,
-  } = formData;
+  const { name, serviceType, preferredDay, dateOfService, firstServiceDate } =
+    formData;
   const isSuccess = status === "Success";
 
   const serviceAddress = [
@@ -59,34 +50,32 @@ function buildInvoiceHtml(formData, paymentDetails, status) {
   const isBillingSame = formData.sameAsShipping;
   const amountPaid = (paymentDetails.amount / 100).toLocaleString("en-IN");
 
-  let schedulingHtml = "";
-  if (formData.serviceType === "single") {
-    schedulingHtml = `
-      <tr>
-        <td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>Date of Service:</strong></td>
-        <td style="padding: 10px 0; border-bottom: 1px solid #eee; text-align: right;">${formData.dateOfService}</td>
-      </tr>
-      <tr>
-        <td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>Preferred Time:</strong></td>
-        <td style="padding: 10px 0; border-bottom: 1px solid #eee; text-align: right;">${formData.preferredTime}</td>
-      </tr>
-    `;
-  } else {
-    schedulingHtml = `
-      <tr>
-        <td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>First Service Date:</strong></td>
-        <td style="padding: 10px 0; border-bottom: 1px solid #eee; text-align: right;">${formData.firstServiceDate}</td>
-      </tr>
-      <tr>
-        <td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>Preferred Day:</strong></td>
-        <td style="padding: 10px 0; border-bottom: 1px solid #eee; text-align: right;">${formData.preferredDay}</td>
-      </tr>
-      <tr>
-        <td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>Preferred Time:</strong></td>
-        <td style="padding: 10px 0; border-bottom: 1px solid #eee; text-align: right;">${formData.preferredTime}</td>
-      </tr>
-    `;
-  }
+  let schedulingHtml =
+    formData.serviceType === "single"
+      ? `
+    <tr>
+      <td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>Date of Service:</strong></td>
+      <td style="padding: 10px 0; border-bottom: 1px solid #eee; text-align: right;">${formData.dateOfService}</td>
+    </tr>
+    <tr>
+      <td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>Preferred Time:</strong></td>
+      <td style="padding: 10px 0; border-bottom: 1px solid #eee; text-align: right;">${formData.preferredTime}</td>
+    </tr>
+  `
+      : `
+    <tr>
+      <td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>First Service Date:</strong></td>
+      <td style="padding: 10px 0; border-bottom: 1px solid #eee; text-align: right;">${formData.firstServiceDate}</td>
+    </tr>
+    <tr>
+      <td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>Preferred Day:</strong></td>
+      <td style="padding: 10px 0; border-bottom: 1px solid #eee; text-align: right;">${formData.preferredDay}</td>
+    </tr>
+    <tr>
+      <td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>Preferred Time:</strong></td>
+      <td style="padding: 10px 0; border-bottom: 1px solid #eee; text-align: right;">${formData.preferredTime}</td>
+    </tr>
+  `;
 
   return `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #ddd; padding: 20px; border-radius: 8px;">
@@ -109,7 +98,6 @@ function buildInvoiceHtml(formData, paymentDetails, status) {
         <tr><td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>Billing Address:</strong></td><td style="text-align: right; padding: 10px 0; border-bottom: 1px solid #eee;">${isBillingSame ? "Same as Service Address" : billingAddress}</td></tr>
         <tr><td style="padding: 10px 0;"><strong>Total Paid:</strong></td><td style="text-align: right; padding: 10px 0; font-weight: bold; font-size: 18px; color: #3B82F6;">₹ ${amountPaid}</td></tr>
       </table>
-      <p style="margin-top: 30px; font-size: 12px; color: #777; text-align: center;">If you have questions, contact us at info@expresspesticides.com.</p>
     </div>
   `;
 }
@@ -124,8 +112,6 @@ async function fetchPaymentWithTimeout(paymentId, timeoutMs = 7000) {
 }
 
 export async function POST(req) {
-  console.log("🟢 Live Mode verification sequence checking in...");
-
   try {
     const {
       razorpay_order_id,
@@ -133,30 +119,16 @@ export async function POST(req) {
       razorpay_signature,
       formData,
     } = await req.json();
-    const {
-      name,
-      email,
-      phone,
-      serviceType,
-      preferredDay,
-      serviceCity,
-      bhkType,
-      dateOfService,
-      firstServiceDate,
-    } = formData;
-
-    // ✅ Using production key secret
     const key_secret = process.env.RAZORPAY_KEY_SECRET_TEST;
 
     if (!key_secret) {
-      console.error("❌ Production configuration error: Missing Secret key!");
       return NextResponse.json(
-        { error: "Server misconfigured" },
+        { message: "Missing Secret key in environment configuration" },
         { status: 500 },
       );
     }
 
-    // Step 1: Crypto signature token check
+    // 1. Check Signature
     const signBody = `${razorpay_order_id}|${razorpay_payment_id}`;
     const expectedSignature = crypto
       .createHmac("sha256", key_secret)
@@ -164,18 +136,17 @@ export async function POST(req) {
       .digest("hex");
 
     if (expectedSignature !== razorpay_signature) {
-      console.error("❌ Security signature tampering mismatch!");
       return NextResponse.json(
-        { success: false, message: "Signature token parsing rejected" },
+        { message: "Signature verification failed" },
         { status: 400 },
       );
     }
 
-    // Step 2: Live Server-side cost generation check 🛡️
+    // 2. Compute Expected Price
     const selectedCategory = servicesData[formData.category];
     if (!selectedCategory) {
       return NextResponse.json(
-        { success: false, message: "Selected category does not exist" },
+        { message: "Selected category does not exist" },
         { status: 400 },
       );
     }
@@ -197,40 +168,88 @@ export async function POST(req) {
         : 0;
     }
 
-    // 1.18 calculation replicates your frontend 18% GST addition setup
     const absoluteExpectedAmountInPaise = Math.round(
       1.18 * expectedServerCost * 100,
     );
 
-    // Step 3: Call Razorpay API to match values
+    // 3. Fetch Razorpay Payment details
     let paymentDetails = await fetchPaymentWithTimeout(razorpay_payment_id);
 
     if (paymentDetails.amount !== absoluteExpectedAmountInPaise) {
-      console.error(
-        `❌ AMOUNT FRAUD ENCOUNTERED! Paid: ${paymentDetails.amount}, Computed: ${absoluteExpectedAmountInPaise}`,
-      );
       return NextResponse.json(
-        { success: false, message: "Payment manipulation transaction dropped" },
+        {
+          message: `Amount mismatch: Expected ₹${absoluteExpectedAmountInPaise / 100}, but paid ₹${paymentDetails.amount / 100}`,
+        },
         { status: 400 },
       );
     }
+    console.log("Saving fields:", {
+      orderId: razorpay_order_id,
+      paymentId: razorpay_payment_id,
+      amountPaid: paymentDetails?.amount / 100,
+    });
+    // 4. Save to Database
+    await dbConnect();
 
-    // Setup Messaging configuration loops
-    const paymentStatus = "Success";
-    const emailSubject = `Your Express Pesticides Service is Booked! (Order: ${razorpay_order_id})`;
-    const invoiceHtml = buildInvoiceHtml(
-      formData,
-      paymentDetails,
-      paymentStatus,
-    );
+    const newBooking = await ServiceBooking.create({
+      orderId: razorpay_order_id,
+      paymentId: razorpay_payment_id,
+      amountPaid: paymentDetails.amount / 100,
+      paymentStatus: "Success",
 
-    const SMSbody = `Hi ${name},\nYou have booked ${serviceType.toUpperCase()} service for your ${bhkType || "Property"} - ${serviceCity}, and Your service date is ${dateOfService || firstServiceDate} ${firstServiceDate ? "On Every " + preferredDay + "." : ""}.\nThanks for choosing Express Pesticides`;
+      category: formData.category,
+      subcategory: formData.subcategory,
+      bhkType: formData.bhkType,
+      serviceType: formData.serviceType,
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      dateOfService: formData.dateOfService
+        ? new Date(formData.dateOfService)
+        : null,
+      firstServiceDate: formData.firstServiceDate
+        ? new Date(formData.firstServiceDate)
+        : null,
+      preferredTime: formData.preferredTime,
+      preferredDay: formData.preferredDay,
+      area: formData.area,
 
-    // Fire communication services concurrently
+      serviceAddress1: formData.serviceAddress1,
+      serviceAddress2: formData.serviceAddress2,
+      serviceAddress3: formData.serviceAddress3,
+      serviceLocation: formData.serviceLocation,
+      servicePincode: formData.servicePincode
+        ? Number(formData.servicePincode)
+        : null,
+      serviceCity: formData.serviceCity,
+
+      sameAsShipping: formData.sameAsShipping,
+      billName: formData.billName,
+      billPhone: formData.billPhone,
+      billEmail: formData.billEmail,
+      billingAddress1: formData.billingAddress1,
+      billingAddress2: formData.billingAddress2,
+      billingAddress3: formData.billingAddress3,
+      billingLocation: formData.billingLocation,
+      billingPincode: formData.billingPincode
+        ? Number(formData.billingPincode)
+        : null,
+      billingCity: formData.billingCity,
+    });
+    console.log("Saving fields:", {
+      orderId: razorpay_order_id,
+      paymentId: razorpay_payment_id,
+      amountPaid: paymentDetails?.amount / 100,
+    });
+    // 5. Send Communications asynchronously
     try {
+      const emailSubject = `Your Express Pesticides Service is Booked! (Order: ${razorpay_order_id})`;
+      const invoiceHtml = buildInvoiceHtml(formData, paymentDetails, "Success");
+      const SMSbody = `Hi ${formData.name},\nYou have booked ${formData.serviceType.toUpperCase()} service for your ${formData.bhkType || "Property"} - ${formData.serviceCity}.\nThanks for choosing Express Pesticides`;
+
       await transporter.sendMail({
         from: `"Express Pesticides" <${process.env.EMAIL_USER}>`,
-        to: email,
+        to: formData.email,
         bcc: "exteam.epcorn@gmail.com",
         subject: emailSubject,
         html: invoiceHtml,
@@ -238,7 +257,7 @@ export async function POST(req) {
 
       await axios.post(
         `https://api.textbee.dev/api/v1/gateway/devices/${process.env.TEXT_BEE_DEVICE_ID}/send-sms`,
-        { recipients: [phone.toString()], message: SMSbody },
+        { recipients: [formData.phone.toString()], message: SMSbody },
         { headers: { "x-api-key": process.env.TEXT_BEE_API } },
       );
     } catch (msgErr) {
@@ -249,13 +268,18 @@ export async function POST(req) {
     }
 
     return NextResponse.json(
-      { success: true, message: "Payment secured and documented" },
+      {
+        success: true,
+        message: "Payment secured and documented",
+        newBooking,
+        bookingId: newBooking._id,
+      },
       { status: 200 },
     );
   } catch (error) {
-    console.error("🔥 Global Route Exception:", error);
+    console.error("🔥 Error during payment verification:", error);
     return NextResponse.json(
-      { error: "Internal server error execution branch" },
+      { message: error.message || "Internal server error during verification" },
       { status: 500 },
     );
   }
