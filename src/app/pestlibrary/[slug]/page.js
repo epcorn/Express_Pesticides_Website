@@ -3,9 +3,12 @@
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import Footer from "@/components/Footer";
-import { FaCheckCircle, FaExclamationTriangle, FaShieldAlt } from "react-icons/fa";
+import {
+  FaCheckCircle,
+  FaExclamationTriangle,
+  FaShieldAlt,
+} from "react-icons/fa";
 import { pestData } from "@/data/pestliabrary";
-
 
 export default function PestDetailPage() {
   const params = useParams();
@@ -13,11 +16,13 @@ export default function PestDetailPage() {
 
   // Find the pest data based on the slug
   const pest = pestData[slug];
-
+  console.log(pest);
   // Show a "not found" message if the slug is invalid
   if (!pest) {
     return (
-      <main className="pt-32 min-h-screen"> {/* Adjusted padding */}
+      <main className="pt-32 min-h-screen">
+        {" "}
+        {/* Adjusted padding */}
         <section className="py-20">
           <div className="max-w-7xl mx-auto px-6 text-center">
             <h1 className="text-4xl font-bold text-gray-900">Pest Not Found</h1>
@@ -33,7 +38,9 @@ export default function PestDetailPage() {
 
   // --- Main Pest Page Layout ---
   return (
-    <main className="pt-16 lg:pt-26 bg-gray-50"> {/* Adjusted padding */}
+    <main className="py-16 lg:py-26 bg-gray-50">
+      {" "}
+      {/* Adjusted padding */}
       {/* 1. Pest Header */}
       <section className="py-12">
         <div className="max-w-7xl mx-auto px-6 text-center">
@@ -48,33 +55,32 @@ export default function PestDetailPage() {
           </span>
         </div>
       </section>
-
       {/* 2. Intro Section (Text + Image) */}
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           {/* Text */}
           <div>
-             <h2 className="text-3xl font-bold text-blue-600 mb-4">
-               Meet the {pest.name}
-             </h2>
+            <h2 className="text-3xl font-bold text-blue-600 mb-4">
+              {/* Meet the {pest.name} */}
+              {pest.heading}
+            </h2>
             <p className="text-lg text-gray-700 leading-relaxed">
               {pest.overview}
             </p>
           </div>
-           {/* Pest Image */}
+          {/* Pest Image */}
           <div className="w-full h-80 relative rounded-lg overflow-hidden shadow-lg border bg-white">
             <Image
               src={pest.mainImage}
               alt={pest.name}
               fill
-              className="object-contain p-4" 
+              className="object-contain p-4"
             />
           </div>
         </div>
       </section>
-
       {/* 3. Overview & Habitat/Behavior */}
-      <section className="py-16 bg-blue-50">
+      <section className="hidden py-16 bg-blue-50">
         <div className="max-w-4xl mx-auto px-6">
           <h2 className="text-3xl font-bold text-gray-900 text-center mb-6">
             Habitat and Behavior
@@ -84,17 +90,47 @@ export default function PestDetailPage() {
           </p>
         </div>
       </section>
+      {/* 4. Types of Pest */}
+      <section className="py-16 bg-blue-400">
+        <div className="max-w-5xl mx-auto px-6">
+          <h2 className="text-3xl font-bold text-gray-900 text-center mb-10">
+            Types Of {pest?.name}
+          </h2>
 
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(160px,1fr))] gap-8 justify-items-center items-start">
+            {pest?.typeOfPest?.map((p) => (
+              <div
+                key={p.name}
+                className="flex flex-col items-center gap-3 w-full max-w-[200px] text-center">
+                {/* Image Wrapper */}
+                <div className="relative w-full aspect-square bg-white rounded-full shadow-md overflow-hidden p-3 border border-blue-50 hover:shadow-lg transition-shadow">
+                  <Image
+                    src={encodeURI(p.img)}
+                    alt={p.name}
+                    fill
+                    className="object-contain p-2"
+                  />
+                </div>
+
+                {/* Pest Title */}
+                <p className="text-base sm:text-lg font-semibold text-gray-800 leading-snug">
+                  {p.name}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
       {/* 4. Lifecycle Section (Image + Text) */}
-       <section className="py-16">
+      <section className="py-16 bg-green-50">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-           {/* Lifecycle Image */}
+          {/* Lifecycle Image */}
           <div className="w-full h-96 relative rounded-lg overflow-hidden shadow-lg border">
             <Image
               src={pest.lifecycleImage}
               alt={`${pest.name} Lifecycle`}
               fill
-              className="object-contain p-2" 
+              className="object-contain p-2"
             />
           </div>
           {/* Lifecycle Text */}
@@ -108,36 +144,52 @@ export default function PestDetailPage() {
           </div>
         </div>
       </section>
-
       {/* 5. Signs of Infestation (Text + Image) */}
-       <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-amber-100">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-           {/* Text */}
+          {/* Text */}
           <div>
             <h2 className="text-3xl font-bold text-blue-600 mb-4">
               Signs of Infestation
             </h2>
-            <p className="text-lg text-gray-700 leading-relaxed">
-              {pest.signsInfestationText}
-            </p>
+            {pest?.signsInfestationText?.map((inf, i) => (
+              <p
+                key={i}
+                className="text-md md:text-lg text-gray-700 leading-relaxed">
+                {i + 1} - {inf}
+              </p>
+            ))}
           </div>
-           {/* Infestation Image */}
+          {/* Infestation Image */}
           <div className="w-full h-80 relative rounded-lg overflow-hidden shadow-lg border bg-white">
             <Image
               src={pest.signsInfestationImage}
               alt={`Signs of ${pest.name} Infestation`}
               fill
-              className="object-contain p-4" 
+              className="object-cover"
             />
           </div>
         </div>
       </section>
-
+      {/* Get rid of Pest */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto space-y-4 px-2">
+          <h3 className="text-2xl md:text-3xl font-bold text-center">
+            {pest?.getRid?.title}
+          </h3>
+          {pest?.getRid?.descrption.split("\n").map((sc) => (
+            <p key={sc} className="text-lg text-gray-700 leading-relaxed">
+              {sc}
+            </p>
+          ))}
+        </div>
+      </section>
       {/* 6. Health Risks */}
-      <section className="py-16">
+      <section className="py-16 hidden">
         <div className="max-w-4xl mx-auto px-6">
           <h2 className="text-3xl font-bold text-gray-900 text-center mb-10">
-             <FaExclamationTriangle className="inline-block text-red-500 mr-2 mb-1" /> Health Risks
+            <FaExclamationTriangle className="inline-block text-red-500 mr-2 mb-1" />{" "}
+            Health Risks
           </h2>
           <ul className="space-y-4">
             {pest.healthRisks.map((risk) => (
@@ -149,12 +201,12 @@ export default function PestDetailPage() {
           </ul>
         </div>
       </section>
-
       {/* 7. Prevention Tips */}
-      <section className="py-16 bg-green-50">
+      <section className="py-16 bg-green-50 hidden">
         <div className="max-w-4xl mx-auto px-6">
           <h2 className="text-3xl font-bold text-gray-900 text-center mb-10">
-            <FaShieldAlt className="inline-block text-green-600 mr-2 mb-1" /> Prevention Tips
+            <FaShieldAlt className="inline-block text-green-600 mr-2 mb-1" />{" "}
+            Prevention Tips
           </h2>
           <ul className="space-y-4">
             {pest.preventionTips.map((tip) => (
@@ -166,7 +218,6 @@ export default function PestDetailPage() {
           </ul>
         </div>
       </section>
-
       <Footer />
     </main>
   );

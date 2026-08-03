@@ -2,6 +2,8 @@
 
 import { features } from "@/data/whychooseusData";
 import ServiceCard from "./ServiceCard";
+import Link from "next/link";
+import { createSlug } from "@/app/why_choose_us/[slug]/page";
 
 export default function WhyChooseUs() {
   return (
@@ -18,17 +20,20 @@ export default function WhyChooseUs() {
 
       {/* Feature Cards Grid */}
       <div className="max-w-6xl mx-auto grid gap-6 sm:gap-8 sm:grid-cols-2 lg:grid-cols-3 px-4 sm:px-6">
-        {features.map((feature) => (
-          <div
+        {features.map((feature) => {
+          const key = createSlug(feature.name)
+          return(
+          <Link
             key={feature.name}
+            href={`/why_choose_us/${key}`}
             className="flex flex-col items-center text-center bg-white rounded-2xl shadow-md hover:shadow-lg transition p-6"
           >
-            <ServiceCard name={feature.name} logo={feature.logo} />
+            <ServiceCard name={feature.name} cover={true} logo={feature.logo} />
             <p className="text-gray-600 text-sm sm:text-base mt-3">
               {feature.description}
             </p>
-          </div>
-        ))}
+          </Link>
+        )})}
       </div>
 
       {/* Footer Tagline */}

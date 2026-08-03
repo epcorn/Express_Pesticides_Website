@@ -10,7 +10,7 @@ export default function ServiceCard({ name, logo }) {
           src={logo}
           alt={name}
           fill
-          className="object-contain"
+          className="object-contain h-auto"
           sizes="80px"
         />
       </div>

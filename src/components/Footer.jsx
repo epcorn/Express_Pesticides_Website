@@ -24,7 +24,7 @@ export default function Footer() {
                 Services
               </Link>
             </li>
-             <li>
+            <li>
               <Link href="/products" className="hover:text-blue-400 transition-colors">
                 Products
               </Link>
@@ -78,17 +78,17 @@ export default function Footer() {
           <h3 className="text-xl font-bold mb-4 text-blue-500">Get in Touch</h3>
           <p className="mb-1 font-semibold">Express Pesticides Private Limited</p>
           <p className="mb-3 text-gray-300">
-             S - 5, 2nd Floor, Khira Industrial Estate, VM Bhargav Rd,
+            S - 5, 2nd Floor, Khira Industrial Estate, VM Bhargav Rd,
             Khira Nagar, Santacruz (West), Mumbai, Maharashtra 400054
           </p>
           <p className="mb-2">Phone: <a href="tel:02261386600" className="hover:text-blue-400">02261386600</a></p>
           <p className="mb-4">
             Email:{" "}
             <a
-              href="mailto:info@expresspesticides.com"
+              href="mailto:epcorn@yahoo.in"
               className="hover:text-blue-400 transition-colors"
             >
-              info@expresspesticides.com
+              epcorn@yahoo.in
             </a>
           </p>
 
@@ -102,8 +102,8 @@ export default function Footer() {
             <a href="https://in.linkedin.com/company/express-pesticides-private-limited" rel="noopener noreferrer" target="_blank" className="hover:text-blue-400 transition-colors">
               <FaLinkedinIn />
             </a>
-            <a href="https://www.youtube.com/@epcorn1972" target="_blank" 
-  rel="noopener noreferrer"  className="hover:text-blue-400 transition-colors">
+            <a href="https://www.youtube.com/@epcorn1972" target="_blank"
+              rel="noopener noreferrer" className="hover:text-blue-400 transition-colors">
               <FaYoutube />
             </a>
           </div>

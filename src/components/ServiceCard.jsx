@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 
-export default function ServiceCard({ name, logo }) {
-  
+export default function ServiceCard({ name, logo, cover = false }) {
+
   return (
     <div className="flex flex-col items-center cursor-pointer group">
       {/* Rounded Logo */}
@@ -13,8 +13,8 @@ export default function ServiceCard({ name, logo }) {
           alt={name}
           width={300}
           height={200}
-          className="object-contain aspect-square"
-          style={{width:"100%", height:"auto"}}
+          className={`${cover ? "object-cover" : "object-contain"} aspect-square`}
+          style={{ width: "100%", height: "auto" }}
         />
       </div>
 

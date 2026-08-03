@@ -9,6 +9,7 @@ import Script from "next/script";
 export const metadata = {
   title: "Express Pesticides", //changed
   description: "Express Pesticides homepage", //added
+  icons: { icon: "/logo.jpg" },
 };
 
 export default function RootLayout({ children }) {

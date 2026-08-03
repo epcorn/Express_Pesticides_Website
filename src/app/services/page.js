@@ -21,7 +21,7 @@ export default function ServicesPage() {
             {servicesIcons?.map((s) => (
               <Link
                 key={s.slug}
-                href={`/services/${s.slug}`}
+                href={`/services/pest/${s.slug}`}
                 className="flex flex-col items-center transform hover:-translate-y-2 transition duration-300">
                 <div className="relative w-28 h-28 rounded-full overflow-hidden flex items-center justify-center bg-transparent">
                   <Image
@@ -51,14 +51,15 @@ export default function ServicesPage() {
 
           <div className="grid gap-8 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
             {workAreas.map((area) => (
-              <div
+              <Link
+                href={`services/work/${area.slug}`}
                 key={area.name}
                 className="bg-white rounded-2xl shadow-md hover:shadow-lg transition-transform duration-300 p-6 flex flex-col items-center border border-gray-100 hover:-translate-y-2">
                 <div className="text-blue-600 text-4xl mb-3">{area.icon}</div>
                 <p className="text-gray-800 font-semibold text-base">
                   {area.name}
                 </p>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

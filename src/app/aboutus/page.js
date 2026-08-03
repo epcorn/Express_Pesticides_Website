@@ -25,17 +25,17 @@ export default function AboutPage() {
 
   const processSteps = [
     {
-      step: "01",
+      step: "/assets/About_us/The_Express_Approach/Inspection_Identification.png",
       title: "Inspection & Identification",
       desc: "We begin with a detailed property inspection to identify pest activity, breeding / harborages areas, and entry points. Our subject matter experts identify the pests and assess the infestation level to plan the right management approach.",
     },
     {
-      step: "02",
+      step: "/assets/About_us/The_Express_Approach/Target_treatment.png",
       title: "Targeted Treatment",
       desc: "Based on our findings, we apply a precise treatment plan using advanced tools and safe-eco products. From spraying and fogging to gel baiting, every method is customised for maximum effectiveness with minimum disruption.",
     },
     {
-      step: "03",
+      step: "/assets/About_us/The_Express_Approach/Prevention_Maintence.png",
       title: "Prevention & Maintenance",
       desc: "Once the pests are eliminated, our team manages to maintain a pest-free environment through regular monitoring, proofing vulnerable areas, and giving simple preventive tips for lasting protection from pests.",
     },
@@ -97,29 +97,39 @@ export default function AboutPage() {
     <main className="">
       {/* Section 1: About Us */}
       <section className="pt-20">
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          <div>
-            <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 sm:gap-5 lg:gap-12 items-center">
+          <div className="md:col-span-2 flex items-center gap-2 mb-6">
+            <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900">
               About <span className="text-blue-600">Express Pesticides</span>
             </h1>
+            <div className="w-20 h-20 flex-shrink-0 relative flex items-center justify-center">
+              <div className="absolute inset-0 rounded-full border-4 border-transparent bg-gradient-to-tr from-blue-300 via-blue-200 to-blue-50 [background-clip:padding-box,border-box] [background-origin:border-box] animate-spin"></div>
+
+              <div className="w-[calc(100%-12px)] h-[calc(100%-12px)] relative rounded-full overflow-hidden z-10 bg-gray-400">
+                <Image
+                  src="/assets/About_us/50+years.png"
+                  fill
+                  alt="50+year"
+                  className="object-cover"
+                  sizes="80px"
+                />
+              </div>
+            </div>
+          </div>
+          <div>
             <p className="text-lg text-gray-700 leading-relaxed mb-4">
-              At Express Pesticides, we believe that true progress begins with
-              protection — protection of health, homes, and habitats. Founded
-              with a vision to redefine pest management through innovation and
-              integrity, Express Pesticides stands at the forefront of smart-eco
-              solutions designed for a dependable, safer, and healthier world.
+              Express Pesticides is a trusted name in integrated pest
+              management, delivering smart, eco-conscious solutions that protect
+              health, homes, and businesses. We serve residential, commercial,
+              and industrial clients across India with safe, effective, and
+              reliable pest management services.
             </p>
             <p className="text-lg text-gray-700 leading-relaxed mb-4">
-              With years of expertise and a commitment to excellence, we focus
-              on a comprehensive integrated pest management approach through the
-              offered services to residential, commercial, and industrial
-              clients across India.
-            </p>
-            <p className="text-lg text-gray-700 leading-relaxed">
-              Our team of constantly trained professionals, certified
-              applicators, and quality assurance specialists work hand-in-hand
-              to uphold Express {`Pesticide's`} pledge: Zero compromise on
-              safety, service, and satisfaction.
+              Backed by trained professionals, certified technicians, and a
+              strong commitment to quality, we focus on innovative solutions and
+              customer satisfaction. Our promise is simple—providing dependable
+              pest management with zero compromise on safety, service, and
+              excellence.
             </p>
           </div>
           <div className="w-full h-96 relative rounded-lg overflow-hidden shadow-lg shadow-zinc-600">
@@ -133,7 +143,92 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Section 2: Sustainability */}
+      {/* Section 2: CMD's Msg */}
+      <section className="pt-20 p-5">
+        <div className="relative bg-[#0A1649] text-white rounded-2xl">
+          <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-center p-5">
+            {/* Heading spanning full width */}
+
+            {/* Text Content Column */}
+            <div className="order-2 md:order-1 space-y-3">
+              <h2 className="text-2xl md:text-3xl font-extrabold md:col-span-2">
+                Message from <span className="text-blue-600">CMD</span>
+              </h2>
+              <p className="text-lg leading-relaxed text-justify">
+                {`“Established in 1972 by Mr. Felix J. Quadros, Epcorn has over 50+ years of expertise in delivering reliable pest management solutions. Driven by a commitment to protecting health, property, and the environment, our highly trained team provides safe, compliant, and customer-focused services. With experience across residential, commercial, industrial, and government sectors, Epcorn continues to build lasting trust through quality, innovation, and professional excellence.”`}
+              </p>
+            </div>
+
+            {/* Image & Caption Column */}
+            <div className="order-1 md:order-2 flex flex-col items-center md:items-end justify-self-center md:justify-self-end w-full max-w-sm">
+              <div className="w-full aspect-square relative rounded-lg overflow-hidden bg-white shadow-lg shadow-zinc-400">
+                <Image
+                  src="/assets/About_us/Flex_sir.png"
+                  alt="Express Pesticides Team"
+                  fill
+                  className="object-cover object-top"
+                  sizes="(max-w-7xl) 384px, 100vw"
+                />
+              </div>
+              <p className="mt-3 z-10 font-semibold text-lg text-center md:text-right w-full">
+                <span className="text-green-600">Founder</span>,{" "}
+                <span className="text-white">
+                  Chairman
+                </span>{" "}
+                & <span className="text-amber-600">Managing Director</span>
+              </p>
+            </div>
+          </div>
+          <div className="absolute h-0 w-0 border-x-[30px] border-b-[60px] -rotate-45 border-x-transparent border-b-[#0A1649] bg-transparent -bottom-5 right-10 "/>
+        </div>
+      </section>
+
+      {/* Section 3: comprehensive page */}
+      <section className="pt-20 bg-blue-50 pb-5">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          {/* Heading spanning full width */}
+
+          {/* Text Content Column */}
+          <div className="">
+            <h4 className="text-2xl md:text-3xl font-extrabold text-gray-900">
+              Comprehensive Pest Management Solution
+            </h4>
+            <p className="text-lg text-gray-700 leading-relaxed text-justify">
+              With over five decades of expertise, Express Pesticides provides
+              comprehensive pest management solutions for residential,
+              commercial, and industrial sectors. Our integrated approach
+              combines scientific methods, skilled professionals, and
+              eco-conscious practices to deliver safe, effective, and reliable
+              protection against a wide range of pests, ensuring healthier and
+              pest-free environments for our clients.
+            </p>
+          </div>
+
+          {/* Clean 4-Image Grid Column */}
+          <div className="grid grid-cols-2 gap-4 w-full">
+            {[
+              "/assets/About_us/Image_01.jpg",
+              "/assets/About_us/Image_02.jpg",
+              "/assets/About_us/Image_03.jpg",
+              "/assets/About_us/Image_04.jpg",
+            ].map((img, index) => (
+              <div
+                key={img}
+                className="relative aspect-video h-30 rounded-lg overflow-hidden shadow-sm border border-gray-100">
+                <Image
+                  src={img}
+                  fill
+                  alt={`Pest Management Solution Showcase ${index + 1}`}
+                  className="object-cover"
+                  sizes="(max-w-7xl) 280px, 50vw"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Section 3: Sustainability */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div className="w-full h-96 relative rounded-lg overflow-hidden shadow-lg shadow-zinc-500 md:order-1">
@@ -164,7 +259,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Section 3: Commitment */}
+      {/* Section 4: Commitment */}
       <section className="py-16 bg-blue-600 text-white">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-3xl font-bold text-center mb-10">
@@ -187,7 +282,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Section 4: Certificates (Horizontal scroll row) */}
+      {/* Section 5: Certificates (Horizontal scroll row) */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-3xl font-bold text-center mb-10">
@@ -223,7 +318,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Section 5: Vision */}
+      {/* Section 6: Vision */}
       <section className="grid grid-cols-1 sm:grid-cols-2 gap-5 px-5 bg-neutral-50 *:shadow-md">
         <div className="py-16 bg-white">
           <div className="max-w-5xl mx-auto text-center px-6">
@@ -277,7 +372,12 @@ export default function AboutPage() {
                 className="relative group bg-white rounded-2xl shadow-sm border border-slate-100 p-10 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 z-10">
                 {/* Step Number Circle */}
                 <div className="absolute -top-6 left-10 w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-xl shadow-lg ring-4 ring-white">
-                  {step.step}
+                  <Image
+                    className="w-full h-full"
+                    fill
+                    src={step.step}
+                    alt={step.title}
+                  />
                 </div>
 
                 <h4 className="text-2xl font-bold mb-4 text-slate-800 group-hover:text-blue-600 transition-colors">

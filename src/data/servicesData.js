@@ -12,16 +12,20 @@ import {
 } from "react-icons/fa";
 
 export const workAreas = [
-  { name: "Hospitals", icon: <FaHospital /> },
-  { name: "Offices", icon: <FaBriefcase /> },
-  { name: "Hotels & Restaurants", icon: <FaHotel /> },
-  { name: "Warehouses", icon: <FaWarehouse /> },
-  { name: "Schools & Colleges", icon: <FaSchool /> },
-  { name: "Factories", icon: <FaIndustry /> },
-  { name: "Residential Societies", icon: <FaHome /> },
-  { name: "Shopping Malls", icon: <FaShoppingBag /> },
-  { name: "Pharmaceutical Units", icon: <FaCapsules /> },
-  { name: "Corporate Buildings", icon: <FaBuilding /> },
+  { slug: "hospitals", name: "Hospitals", icon: <FaHospital /> },
+  { slug: "offices", name: "Offices", icon: <FaBriefcase /> },
+  {
+    slug: "hotels_restaurants",
+    name: "Hotels & Restaurants",
+    icon: <FaHotel />,
+  },
+  { slug: "warehouses", name: "Warehouses", icon: <FaWarehouse /> },
+  { slug: "schools", name: "Schools & Colleges", icon: <FaSchool /> },
+  { slug: "factories", name: "Factories", icon: <FaIndustry /> },
+  { slug: "residentials", name: "Residential Societies", icon: <FaHome /> },
+  { slug: "shopping_malls", name: "Shopping Malls", icon: <FaShoppingBag /> },
+  { slug: "pharma", name: "Pharmaceutical Units", icon: <FaCapsules /> },
+  { slug: "corporate", name: "Corporate Buildings", icon: <FaBuilding /> },
 ];
 
 export const servicePestImages = {
@@ -108,8 +112,8 @@ export const servicePestImages = {
       "/assets/service_icons/Service_Gallery/Woodsafe_2.jpg",
     ],
   },
-  rapron: {
-    hero: "/public/assets/service_icons/Repron.png",
+  repron: {
+    hero: "/assets/service_icons/Repron.png",
     signs: [],
     gallery: [],
   },
@@ -162,8 +166,8 @@ export const servicesIcons = [
     logo: "/assets/service_icons/Antron.png",
   },
   {
-    name: "Rapron Service",
-    slug: "rapron",
+    name: "Repron Service",
+    slug: "repron",
     logo: "/assets/service_icons/Repron.png",
   },
 ];
@@ -553,10 +557,10 @@ export const servicesData = {
     ],
     types: [],
   },
-  rapron: {
-    name: "Rapron Service",
+  repron: {
+    name: "Repron Service",
     logo: "/assets/service_icons/Repron.png",
-    subtitle: "Professional Rapron Service Treatment",
+    subtitle: "Professional Repron Service Treatment",
     description: `Repron Service is a professional snake repellent and reptile management program offered by Express Pesticides, designed through an Integrated Pest Management (IPM) approach that combines habitat assessment, reptile repellent application, exclusion techniques, and preventive recommendations to reduce the risk of snake entry into residential, commercial, industrial, and institutional premises.
     At Express Pesticides, Repron Service is carried out by our specially trained technicians, who inspect the property for potential snake harbourage areas, identify entry points and environmental risk factors, apply scientifically formulated snake repellent products, and recommend preventive measures to create a safer environment.
 `,
@@ -579,5 +583,435 @@ export const servicesData = {
       "Cost-Effective Protection: Prevents costly disruptions, safety incidents, and emergency snake management by implementing proactive, professional reptile prevention measures.",
     ],
     types: [],
+  },
+};
+
+export const workServiceData = {
+  hospitals: {
+    slug: "hospitals",
+    bgImg: "/assets/Where_We_work/Hospital.jpg",
+    title: "HOSPITAL PEST CONTROL SERVICES",
+    slog: "Pests Threaten More Than Patient Safety",
+    subSlog1:
+      "Trusted Pest Control for Hospitals, Clinics & Healthcare Facilities",
+    para1:
+      "When it comes to pest control for healthcare facilities, the risks extend far beyond nuisance pests. Hospitals, clinics and medical centers require the highest standards of hygiene, where even minor pest activity can compromise patient safety, contaminate sterile environments and impact regulatory compliance. Rodents, cockroaches, flies and other pests can spread harmful pathogens, damage critical infrastructure and affect your reputation. Express Pesticides delivers customized hospital pest management programs designed to protect patients, healthcare professionals and sensitive medical environments through scientifically proven Integrated Pest Management solutions.",
+    subSlog2: "Pest Control Services for Hospitals & Healthcare Facilities",
+    risks: [
+      {
+        title: "Integrated Pest Management (IPM)",
+        img: "/assets/Where_We_work/Common_Risk/IPM_Integrated_Pest_Management.png",
+        desc: "Healthcare facilities require preventive pest management, not reactive treatments. Our Integrated Pest Management approach combines inspections, monitoring, sanitation recommendations and targeted treatments to maintain a safe, hygienic and compliant environment.",
+      },
+      {
+        title: "Rodent Control",
+        img: "/assets/Where_We_work/Common_Risk/Rodent_Control.png",
+        desc: "Rodents can contaminate medical supplies, damage electrical systems and spread diseases. Our monitoring and exclusion programs help protect hospitals from rodent infestations.",
+      },
+      {
+        title: "Cockroach Control",
+        img: "/assets/Where_We_work/Common_Risk/Cockroach_Control.png",
+        desc: "Cockroaches carry harmful bacteria and thrive in kitchens, drains and utility areas. Our targeted treatments help eliminate infestations while protecting sensitive environments.",
+      },
+      {
+        title: "Fly & Mosquito Management",
+        img: "/assets/Where_We_work/Common_Risk/Fly_control.png",
+        desc: "Flying insects can spread pathogens and create discomfort for patients and staff. We implement comprehensive fly and mosquito management programs for healthcare facilities.",
+      },
+      {
+        title: "Pest Exclusion Services",
+        img: "/assets/Where_We_work/Common_Risk/Pest_Exclusive_Service.png",
+        desc: "Doors, vents and utility openings provide easy access for pests. We identify and seal potential entry points to reduce future infestations.",
+      },
+      {
+        title: "Comprehensive Reporting",
+        img: "/assets/Where_We_work/Common_Risk/Comprehensive_Report.png",
+        desc: "Our digital reporting system provides detailed service records, inspection reports and pest activity trends to support healthcare audits and regulatory compliance.",
+      },
+    ],
+  },
+  offices: {
+    slug: "offices",
+    title: "OFFICE PEST CONTROL SERVICES",
+    bgImg: "/assets/Where_We_work/Office.jpg",
+    slog: "Pests Threaten More Than Workplace Productivity",
+    subSlog1: "Trusted Pest Control for Offices & Commercial Workspaces",
+    para1:
+      "A pest infestation in office environments can affect employee wellbeing, damage office assets and create an unhealthy workplace. Rodents, cockroaches and ants can contaminate pantry areas, damage wiring and negatively impact your company's professional image. Express Pesticides provides proactive pest management programs that help businesses maintain clean, healthy and productive work environments with minimal disruption.",
+    subSlog2: "Pest Control Services for Offices & Business Centers",
+    risks: [
+      {
+        title: "Integrated Pest Management (IPM)",
+        img: "/assets/Where_We_work/Common_Risk/IPM_Integrated_Pest_Management.png",
+        desc: "Our preventive IPM program combines inspections, monitoring and targeted treatments to reduce pest activity while maintaining a safe workplace.",
+      },
+      {
+        title: "Rodent Control",
+        img: "/assets/Where_We_work/Common_Risk/Rodent_Control.png",
+        desc: "Rodents can damage electrical cables, office equipment and stored documents. Our monitoring and exclusion solutions help protect office premises.",
+      },
+      {
+        title: "Cockroach Control",
+        img: "/assets/Where_We_work/Common_Risk/Cockroach_Control.png",
+        desc: "Cockroaches commonly infest pantry areas and washrooms. Our treatments help eliminate infestations and improve workplace hygiene.",
+      },
+      {
+        title: "Ant Control",
+        img: "/assets/Where_We_work/Common_Risk/Ant_Control.png",
+        desc: "Ants invade food storage and break areas. We identify nesting sites and provide long-term ant management solutions.",
+      },
+      {
+        title: "Pest Exclusion Services",
+        img: "/assets/Where_We_work/Common_Risk/Pest_Exclusive_Service.png",
+        desc: "We identify structural gaps and entry points that allow pests into office buildings and recommend effective proofing measures.",
+      },
+      {
+        title: "Comprehensive Reporting",
+        img: "/assets/Where_We_work/Common_Risk/Comprehensive_Report.png",
+        desc: "Receive detailed inspection reports, service records and pest trend analysis for complete visibility.",
+      },
+    ],
+  },
+  hotels_restaurants: {
+    slug: "hotels_restaurants",
+    title: "HOTEL & RESTAURANT PEST CONTROL SERVICES",
+    bgImg: "/assets/Where_We_work/Hotel.jpg",
+    slog: "Pests Threaten More Than Your Reputation",
+    subSlog1:
+      "Trusted Pest Control for Hotels, Restaurants & Hospitality Businesses",
+    para1:
+      "Hospitality businesses depend on cleanliness, guest satisfaction and food safety. Even a single pest sighting can lead to customer complaints, health violations and reputational damage. Express Pesticides delivers discreet, effective pest management programs designed to protect kitchens, dining areas, guest rooms and food storage facilities.",
+    subSlog2: "Pest Control Services for Hotels & Restaurants",
+    risks: [
+      {
+        title: "Integrated Pest Management (IPM)",
+        img: "/assets/Where_We_work/Common_Risk/IPM_Integrated_Pest_Management.png",
+        desc: "Our hospitality IPM program combines routine inspections, monitoring and preventive treatments to minimize pest risks.",
+      },
+      {
+        title: "Cockroach Control",
+        img: "/assets/Where_We_work/Common_Risk/Cockroach_Control.png",
+        desc: "Cockroaches contaminate food preparation areas and spread harmful bacteria. Our targeted treatments help maintain hygienic kitchens.",
+      },
+      {
+        title: "Rodent Control",
+        img: "/assets/Where_We_work/Common_Risk/Rodent_Control.png",
+        desc: "Rodents damage food packaging and contaminate storage areas. Our prevention programs help safeguard food businesses.",
+      },
+      {
+        title: "Fly Management",
+        img: "/assets/Where_We_work/Common_Risk/Fly_control.png",
+        desc: "Flies create hygiene concerns and negatively impact guest experiences. We implement customized fly control solutions.",
+      },
+      {
+        title: "Bird Control",
+        img: "/assets/Where_We_work/Common_Risk/Pigeon_Control.png",
+        desc: "Birds nesting around buildings leave droppings that contaminate outdoor dining and entrances. We install effective bird deterrent systems.",
+      },
+      {
+        title: "Comprehensive Reporting",
+        img: "/assets/Where_We_work/Common_Risk/Comprehensive_Report.png",
+        desc: "Digital reports and service documentation help maintain food safety compliance and inspection readiness.",
+      },
+    ],
+  },
+  warehouses: {
+    slug: "warehouses",
+    title: "WAREHOUSE PEST CONTROL SERVICES",
+    slog: "Pests Threaten More Than Your Inventory",
+    bgImg: "/assets/Where_We_work/Warehouse.png",
+    subSlog1:
+      "Trusted Pest Control for Warehouses, Distribution Centers & Logistics Facilities",
+    para1:
+      "When it comes to warehouse pest control, the risks extend beyond damaged goods. Warehouses experience constant movement of products, open loading docks and large storage areas that create ideal conditions for pests. Rodents, stored product insects and birds can contaminate inventory, damage packaging and disrupt supply chain operations. Express Pesticides provides customized warehouse pest management solutions designed to protect inventory, employees and business continuity.",
+    subSlog2: "Pest Control Services for Warehouses & Logistics Facilities",
+    risks: [
+      {
+        title: "Integrated Pest Management (IPM)",
+        img: "/assets/Where_We_work/Common_Risk/IPM_Integrated_Pest_Management.png",
+        desc: "Our warehouse IPM program combines inspections, monitoring and targeted treatments to reduce pest risks while supporting uninterrupted operations.",
+      },
+      {
+        title: "Rodent Control",
+        img: "/assets/Where_We_work/Common_Risk/Rodent_Control.png",
+        desc: "Rodents chew packaging, wiring and stored goods. Our monitoring and exclusion programs help prevent costly losses.",
+      },
+      {
+        title: "Stored Product Pest Control",
+        img: "/assets/Where_We_work/Common_Risk/Stored_Product_Pest_Control.png",
+        desc: "Stored product insects can quickly infest packaged goods. Our specialized treatments help protect inventory and reduce contamination risks.",
+      },
+      {
+        title: "Bird Control",
+        img: "/assets/Where_We_work/Common_Risk/Pigeon_Control.png",
+        desc: "Birds nesting in warehouse structures contaminate products and damage facilities. We implement long-term bird management solutions.",
+      },
+      {
+        title: "Pest Exclusion Services",
+        img: "/assets/Where_We_work/Common_Risk/Pest_Exclusive_Service.png",
+        desc: "Loading docks, gaps and structural openings provide easy pest access. We help seal entry points to prevent infestations.",
+      },
+      {
+        title: "Comprehensive Reporting",
+        img: "/assets/Where_We_work/Common_Risk/Comprehensive_Report.png",
+        desc: "Our digital reporting system provides inspection records, pest trends and service documentation to support audits.",
+      },
+    ],
+  },
+  schools: {
+    slug: "schools",
+    title: "SCHOOL & COLLEGE PEST CONTROL SERVICES",
+    bgImg: "/assets/Where_We_work/School.jpeg",
+    slog: "Pests Threaten More Than Learning",
+    subSlog1:
+      "Trusted Pest Control for Schools, Colleges & Educational Campuses",
+    para1:
+      "Educational institutions require clean and healthy environments where students and staff can learn safely. Pest infestations can spread diseases, damage infrastructure and disrupt daily activities. Express Pesticides provides safe, scheduled pest management programs designed specifically for educational facilities.",
+    subSlog2: "Pest Control Services for Schools & Colleges",
+    risks: [
+      {
+        title: "Integrated Pest Management (IPM)",
+        img: "/assets/Where_We_work/Common_Risk/IPM_Integrated_Pest_Management.png",
+        desc: "Educational institutions require proactive pest prevention. Our IPM program combines routine inspections, monitoring and targeted treatments to help maintain a safe, healthy and pest-free learning environment.",
+      },
+      {
+        title: "Rodent Control",
+        img: "/assets/Where_We_work/Common_Risk/Rodent_Control.png",
+        desc: "Rodents can contaminate classrooms, cafeterias and storage areas while damaging books, furniture and electrical wiring. Our rodent management program helps reduce infestation risks across the campus.",
+      },
+      {
+        title: "Cockroach Control",
+        img: "/assets/Where_We_work/Common_Risk/Cockroach_Control.png",
+        desc: "Cockroaches thrive in cafeterias, kitchens and washrooms, posing hygiene and health concerns. Our targeted treatments help eliminate infestations and improve sanitation.",
+      },
+      {
+        title: "Mosquito & Fly Management",
+        img: "/assets/Where_We_work/Common_Risk/mosquito_Control.png",
+        desc: "Mosquitoes and flies can spread diseases and create discomfort for students, teachers and visitors. Our integrated flying insect management program helps minimize breeding and pest activity.",
+      },
+      {
+        title: "Termite Control",
+        img: "/assets/Where_We_work/Common_Risk/Termite_control.png",
+        desc: "Termites can silently damage wooden furniture, doors, libraries and structural elements. We provide preventive and corrective termite solutions to protect educational infrastructure.",
+      },
+      {
+        title: "Comprehensive Reporting",
+        img: "/assets/Where_We_work/Common_Risk/Comprehensive_Report.png",
+        desc: "Our digital inspection reports, service records and pest activity trends help schools maintain hygiene standards and demonstrate proactive facility management.",
+      },
+    ],
+  },
+  factories: {
+    slug: "factories",
+    title: "FACTORY PEST CONTROL SERVICES",
+    bgImg: "/assets/Where_We_work/Factory.jpg",
+    slog: "Pests Threaten More Than Production",
+    subSlog1: "Trusted Pest Control for Manufacturing & Industrial Facilities",
+    para1:
+      "Factories require continuous production and strict hygiene standards. Pest infestations can contaminate products, damage machinery and interrupt manufacturing operations. Express Pesticides provides customized industrial pest management programs that help protect production, employees and compliance.",
+    subSlog2: "Pest Control Services for Manufacturing Facilities",
+    risks: [
+      {
+        title: "Integrated Pest Management (IPM)",
+        img: "/assets/Where_We_work/Common_Risk/IPM_Integrated_Pest_Management.png",
+        desc: "Manufacturing facilities require continuous pest prevention. Our IPM program combines inspections, monitoring and targeted treatments to protect production environments.",
+      },
+      {
+        title: "Rodent Control",
+        img: "/assets/Where_We_work/Common_Risk/Rodent_Control.png",
+        desc: "Rodents can damage machinery, electrical cables, raw materials and finished products. Our monitoring and exclusion solutions help minimize operational risks.",
+      },
+      {
+        title: "Cockroach Control",
+        img: "/assets/Where_We_work/Common_Risk/Cockroach_Control.png",
+        desc: "Cockroaches contaminate production and employee welfare areas while affecting hygiene standards. Our treatments help maintain clean manufacturing environments.",
+      },
+      {
+        title: "Fly Management",
+        img: "/assets/Where_We_work/Common_Risk/Fly_control.png",
+        desc: "Flying insects can contaminate production areas and impact product quality. We implement customized fly management programs to reduce infestation risks.",
+      },
+      {
+        title: "Bird Control",
+        img: "/assets/Where_We_work/Common_Risk/Pigeon_Control.png",
+        desc: "Birds nesting around factories can contaminate products, damage structures and create safety hazards. Our bird deterrent systems help protect industrial facilities.",
+      },
+      {
+        title: "Comprehensive Reporting",
+        img: "/assets/Where_We_work/Common_Risk/Comprehensive_Report.png",
+        desc: "Digital reports, pest trend analysis and service documentation help support quality audits and regulatory compliance.",
+      },
+    ],
+  },
+  residentials: {
+    slug: "residentials",
+    title: "RESIDENTIAL SOCIETY PEST CONTROL SERVICES",
+    bgImg: "/assets/Where_We_work/Residential.jpeg",
+    slog: "Pests Threaten More Than Comfortable Living",
+    subSlog1:
+      "Trusted Pest Control for Residential Communities & Apartment Complexes",
+    para1:
+      "Residential communities require clean, healthy and pest-free surroundings for residents and visitors. Common areas, drainage systems, gardens and waste collection zones often become breeding grounds for pests. Express Pesticides provides comprehensive pest management solutions to create safer living environments.",
+    subSlog2: "Pest Control Services for Residential Societies",
+    risks: [
+      {
+        title: "Integrated Pest Management (IPM)",
+        img: "/assets/Where_We_work/Common_Risk/IPM_Integrated_Pest_Management.png",
+        desc: "Our preventive IPM program helps reduce pest activity through regular inspections, monitoring and targeted treatments across common areas.",
+      },
+      {
+        title: "Mosquito Control",
+        img: "/assets/Where_We_work/Common_Risk/mosquito_Control.png",
+        desc: "Standing water and landscaped areas create ideal mosquito breeding conditions. Our mosquito management program helps improve resident comfort and health.",
+      },
+      {
+        title: "Rodent Control",
+        img: "/assets/Where_We_work/Common_Risk/Rodent_Control.png",
+        desc: "Rodents commonly infest parking areas, drainage systems and waste collection zones. Our monitoring and control programs help prevent infestations.",
+      },
+      {
+        title: "Cockroach Control",
+        img: "/assets/Where_We_work/Common_Risk/Cockroach_Control.png",
+        desc: "Cockroaches thrive in sewage lines, garbage rooms and utility areas. Our targeted treatments help maintain hygienic residential surroundings.",
+      },
+      {
+        title: "Termite Control",
+        img: "/assets/Where_We_work/Common_Risk/Termite_control.png",
+        desc: "Termites can damage wooden fixtures, clubhouses and building structures. We provide preventive termite management to protect valuable property.",
+      },
+      {
+        title: "Comprehensive Reporting",
+        img: "/assets/Where_We_work/Common_Risk/Comprehensive_Report.png",
+        desc: "Residents and facility managers receive detailed service reports, inspection records and treatment recommendations for complete transparency.",
+      },
+    ],
+  },
+  shopping_malls: {
+    slug: "shopping_malls",
+    title: "SHOPPING MALL PEST CONTROL SERVICES",
+    bgImg: "/assets/Where_We_work/Shopping_Mall.jpeg",
+    slog: "Protecting Shoppers, Retailers & Reputation",
+    subSlog1: "Professional Pest Control for Shopping Malls & Retail Complexes",
+    para1:
+      "High visitor traffic, food courts, and service areas make shopping malls susceptible to pest infestations. Express Pesticides helps maintain a clean, hygienic, and welcoming environment through proactive pest management solutions.",
+    subSlog2: "Pest Control Services for Shopping Malls",
+    risks: [
+      {
+        title: "Integrated Pest Management (IPM)",
+        img: "/assets/Where_We_work/Common_Risk/IPM_Integrated_Pest_Management.png",
+        desc: "Our IPM program combines routine inspections, monitoring and preventive treatments to help maintain a clean and welcoming shopping environment.",
+      },
+      {
+        title: "Rodent Control",
+        img: "/assets/Where_We_work/Common_Risk/Rodent_Control.png",
+        desc: "Rodents can contaminate food courts, storage areas and retail spaces while damaging infrastructure. Our monitoring program helps protect commercial operations.",
+      },
+      {
+        title: "Cockroach Control",
+        img: "/assets/Where_We_work/Common_Risk/Cockroach_Control.png",
+        desc: "Cockroaches commonly infest restaurants, food courts and service corridors. Our targeted treatments help maintain food hygiene and customer confidence.",
+      },
+      {
+        title: "Fly Management",
+        img: "/assets/Where_We_work/Common_Risk/Fly_control.png",
+        desc: "Flies create hygiene concerns around food outlets and waste disposal areas. Our customized fly management solutions help reduce pest activity.",
+      },
+      {
+        title: "Bird Control",
+        img: "/assets/Where_We_work/Common_Risk/Pigeon_Control.png",
+        desc: "Birds around entrances, parking structures and rooftops leave droppings that damage property and affect visitor experience. We install effective bird deterrent systems.",
+      },
+      {
+        title: "Comprehensive Reporting",
+        img: "/assets/Where_We_work/Common_Risk/Comprehensive_Report.png",
+        desc: "Our digital reports provide inspection history, treatment records and pest activity trends to support facility management.",
+      },
+    ],
+  },
+  pharma: {
+    slug: "pharma",
+    title: "PHARMACEUTICAL PEST CONTROL SERVICES",
+    bgImg: "/assets/Where_We_work/Pharmaceutical.jpg",
+    slog: "Pests Threaten More Than Product Quality",
+    subSlog1:
+      "Trusted Pest Control for Pharmaceutical Manufacturing & Research Facilities",
+    para1:
+      "Pharmaceutical facilities operate under strict quality and regulatory requirements where even minor pest activity can compromise production, contaminate products and impact compliance. Express Pesticides delivers audit-ready pest management solutions designed for pharmaceutical environments.",
+    subSlog2: "Pest Control Services for Pharmaceutical Facilities",
+    risks: [
+      {
+        title: "Integrated Pest Management (IPM)",
+        img: "/assets/Where_We_work/Common_Risk/IPM_Integrated_Pest_Management.png",
+        desc: "Pharmaceutical facilities require strict pest prevention. Our IPM program combines inspections, monitoring and targeted treatments to help maintain GMP-compliant environments.",
+      },
+      {
+        title: "Rodent Control",
+        img: "/assets/Where_We_work/Common_Risk/Rodent_Control.png",
+        desc: "Rodents can contaminate raw materials, packaging and finished products while damaging critical infrastructure. Our monitoring systems help reduce contamination risks.",
+      },
+      {
+        title: "Flying Insect Management",
+        img: "/assets/Where_We_work/Common_Risk/Fly_control.png",
+        desc: "Flying insects can compromise sterile environments and manufacturing processes. We implement advanced monitoring and control programs for sensitive production areas.",
+      },
+      {
+        title: "Stored Product Pest Control",
+        img: "/assets/Where_We_work/Common_Risk/Stored_Product_Pest_Control.png",
+        desc: "Stored product pests can infest packaging materials and raw ingredients. Our targeted treatments help safeguard pharmaceutical inventory.",
+      },
+      {
+        title: "Pest Exclusion Services",
+        img: "/assets/Where_We_work/Common_Risk/Pest_Exclusive_Service.png",
+        desc: "We identify and seal structural gaps, service penetrations and entry points to reduce pest access into critical manufacturing areas.",
+      },
+      {
+        title: "Comprehensive Reporting",
+        img: "/assets/Where_We_work/Common_Risk/Comprehensive_Report.png",
+        desc: "Detailed digital reports, trend analysis and service documentation support GMP, ISO and regulatory audit requirements.",
+      },
+    ],
+  },
+  corporate: {
+    slug: "corporate",
+    title: "CORPORATE BUILDING PEST CONTROL SERVICES",
+    bgImg: "/assets/Where_We_work/Coporate.jpg",
+    slog: "Pests Threaten More Than Your Professional Image",
+    subSlog1:
+      "Trusted Pest Control for Corporate Offices & Commercial Buildings",
+    para1:
+      "Corporate buildings require clean, hygienic and pest-free environments that support employee wellbeing and create positive impressions for clients and visitors. Express Pesticides provides proactive pest management programs tailored to modern commercial buildings.",
+    subSlog2: "Pest Control Services for Corporate Buildings",
+    risks: [
+      {
+        title: "Integrated Pest Management (IPM)",
+        img: "/assets/Where_We_work/Common_Risk/IPM_Integrated_Pest_Management.png",
+        desc: "Our preventive IPM program combines inspections, monitoring and targeted treatments to help maintain a clean and professional business environment.",
+      },
+      {
+        title: "Rodent Control",
+        img: "/assets/Where_We_work/Common_Risk/Rodent_Control.png",
+        desc: "Rodents can damage office infrastructure, electrical wiring and storage areas. Our monitoring and exclusion solutions help prevent infestations.",
+      },
+      {
+        title: "Cockroach Control",
+        img: "/assets/Where_We_work/Common_Risk/Cockroach_Control.png",
+        desc: "Cockroaches commonly infest pantry areas, cafeterias and utility rooms. Our treatments help improve workplace hygiene and employee wellbeing.",
+      },
+      {
+        title: "Ant Control",
+        img: "/assets/Where_We_work/Common_Risk/Ant_Control.png",
+        desc: "Ants invade food storage areas, break rooms and office spaces. Our customized ant management solutions help eliminate infestations at the source.",
+      },
+      {
+        title: "Pest Exclusion Services",
+        img: "/assets/Where_We_work/Common_Risk/Pest_Exclusive_Service.png",
+        desc: "We identify structural gaps, utility openings and access points to prevent pests from entering commercial buildings.",
+      },
+      {
+        title: "Comprehensive Reporting",
+        img: "/assets/Where_We_work/Common_Risk/Comprehensive_Report.png",
+        desc: "Digital inspection reports, treatment history and pest trend analysis provide complete visibility for facility managers and corporate administrators.",
+      },
+    ],
   },
 };
