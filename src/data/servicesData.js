@@ -30,22 +30,25 @@ export const workAreas = [
 
 export const servicePestImages = {
   "green-shield": {
-    hero: "https://res.cloudinary.com/epcorn/image/upload/v1761890421/Express_Pesticides_Website/SERVICES_IMAGES/Green%20shield/german_cockroach_jcuo0h.webp",
+    hero: "https://res.cloudinary.com/epcorn/image/upload/v1761890421/Express_Pesticides_Website/SERVICES_IMAGES/Green%20shield/german_cockroach_jcuo0h.jpg",
     signs: [
-      "https://res.cloudinary.com/epcorn/image/upload/v1761890422/Express_Pesticides_Website/SERVICES_IMAGES/Green%20shield/ant_rfwaxe.webp",
-      "https://res.cloudinary.com/epcorn/image/upload/v1761890423/Express_Pesticides_Website/SERVICES_IMAGES/Green%20shield/silverfish_fg7qbk.webp",
+      "https://res.cloudinary.com/djc8opvcg/image/upload/v1785832528/express_pesticides/Service_Gallery/Sign%20of%20infestation%20for%20Service/German_Cockroaches_infestation_utyzhc.jpg",
+      "https://res.cloudinary.com/djc8opvcg/image/upload/v1785832526/express_pesticides/Service_Gallery/Sign%20of%20infestation%20for%20Service/silverfish_sign_infestation_image02_kykytu.webp",
     ],
-    gallery: [],
+    gallery: [
+      "https://res.cloudinary.com/djc8opvcg/image/upload/v1785828098/express_pesticides/Service_Gallery/Greenshield_1_rojqqr.jpg",
+      "https://res.cloudinary.com/djc8opvcg/image/upload/v1785828097/express_pesticides/Service_Gallery/Greenshield_2_lueqqf.jpg",
+    ],
   },
   "rat-rid": {
     hero: "https://res.cloudinary.com/epcorn/image/upload/v1761890434/Express_Pesticides_Website/SERVICES_IMAGES/Ratrid/pexels-denitsa-kireva-2915302-9783103_gq1c6s.jpg",
     signs: [
-      "https://res.cloudinary.com/epcorn/image/upload/v1761890431/Express_Pesticides_Website/SERVICES_IMAGES/Ratrid/Rat_damaged_01_oljzj7.jpg",
+      "https://res.cloudinary.com/djc8opvcg/image/upload/v1785832521/express_pesticides/Service_Gallery/Sign%20of%20infestation%20for%20Service/Sign_infestation_rat_image01_gg7nzb.jpg",
       "https://res.cloudinary.com/epcorn/image/upload/v1761890429/Express_Pesticides_Website/SERVICES_IMAGES/Ratrid/Rat_damage_rahdbx.jpg",
     ],
     gallery: [
-      "/assets/service_icons/Service_Gallery/Ratrid_2.jpg",
-      "/assets/service_icons/Service_Gallery/Ratrid_1.png",
+      "https://res.cloudinary.com/djc8opvcg/image/upload/v1785828100/express_pesticides/Service_Gallery/Ratrid_1_ogxrgx.jpg",
+      "https://res.cloudinary.com/djc8opvcg/image/upload/v1785828195/express_pesticides/Service_Gallery/Ratrid_2_t8btyf.jpg",
     ],
   },
   "anti-termite-treatment": {
@@ -55,62 +58,66 @@ export const servicePestImages = {
       "https://res.cloudinary.com/epcorn/image/upload/v1761890368/Express_Pesticides_Website/SERVICES_IMAGES/Anti-termite/Termite_damage_qekjam.jpg",
     ],
     gallery: [
-      "/assets/service_icons/Service_Gallery/Anti-termite_1.jpg",
-      "/assets/service_icons/Service_Gallery/Anti-termite_2.jpg",
+      "https://res.cloudinary.com/djc8opvcg/image/upload/v1785828109/express_pesticides/Service_Gallery/Anti-termite_1_febtud.jpg",
+      "https://res.cloudinary.com/djc8opvcg/image/upload/v1785828095/express_pesticides/Service_Gallery/Anti-termite_2_lyycmp.jpg",
     ],
   },
   mosquit: {
     hero: "https://res.cloudinary.com/epcorn/image/upload/v1761890428/Express_Pesticides_Website/SERVICES_IMAGES/Mosquit/MOSQUITO-FACTS_xmtcp4.jpg",
     signs: [
-      "https://res.cloudinary.com/epcorn/image/upload/v1761890425/Express_Pesticides_Website/SERVICES_IMAGES/Mosquit/Mosquito_sv7q5e.webp",
-      "https://res.cloudinary.com/epcorn/image/upload/v1761890426/Express_Pesticides_Website/SERVICES_IMAGES/Mosquit/Mosquito_biite_qlrrnq.jpg",
+      "https://res.cloudinary.com/djc8opvcg/image/upload/v1785832523/express_pesticides/Service_Gallery/Sign%20of%20infestation%20for%20Service/Mosquito_image_infestation_02_i7lkfb.jpg",
+      "https://res.cloudinary.com/djc8opvcg/image/upload/v1785832519/express_pesticides/Service_Gallery/Sign%20of%20infestation%20for%20Service/mosquitoes_infestation_image01_uaa3xc.jpg",
     ],
     gallery: [
-      "/assets/service_icons/Service_Gallery/Mosquito_1.jpg",
-      "/assets/service_icons/Service_Gallery/Mosquito_2.jpg",
+      "https://res.cloudinary.com/djc8opvcg/image/upload/v1785828098/express_pesticides/Service_Gallery/Mosquito_1_btlbxu.jpg",
+      "https://res.cloudinary.com/djc8opvcg/image/upload/v1785828099/express_pesticides/Service_Gallery/Mosquito_2_j6lvjr.jpg",
     ],
   },
   flyban: {
     hero: "https://res.cloudinary.com/epcorn/image/upload/v1761890420/Express_Pesticides_Website/SERVICES_IMAGES/Flyban/fly-447307_1280_hjjzaz.jpg",
     signs: [
-      "https://res.cloudinary.com/epcorn/image/upload/v1761890419/Express_Pesticides_Website/SERVICES_IMAGES/Flyban/green-flies-on-food-garbage-260nw-440779216_utbqoz.png",
+      "https://res.cloudinary.com/djc8opvcg/image/upload/v1785832517/express_pesticides/Service_Gallery/Sign%20of%20infestation%20for%20Service/fly_sign_infestation_image02_rxxcda.jpg",
     ],
     gallery: [],
   },
   "termi-proof": {
-    hero: "https://res.cloudinary.com/epcorn/image/upload/v1761890439/Express_Pesticides_Website/SERVICES_IMAGES/Termiproof/shutterstock_1078415000_web-2_idemnv.webp",
+    hero: "https://res.cloudinary.com/epcorn/image/upload/v1761890439/Express_Pesticides_Website/SERVICES_IMAGES/Termiproof/shutterstock_1078415000_web-2_idemnv.jpg",
     signs: [
       "https://res.cloudinary.com/epcorn/image/upload/v1761890437/Express_Pesticides_Website/SERVICES_IMAGES/Termiproof/istockphoto-1300681997-612x612_pdeqf8.jpg",
-      "https://res.cloudinary.com/epcorn/image/upload/v1761890437/Express_Pesticides_Website/SERVICES_IMAGES/Termiproof/close-termites-on-woodhome-damaged-260nw-578777110_f5hvqy.webp",
+      "https://res.cloudinary.com/epcorn/image/upload/v1761890437/Express_Pesticides_Website/SERVICES_IMAGES/Termiproof/close-termites-on-woodhome-damaged-260nw-578777110_f5hvqy.jpg",
     ],
     gallery: [
-      "/assets/service_icons/Service_Gallery/Termiproof_1.webp",
-      "/assets/service_icons/Service_Gallery/Termiproof_2.jpg",
+      "https://res.cloudinary.com/djc8opvcg/image/upload/v1785828104/express_pesticides/Service_Gallery/Termiproof_2_of2ihr.jpg",
+      "https://res.cloudinary.com/djc8opvcg/image/upload/v1785828103/express_pesticides/Service_Gallery/Termiproof_1_mtomoz.jpg",
     ],
   },
   "bug-free": {
     hero: "https://res.cloudinary.com/epcorn/image/upload/v1761890410/Express_Pesticides_Website/SERVICES_IMAGES/Bugfree/bug_Background_rrdhcw.jpg",
     signs: [
-      "https://res.cloudinary.com/epcorn/image/upload/v1761890409/Express_Pesticides_Website/SERVICES_IMAGES/Bugfree/Bed-bug_IMage_bzodfr.webp",
-      "https://res.cloudinary.com/epcorn/image/upload/v1761890409/Express_Pesticides_Website/SERVICES_IMAGES/Bugfree/bedbugs_on_bed_cqaozy.webp",
-    ],
-    gallery: ["/assets/service_icons/Service_Gallery/Bedbug-Service_1.jpg"],
-  },
-  woodsafe: {
-    hero: "/assets/service_icons/woodBoarer/Wood_borer.jpg", // will use fallback
-    signs: [],
-    gallery: [],
-  },
-  antron: {
-    hero: "/assets/service_icons/Antron/Antron_Backside.jpg",
-    signs: [
-      "/assets/service_icons/Antron/sign_1.jpeg",
-      "/assets/service_icons/Antron/Sign_2.jpg",
+      "https://res.cloudinary.com/epcorn/image/upload/v1761890409/Express_Pesticides_Website/SERVICES_IMAGES/Bugfree/Bed-bug_IMage_bzodfr.jpg",
+      "https://res.cloudinary.com/epcorn/image/upload/v1761890409/Express_Pesticides_Website/SERVICES_IMAGES/Bugfree/bedbugs_on_bed_cqaozy.jpg",
     ],
     gallery: [
-      "/assets/service_icons/Service_Gallery/Woodsafe_1.jpg",
-      "/assets/service_icons/Service_Gallery/Woodsafe_2.jpg",
+      "https://res.cloudinary.com/djc8opvcg/image/upload/v1785828096/express_pesticides/Service_Gallery/Bedbug-Service_1_amjshb.jpg",
     ],
+  },
+  woodsafe: {
+    hero: "https://res.cloudinary.com/djc8opvcg/image/upload/v1785832208/express_pesticides/Service_Gallery/woodBoarer/Wood_borer_badbxz.jpg", // will use fallback
+    signs: [
+      "https://res.cloudinary.com/djc8opvcg/image/upload/v1785832530/express_pesticides/Service_Gallery/Sign%20of%20infestation%20for%20Service/woodborer_image_01_tqmhta.jpg",
+    ],
+    gallery: [
+      "https://res.cloudinary.com/djc8opvcg/image/upload/v1785828106/express_pesticides/Service_Gallery/Woodsafe_1_eztk4j.jpg",
+      "https://res.cloudinary.com/djc8opvcg/image/upload/v1785828107/express_pesticides/Service_Gallery/Woodsafe_2_wcdfbr.jpg",
+    ],
+  },
+  antron: {
+    hero: "https://res.cloudinary.com/djc8opvcg/image/upload/v1785828541/express_pesticides/pest_liabrary/Antron/Antron_Backside_gqxzss.jpg",
+    signs: [
+      "https://res.cloudinary.com/djc8opvcg/image/upload/v1785828542/express_pesticides/pest_liabrary/Antron/Sign_2_gqv51a.jpg",
+      "https://res.cloudinary.com/djc8opvcg/image/upload/v1785828539/express_pesticides/pest_liabrary/Antron/sign_1_pbxnao.jpg",
+    ],
+    gallery: [],
   },
   repron: {
     hero: "/assets/service_icons/Repron.png",
@@ -118,6 +125,7 @@ export const servicePestImages = {
     gallery: [],
   },
 };
+
 
 export const servicesIcons = [
   {

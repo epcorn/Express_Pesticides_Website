@@ -60,7 +60,7 @@ export default function ServiceDetailPage({
 
         {/* Added relative positioning to the badge wrapper so fill works correctly */}
         <div className="absolute top-8 left-1/2 -translate-x-1/2">
-          <div className="relative w-24 h-24 overflow-hidden rounded-full bg-white shadow-xl">
+          <div className="relative w-24 h-24 overflow-hidden rounded-full  shadow-xl">
             <Image
               src={logo}
               alt={name}
@@ -90,7 +90,7 @@ export default function ServiceDetailPage({
 
       {/* ==== 3. SIGNS OF INFESTATION – RIGHT SIDE SWIPER ==== */}
       {(img?.signs?.length > 0 || signs?.length > 0) && (
-        <section className="py-16 bg-gray-50">
+        <section className="py-16 bg-gray-200">
           <div className="max-w-7xl mx-auto px-6">
             <h2 className="text-3xl font-bold text-gray-900 text-center mb-10">
               Signs of Infestation
@@ -120,7 +120,7 @@ export default function ServiceDetailPage({
                 >
                   {img?.signs?.length > 0 && img?.signs?.map((src, i) => (
                     <SwiperSlide key={i}>
-                      <div className="relative h-80">
+                      <div className="relative h-96">
                         <Image
                           src={src}
                           alt={`Sign ${i + 1}`}

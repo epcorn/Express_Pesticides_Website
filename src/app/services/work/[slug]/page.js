@@ -1,5 +1,4 @@
 import { workServiceData } from "@/data/servicesData";
-import { responseCookiesToRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
 import Image from "next/image";
 import React from "react";
 
