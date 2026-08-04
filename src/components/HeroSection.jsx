@@ -6,7 +6,6 @@ import { Autoplay, EffectCube } from "swiper/modules";
 
 // Import Swiper core styles
 import "swiper/css";
-import "swiper/css/effect-fade";
 import { images } from "@/data/herosectionData";
 
 const blurPlaceholder =
@@ -17,7 +16,6 @@ export default function HeroSection() {
     <section className="w-full relative bg-black">
       <Swiper
         modules={[Autoplay, EffectCube]}
-        effect="fade"
         speed={1000}
         autoplay={{
           delay: 3000,

@@ -4,8 +4,9 @@ import { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import { servicesData } from "../app/services/lib/ServiceData.js";
 import { holidays, mockPincodes } from "@/data/bookservicemodelData.js";
-import postalcodes from "postalcodes-india";
+// import postalcodes from "postalcodes-india";
 import { toast } from "@/lib/toast.js";
+
 
 
 function BookServiceModal() {
@@ -61,14 +62,15 @@ function BookServiceModal() {
 
     if (name === "dateOfService" || name === "firstServiceDate") {
       const now = new Date();
-      let tommorrow = new Date();
+      let tomorrow = new Date();
       const checkMonday = new Date(value);
 
-      tommorrow.setDate(now.getDate() + 1);
-      tommorrow = tommorrow.toISOString().split("T")[0];
+      tomorrow.setDate(now.getDate() + 1);
+      tomorrow = tomorrow.toISOString().split("T")[0];
 
       if (holidays.includes(value.slice(5))) {
         toast.warning("Oops! It's a holiday. Choose another date.");
+
         setFormData((prev) => ({
           ...prev,
           dateOfService: "",
@@ -77,18 +79,24 @@ function BookServiceModal() {
         return;
       }
 
-      if (value === tommorrow && now.getHours() >= 14) {
+      if (value === tomorrow && now.getHours() >= 14) {
+        toast.warning(
+          "Please select another day. After 2 PM you cannot get an appointment for the next day."
+        );
+
         setFormData((prev) => ({
           ...prev,
           dateOfService: "",
           firstServiceDate: "",
         }));
-        toast.warning("Please select another day. After 2pm you cannot get an appointment for the next day.");
         return;
       }
 
       if (checkMonday.getDay() === 1) {
-        toast.warning("Monday off, ready to go on Tuesday! Please select another day for your appointment.");
+        toast.warning(
+          "Monday is off. Please select another day."
+        );
+
         setFormData((prev) => ({
           ...prev,
           dateOfService: "",
@@ -98,31 +106,65 @@ function BookServiceModal() {
       }
     }
 
-    if (name === "servicePincode" && value.length === 6) {
-      const res = postalcodes.find(value);
+    // if (name === "servicePincode" && value.length === 6) {
+    //   lookupPincode(value);
+    // }
+  };
+
+  const lookupPincode = async (value) => {
+    try {
+      const response = await fetch(`/api/pincode?code=${value}`);
+
+      if (!response.ok) {
+        console.error("Failed to fetch pincode");
+        return;
+      }
+
+      const res = await response.json();
       const info = Array.isArray(res) ? res[0] : res;
 
       if (!mockPincodes.includes(value)) {
         alert("Area is not serviceable");
+
         setFormData((prev) => ({
-          ...prev, servicePincode: "", serviceLocation: '', serviceCity: ""
+          ...prev,
+          servicePincode: "",
+          serviceLocation: "",
+          serviceCity: "",
         }));
         return;
       }
 
-      if (pincode !== value) {
-        const goAhead = confirm(`You checked for ${pincode} and you have entered ${value}. \nWanna proceed?`);
+      if (pincode && pincode !== value) {
+        const goAhead = window.confirm(
+          `You checked for ${pincode} and entered ${value}.\nDo you want to continue?`
+        );
+
         if (!goAhead) return;
       }
 
-      if (info) {
-        const city = info.subDistrict.split(" ")[0] === info.district ? info.place.split(" ")[0] : info.subDistrict.split(/[ \(]/)[0];
+      if (info?.subDistrict && info?.district) {
+        const city =
+          info.subDistrict.split(" ")[0] === info.district
+            ? info.place.split(" ")[0]
+            : info.subDistrict.split(/[ (]/)[0];
+
         setFormData((prev) => ({
-          ...prev, serviceLocation: city, serviceCity: info.district,
+          ...prev,
+          serviceLocation: city,
+          serviceCity: info.district,
         }));
       }
+    } catch (err) {
+      console.error("Pincode lookup failed:", err);
     }
   };
+  
+  useEffect(() => {
+    if (formData.servicePincode.length === 6) {
+      lookupPincode(formData.servicePincode);
+    }
+  }, [formData.servicePincode]);
 
   const handlePincodeCheck = () => {
     setPincodeStatus("loading");
@@ -176,8 +218,10 @@ function BookServiceModal() {
 
   // Sync billing address if sameAsShipping is checked
   useEffect(() => {
-    if (sameAsShipping) {
-      setFormData((prev) => ({
+    if (!sameAsShipping) return;
+
+    setFormData((prev) => {
+      const updated = {
         ...prev,
         billName: prev.name,
         billPhone: prev.phone,
@@ -188,9 +232,36 @@ function BookServiceModal() {
         billingLocation: prev.serviceLocation,
         billingPincode: prev.servicePincode,
         billingCity: prev.serviceCity,
-      }));
-    }
-  }, [sameAsShipping, formData.serviceAddress1, formData.servicePincode, formData.phone, formData.serviceAddress2, formData.serviceAddress3, formData.serviceLocation, formData.serviceCity]);
+      };
+
+      if (
+        updated.billName === prev.billName &&
+        updated.billPhone === prev.billPhone &&
+        updated.billEmail === prev.billEmail &&
+        updated.billingAddress1 === prev.billingAddress1 &&
+        updated.billingAddress2 === prev.billingAddress2 &&
+        updated.billingAddress3 === prev.billingAddress3 &&
+        updated.billingLocation === prev.billingLocation &&
+        updated.billingPincode === prev.billingPincode &&
+        updated.billingCity === prev.billingCity
+      ) {
+        return prev;
+      }
+
+      return updated;
+    });
+  }, [
+    sameAsShipping,
+    formData.name,
+    formData.phone,
+    formData.email,
+    formData.serviceAddress1,
+    formData.serviceAddress2,
+    formData.serviceAddress3,
+    formData.serviceLocation,
+    formData.servicePincode,
+    formData.serviceCity,
+  ]);
 
   // Handle Form Submission Lock Execution
   const handleSubmit = async (e) => {

@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar";
 import BookServiceModal from "../components/BookServiceModal";
 import Chatbot from "../components/Chatbot"; // was giving error
 import Script from "next/script";
+import ErrorLogger from "@/components/ErrorLogger";
 
 export const metadata = {
   title: "Express Pesticides", //changed
@@ -24,7 +25,8 @@ export default function RootLayout({ children }) {
         />
         <Navbar />
         <BookServiceModal />
-        <Chatbot />
+        {/* <Chatbot /> */}
+        <ErrorLogger />
 
         {/* This is still required to push content below the fixed h-16 navbar */}
         <main className="min-h-screen pt-16">{children}</main>
