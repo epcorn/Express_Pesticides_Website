@@ -146,43 +146,50 @@ export default function AboutPage() {
       {/* Section 2: CMD's Msg */}
       <section className="pt-20 p-5">
         <div className="relative bg-[#0A1649] text-white rounded-2xl">
-          <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-center p-5">
-            {/* Heading spanning full width */}
+          <div className="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-center">
+            {/* Heading spanning full width at the top of the grid */}
+            <h2 className="text-2xl md:text-3xl font-extrabold md:col-span-2">
+              Message from <span className="text-blue-400">CMD</span>
+            </h2>
 
             {/* Text Content Column */}
             <div className="order-2 md:order-1 space-y-3">
-              <h2 className="text-2xl md:text-3xl font-extrabold md:col-span-2">
-                Message from <span className="text-blue-600">CMD</span>
-              </h2>
-              <p className="text-lg leading-relaxed text-justify">
-                {`“Established in 1972 by Mr. Felix J. Quadros, Epcorn has over 50+ years of expertise in delivering reliable pest management solutions. Driven by a commitment to protecting health, property, and the environment, our highly trained team provides safe, compliant, and customer-focused services. With experience across residential, commercial, industrial, and government sectors, Epcorn continues to build lasting trust through quality, innovation, and professional excellence.”`}
+              <p className="text-lg leading-relaxed text-justify text-slate-200">
+                “Established in 1972 by Mr. Felix J. Quadros, Epcorn has over
+                50+ years of expertise in delivering reliable pest management
+                solutions. Driven by a commitment to protecting health,
+                property, and the environment, our highly trained team provides
+                safe, compliant, and customer-focused services. With experience
+                across residential, commercial, industrial, and government
+                sectors, Epcorn continues to build lasting trust through
+                quality, innovation, and professional excellence.”
               </p>
             </div>
 
             {/* Image & Caption Column */}
             <div className="order-1 md:order-2 flex flex-col items-center md:items-end justify-self-center md:justify-self-end w-full max-w-sm">
-              <div className="w-full aspect-square relative rounded-lg overflow-hidden bg-white shadow-lg shadow-zinc-400">
+              <div className="w-full aspect-square relative rounded-lg overflow-hidden bg-white shadow-lg shadow-black/40">
                 <Image
                   src="/assets/About_us/Flex_sir.png"
-                  alt="Express Pesticides Team"
+                  alt="Mr. Felix J. Quadros - Founder, Chairman & Managing Director"
                   fill
                   className="object-cover object-top"
                   sizes="(max-w-7xl) 384px, 100vw"
+                  priority
                 />
               </div>
               <p className="mt-3 z-10 font-semibold text-lg text-center md:text-right w-full">
-                <span className="text-green-600">Founder</span>,{" "}
-                <span className="text-white">
-                  Chairman
-                </span>{" "}
-                & <span className="text-amber-600">Managing Director</span>
+                <span className="text-green-400">Founder</span>,{" "}
+                <span className="text-white">Chairman</span> &{" "}
+                <span className="text-amber-400">Managing Director</span>
               </p>
             </div>
           </div>
-          <div className="absolute h-0 w-0 border-x-[30px] border-b-[60px] -rotate-45 border-x-transparent border-b-[#0A1649] bg-transparent -bottom-5 right-10 "/>
+
+          {/* Decorative Triangle Corner Accent */}
+          <div className="absolute h-0 w-0 border-x-[30px] border-b-[60px] -rotate-45 border-x-transparent border-b-[#0A1649] bg-transparent -bottom-5 right-10 " />
         </div>
       </section>
-
       {/* Section 3: comprehensive page */}
       <section className="pt-20 bg-blue-50 pb-5">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
@@ -227,7 +234,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-
       {/* Section 3: Sustainability */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
@@ -258,7 +264,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-
       {/* Section 4: Commitment */}
       <section className="py-16 bg-blue-600 text-white">
         <div className="max-w-7xl mx-auto px-6">
@@ -281,7 +286,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-
       {/* Section 5: Certificates (Horizontal scroll row) */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6">
@@ -317,7 +321,6 @@ export default function AboutPage() {
           </p>
         </div>
       </section>
-
       {/* Section 6: Vision */}
       <section className="grid grid-cols-1 sm:grid-cols-2 gap-5 px-5 bg-neutral-50 *:shadow-md">
         <div className="py-16 bg-white">
@@ -391,7 +394,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-
       {/* Section 8: Why Choose Us */}
       <section className="py-16 bg-blue-600 text-white">
         <div className="max-w-7xl mx-auto px-6 text-center">
@@ -410,7 +412,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-
       {/* Section 9: Core Values */}
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6">
@@ -456,7 +457,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-
       <Footer />
     </main>
   );

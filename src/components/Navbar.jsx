@@ -28,32 +28,32 @@ export default function Navbar() {
     {
       name: "Services",
       links: [
-        { name: 'BirdRid Service Brochure', link: "../assets/services/BirdRid Service Brochure.pdf" },
-        { name: 'Garbage Landfill Brochure', link: "../assets/services/Garbage Landfill Brochure.pdf" },
-        { name: 'Pre-construction brochure', link: "../assets/services/Pre-construction brochure.pdf" },
-        { name: 'Reticulation System Brochure', link: "../assets/services/Reticulation System Brochure.pdf" },
+        { name: 'BirdRid Service Brochure', link: "https://res.cloudinary.com/djc8opvcg/image/upload/v1785826441/express_pesticides/services/BirdRid_Service_Brochure_lmbydd.pdf" },
+        { name: 'Garbage Landfill Brochure', link: "https://res.cloudinary.com/djc8opvcg/image/upload/v1785826439/express_pesticides/services/Garbage_Landfill_Brochure_dluavp.pdf" },
+        { name: 'Pre-construction brochure', link: "https://res.cloudinary.com/djc8opvcg/image/upload/v1785826442/express_pesticides/services/Pre-construction_brochure_e1vmpk.pdf" },
+        { name: 'Reticulation System Brochure', link: "https://res.cloudinary.com/djc8opvcg/image/upload/v1785826438/express_pesticides/services/Reticulation_System_Brochure_xjyjkh.pdf" },
       ],
     },
     {
       name: "Products",
       links: [
-        { name: 'Birdrid brochure', link: "/assets/products/Birdrid brochure.pdf" },
-        { name: 'Crack Selling brochure', link: "/assets/products/Crack Selling brochure.pdf" },
-        { name: 'Reptout Repellent brochure', link: "/assets/products/Reptout Repellent brochure.pdf" },
-        { name: 'Rodein Bait station brochure', link: "/assets/products/Rodein Bait station brochure.pdf" },
-        { name: 'Rodent Repellent  brochure', link: "/assets/products/Rodent Repellent  brochure.pdf" },
-        { name: 'SNAPPER Electric Catcher brochure', link: "/assets/products/SNAPPER Electric Catcher brochure.pdf" },
+        { name: 'Birdrid brochure', link: "https://res.cloudinary.com/djc8opvcg/image/upload/v1785826174/express_pesticides/products_pdf/Birdrid_brochure_xexd0f.pdf" },
+        { name: 'Crack Selling brochure', link: "https://res.cloudinary.com/djc8opvcg/image/upload/v1785827158/express_pesticides/products_pdf/Crack_Selling_brochure_compressed_cevh4w.pdf" },
+        { name: 'Reptout Repellent brochure', link: "https://res.cloudinary.com/djc8opvcg/image/upload/v1785826173/express_pesticides/products_pdf/Reptout_Repellent_brochure_pw8lfk.pdf" },
+        { name: 'Rodein Bait station brochure', link: "https://res.cloudinary.com/djc8opvcg/image/upload/v1785826172/express_pesticides/products_pdf/Rodein_Bait_station_brochure_hbbyaa.pdf" },
+        { name: 'Rodent Repellent  brochure', link: "https://res.cloudinary.com/djc8opvcg/image/upload/v1785827160/express_pesticides/products_pdf/Rodent_Repellent_brochure_compressed_ismunb.pdf" },
+        { name: 'SNAPPER Electric Catcher brochure', link: "https://res.cloudinary.com/djc8opvcg/image/upload/v1785826168/express_pesticides/products_pdf/SNAPPER_Electric_Catcher_brochure_uchipx.pdf" },
       ]
     },
     {
       name: "Company Data",
       links: [
-        { name: 'GST Certificate', link: "/assets/company_data/GST Certificate.pdf" },
-        { name: 'IGBC Certificate 2026', link: "/assets/company_data/IGBC Certificate 2026.pdf" },
-        { name: 'ISO 14001 2015 Certificate', link: "/assets/company_data/ISO 14001 2015 Certificate.pdf" },
-        { name: 'ISO 45001 2018 Certificate', link: "/assets/company_data/ISO 45001 2018 Certificate.pdf" },
-        { name: 'ISO 9001 2015 Certificate', link: "/assets/company_data/ISO 9001 2015 Certificate.pdf" },
-        { name: 'MSME Certificate', link: "/assets/company_data/MSME Certificate.pdf" },
+        { name: 'GST Certificate', link: "https://res.cloudinary.com/djc8opvcg/image/upload/v1785825952/express_pesticides/GST_Certificate_qfv6pc.pdf" },
+        { name: 'IGBC Certificate 2026', link: "https://res.cloudinary.com/djc8opvcg/image/upload/v1785825960/express_pesticides/IGBC_Certificate_2026_qleut7.pdf" },
+        { name: 'ISO 14001 2015 Certificate', link: "https://res.cloudinary.com/djc8opvcg/image/upload/v1785825960/express_pesticides/ISO_14001_2015_Certificate_rqprva.pdf" },
+        { name: 'ISO 45001 2018 Certificate', link: "https://res.cloudinary.com/djc8opvcg/image/upload/v1785825961/express_pesticides/ISO_45001_2018_Certificate_fpoeaf.pdf" },
+        { name: 'ISO 9001 2015 Certificate', link: "https://res.cloudinary.com/djc8opvcg/image/upload/v1785825961/express_pesticides/ISO_9001_2015_Certificate_ji0p92.pdf" },
+        { name: 'MSME Certificate', link: "https://res.cloudinary.com/djc8opvcg/image/upload/v1785825958/express_pesticides/MSME_Certificate_j5lmcb.pdf" },
       ]
     }
   ];
