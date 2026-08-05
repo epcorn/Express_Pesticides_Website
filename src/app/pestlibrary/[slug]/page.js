@@ -45,7 +45,7 @@ export default function PestDetailPage() {
       <section className="py-12">
         <div className="max-w-7xl mx-auto px-6 text-center">
           <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900">
-            {pest.name}
+            {pest?.name} FACTS & INFORMATION
           </h1>
           <p className="text-xl text-gray-600 mt-2">
             ({pest.commonName} - <i>{pest.scientificName}</i>)
@@ -69,7 +69,7 @@ export default function PestDetailPage() {
             </p>
           </div>
           {/* Pest Image */}
-          <div className="w-full h-80 relative rounded-lg overflow-hidden shadow-lg border bg-white">
+          <div className="w-full h-80 relative rounded-lg overflow-hidden shadow-lg bg-white">
             <Image
               src={pest.mainImage}
               alt={pest.name}
@@ -108,7 +108,7 @@ export default function PestDetailPage() {
                     src={encodeURI(p.img)}
                     alt={p.name}
                     fill
-                    className="object-contain p-2"
+                    className="object-contain p-2 scale-75 hover:scale-100 transition-all duration-500"
                   />
                 </div>
 
@@ -121,11 +121,12 @@ export default function PestDetailPage() {
           </div>
         </div>
       </section>
+
       {/* 4. Lifecycle Section (Image + Text) */}
       <section className="py-16 bg-green-50">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           {/* Lifecycle Image */}
-          <div className="w-full h-96 relative rounded-lg overflow-hidden shadow-lg border">
+          <div className="w-full h-96 bg-white relative rounded-lg overflow-hidden shadow-lg">
             <Image
               src={pest.lifecycleImage}
               alt={`${pest.name} Lifecycle`}
@@ -144,8 +145,9 @@ export default function PestDetailPage() {
           </div>
         </div>
       </section>
+
       {/* 5. Signs of Infestation (Text + Image) */}
-      <section className="py-16 bg-amber-100">
+      <section className="py-16 bg-red-100">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           {/* Text */}
           <div>
@@ -161,7 +163,7 @@ export default function PestDetailPage() {
             ))}
           </div>
           {/* Infestation Image */}
-          <div className="w-full h-80 relative rounded-lg overflow-hidden shadow-lg border bg-white">
+          <div className="w-full h-80 relative rounded-lg overflow-hidden shadow-lg bg-white">
             <Image
               src={pest.signsInfestationImage}
               alt={`Signs of ${pest.name} Infestation`}

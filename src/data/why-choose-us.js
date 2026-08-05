@@ -2,6 +2,7 @@ export const whyChooseUsData = [
   {
     heading: "Expert Team",
     subHeading: "Trained Professionals. Proven Expertise. Trusted Results.",
+    img: "https://res.cloudinary.com/djc8opvcg/image/upload/v1785848807/express_pesticides/whyChooseUs/Expert_Team_odjzno.jpg",
     overview:
       "At EPCORN Pest Management, our greatest strength is our people. Our team consists of highly trained, certified, and experienced pest management professionals who understand the biology, behaviour, and control of a wide range of pests. Every technician undergoes continuous training to stay updated with the latest industry standards, treatment methods, safety protocols, and regulatory requirements. \n Whether servicing residential properties, commercial establishments, industrial facilities, healthcare institutions, or food processing units, our experts deliver solutions with precision, professionalism, and care.",
     teamTitle: "What Makes Our Team Different?",
@@ -11,7 +12,7 @@ export const whyChooseUsData = [
         desc: "Our technicians are trained in modern pest management practices and safe pesticide application.",
       },
       {
-        title: "•	Continuous Learning",
+        title: "Continuous Learning",
         desc: "Regular technical training ensures our team stays updated with the latest technologies and regulations.",
       },
       {
@@ -28,6 +29,7 @@ export const whyChooseUsData = [
   {
     heading: "SAFE-ECO SOLUTIONS",
     subHeading: "Protecting Your Environment While Eliminating Pests",
+    img: "https://res.cloudinary.com/djc8opvcg/image/upload/v1785848807/express_pesticides/whyChooseUs/safe_eco_solution_tvrvs5.jpg",
     overview:
       "Effective pest management should never compromise the safety of people, pets, or the environment. EPCORN follows environmentally responsible pest management practices by combining scientifically proven products with Integrated Pest Management (IPM) strategies.\n Our treatments focus on prevention, monitoring, targeted applications, and responsible chemical usage, ensuring effective control while minimizing environmental impact.",
     teamTitle: "Our Eco-Friendly Approach",
@@ -54,6 +56,7 @@ export const whyChooseUsData = [
   {
     heading: "ADVANCED TECHNOLOGY",
     subHeading: "Smart Pest Management Through Innovation",
+    img: "https://res.cloudinary.com/djc8opvcg/image/upload/v1785848806/express_pesticides/whyChooseUs/Advance_technology_image_rlkbtt.jpg",
     overview:
       "Technology has transformed modern pest management. EPCORN integrates digital tools, smart monitoring, QR-based reporting, and data-driven inspections to deliver transparent, efficient, and measurable pest control services.\nOur advanced systems provide customers with real-time service records, inspection reports, and monitoring data that improve decision-making and compliance.",
     teamTitle: "Our Smart Solutions",
@@ -80,6 +83,7 @@ export const whyChooseUsData = [
   {
     heading: "CUSTOMIZED PLANS",
     subHeading: "Every Property is Different. So is Every Solution.",
+    img: "https://res.cloudinary.com/djc8opvcg/image/upload/v1785848807/express_pesticides/whyChooseUs/customized_plan_vg6jan.jpg",
     overview:
       "No two facilities face the same pest challenges. EPCORN designs customized pest management programs based on the type of property, pest pressure, environmental conditions, operational requirements, and regulatory standards.\n Our tailored treatment plans ensure maximum effectiveness while minimizing disruption to your daily operations.",
     teamTitle: "Our Process",
@@ -106,13 +110,24 @@ export const whyChooseUsData = [
   {
     heading: "DEPENDABLE SERVICE",
     subHeading: "Reliable Protection You Can Count On",
-    overview: "Consistency is the foundation of effective pest management. EPCORN is committed to delivering dependable services with timely response, professional execution, and ongoing customer support.\nOur systematic service approach ensures that every visit is completed according to established quality standards, helping customers maintain pest-free environments throughout the year.",
+    img: "https://res.cloudinary.com/djc8opvcg/image/upload/v1785848809/express_pesticides/whyChooseUs/Dependable_service_bc0jnm.png",
+    overview:
+      "Consistency is the foundation of effective pest management. EPCORN is committed to delivering dependable services with timely response, professional execution, and ongoing customer support.\nOur systematic service approach ensures that every visit is completed according to established quality standards, helping customers maintain pest-free environments throughout the year.",
     teamTitle: "Our Commitment",
     team: [
       { title: "Timely Service", desc: "Scheduled visits completed on time." },
-      { title: "Quality Assurance", desc: "Every treatment follows strict operational procedures." },
-      { title: "Dedicated Support", desc: "Our team is always available for assistance and follow-up services." },
-      { title: "Long-Term Protection", desc: "Preventive maintenance programs reduce future infestations." },
+      {
+        title: "Quality Assurance",
+        desc: "Every treatment follows strict operational procedures.",
+      },
+      {
+        title: "Dedicated Support",
+        desc: "Our team is always available for assistance and follow-up services.",
+      },
+      {
+        title: "Long-Term Protection",
+        desc: "Preventive maintenance programs reduce future infestations.",
+      },
     ],
     why: "Reliability is the foundation of everything we do. From the first inspection to ongoing preventive maintenance, Express delivers consistent, timely, and professional pest management services. Our commitment to quality, responsiveness, and customer satisfaction ensures peace of mind with every visit.",
   },

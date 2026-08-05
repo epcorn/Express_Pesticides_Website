@@ -4,11 +4,14 @@ import { useState } from "react";
 import Link from "next/link";
 import { Menu, X, ChevronDown, ChevronRight } from "lucide-react";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState(null);
 
+  const path = usePathname();
+  console.log(path.replace("/", "").toUpperCase())
   const toggleTab = (tabName) => {
     setActiveTab(activeTab === tabName ? null : tabName);
   };
@@ -123,7 +126,7 @@ export default function Navbar() {
                     className="relative font-medium text-black group transition-colors duration-300 text-sm xl:text-base block py-2"
                   >
                     {item}
-                    <span className="absolute left-1/2 -translate-x-1/2 bottom-0 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
+                    <span className={`absolute left-1/2 -translate-x-1/2 bottom-0 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full ${item.replace(" ", "") === path.replace("/", "").toUpperCase() ? "w-full" : ""}`}></span>
                   </Link>
                 )}
               </div>

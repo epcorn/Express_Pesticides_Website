@@ -126,7 +126,6 @@ export const servicePestImages = {
   },
 };
 
-
 export const servicesIcons = [
   {
     name: "Green Shield Service",
@@ -597,7 +596,7 @@ export const servicesData = {
 export const workServiceData = {
   hospitals: {
     slug: "hospitals",
-    bgImg: "/assets/Where_We_work/Hospital.jpg",
+    bgImg: "https://res.cloudinary.com/djc8opvcg/image/upload/v1785909827/express_pesticides/Where_We_work/Hospital_lyg8iz.jpg",
     title: "HOSPITAL PEST CONTROL SERVICES",
     slog: "Pests Threaten More Than Patient Safety",
     subSlog1:
@@ -641,7 +640,7 @@ export const workServiceData = {
   offices: {
     slug: "offices",
     title: "OFFICE PEST CONTROL SERVICES",
-    bgImg: "/assets/Where_We_work/Office.jpg",
+    bgImg: "https://res.cloudinary.com/djc8opvcg/image/upload/v1785909828/express_pesticides/Where_We_work/Office_f1s7iw.jpg",
     slog: "Pests Threaten More Than Workplace Productivity",
     subSlog1: "Trusted Pest Control for Offices & Commercial Workspaces",
     para1:
@@ -683,7 +682,7 @@ export const workServiceData = {
   hotels_restaurants: {
     slug: "hotels_restaurants",
     title: "HOTEL & RESTAURANT PEST CONTROL SERVICES",
-    bgImg: "/assets/Where_We_work/Hotel.jpg",
+    bgImg: "https://res.cloudinary.com/djc8opvcg/image/upload/v1785909829/express_pesticides/Where_We_work/Hotel_k5k0cr.jpg",
     slog: "Pests Threaten More Than Your Reputation",
     subSlog1:
       "Trusted Pest Control for Hotels, Restaurants & Hospitality Businesses",
@@ -727,7 +726,7 @@ export const workServiceData = {
     slug: "warehouses",
     title: "WAREHOUSE PEST CONTROL SERVICES",
     slog: "Pests Threaten More Than Your Inventory",
-    bgImg: "/assets/Where_We_work/Warehouse.png",
+    bgImg: "https://res.cloudinary.com/djc8opvcg/image/upload/v1785909829/express_pesticides/Where_We_work/Warehouse_dukpaf.png",
     subSlog1:
       "Trusted Pest Control for Warehouses, Distribution Centers & Logistics Facilities",
     para1:
@@ -769,7 +768,7 @@ export const workServiceData = {
   schools: {
     slug: "schools",
     title: "SCHOOL & COLLEGE PEST CONTROL SERVICES",
-    bgImg: "/assets/Where_We_work/School.jpeg",
+    bgImg: "https://res.cloudinary.com/djc8opvcg/image/upload/v1785909829/express_pesticides/Where_We_work/School_m8ssel.jpg",
     slog: "Pests Threaten More Than Learning",
     subSlog1:
       "Trusted Pest Control for Schools, Colleges & Educational Campuses",
@@ -812,7 +811,7 @@ export const workServiceData = {
   factories: {
     slug: "factories",
     title: "FACTORY PEST CONTROL SERVICES",
-    bgImg: "/assets/Where_We_work/Factory.jpg",
+    bgImg: "https://res.cloudinary.com/djc8opvcg/image/upload/v1785909827/express_pesticides/Where_We_work/Factory_bbzsfe.jpg",
     slog: "Pests Threaten More Than Production",
     subSlog1: "Trusted Pest Control for Manufacturing & Industrial Facilities",
     para1:
@@ -854,7 +853,7 @@ export const workServiceData = {
   residentials: {
     slug: "residentials",
     title: "RESIDENTIAL SOCIETY PEST CONTROL SERVICES",
-    bgImg: "/assets/Where_We_work/Residential.jpeg",
+    bgImg: "https://res.cloudinary.com/djc8opvcg/image/upload/v1785909830/express_pesticides/Where_We_work/Residential_pzmff5.jpg",
     slog: "Pests Threaten More Than Comfortable Living",
     subSlog1:
       "Trusted Pest Control for Residential Communities & Apartment Complexes",
@@ -897,7 +896,7 @@ export const workServiceData = {
   shopping_malls: {
     slug: "shopping_malls",
     title: "SHOPPING MALL PEST CONTROL SERVICES",
-    bgImg: "/assets/Where_We_work/Shopping_Mall.jpeg",
+    bgImg: "https://res.cloudinary.com/djc8opvcg/image/upload/v1785909829/express_pesticides/Where_We_work/Shopping_Mall_c5vvqr.jpg",
     slog: "Protecting Shoppers, Retailers & Reputation",
     subSlog1: "Professional Pest Control for Shopping Malls & Retail Complexes",
     para1:
@@ -939,7 +938,7 @@ export const workServiceData = {
   pharma: {
     slug: "pharma",
     title: "PHARMACEUTICAL PEST CONTROL SERVICES",
-    bgImg: "/assets/Where_We_work/Pharmaceutical.jpg",
+    bgImg: "https://res.cloudinary.com/djc8opvcg/image/upload/v1785909827/express_pesticides/Where_We_work/Pharmaceutical_tt0rwe.jpg",
     slog: "Pests Threaten More Than Product Quality",
     subSlog1:
       "Trusted Pest Control for Pharmaceutical Manufacturing & Research Facilities",
@@ -982,7 +981,7 @@ export const workServiceData = {
   corporate: {
     slug: "corporate",
     title: "CORPORATE BUILDING PEST CONTROL SERVICES",
-    bgImg: "/assets/Where_We_work/Coporate.jpg",
+    bgImg: "https://res.cloudinary.com/djc8opvcg/image/upload/v1785909839/express_pesticides/Where_We_work/Coporate_d18jy4.jpg",
     slog: "Pests Threaten More Than Your Professional Image",
     subSlog1:
       "Trusted Pest Control for Corporate Offices & Commercial Buildings",

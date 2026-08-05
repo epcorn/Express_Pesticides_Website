@@ -25,17 +25,17 @@ export default function AboutPage() {
 
   const processSteps = [
     {
-      step: "/assets/About_us/The_Express_Approach/Inspection_Identification.png",
+      step: "https://res.cloudinary.com/djc8opvcg/image/upload/v1785905649/express_pesticides/About_us/The_Express_Approach/Inspection_Identification_jx3ven.png",
       title: "Inspection & Identification",
       desc: "We begin with a detailed property inspection to identify pest activity, breeding / harborages areas, and entry points. Our subject matter experts identify the pests and assess the infestation level to plan the right management approach.",
     },
     {
-      step: "/assets/About_us/The_Express_Approach/Target_treatment.png",
+      step: "https://res.cloudinary.com/djc8opvcg/image/upload/v1785905648/express_pesticides/About_us/The_Express_Approach/Target_treatment_mr0gub.png",
       title: "Targeted Treatment",
       desc: "Based on our findings, we apply a precise treatment plan using advanced tools and safe-eco products. From spraying and fogging to gel baiting, every method is customised for maximum effectiveness with minimum disruption.",
     },
     {
-      step: "/assets/About_us/The_Express_Approach/Prevention_Maintence.png",
+      step: "https://res.cloudinary.com/djc8opvcg/image/upload/v1785905649/express_pesticides/About_us/The_Express_Approach/Prevention_Maintence_a6a1mh.png",
       title: "Prevention & Maintenance",
       desc: "Once the pests are eliminated, our team manages to maintain a pest-free environment through regular monitoring, proofing vulnerable areas, and giving simple preventive tips for lasting protection from pests.",
     },
@@ -98,16 +98,16 @@ export default function AboutPage() {
       {/* Section 1: About Us */}
       <section className="pt-20">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 sm:gap-5 lg:gap-12 items-center">
-          <div className="md:col-span-2 flex items-center gap-2 mb-6">
+          <div className="md:col-span-2 flex justify-center items-center gap-2 mb-6">
             <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900">
               About <span className="text-blue-600">Express Pesticides</span>
             </h1>
-            <div className="w-20 h-20 flex-shrink-0 relative flex items-center justify-center">
+            <div className="w-24 h-24 flex-shrink-0 relative flex items-center justify-center">
               <div className="absolute inset-0 rounded-full border-4 border-transparent bg-gradient-to-tr from-blue-300 via-blue-200 to-blue-50 [background-clip:padding-box,border-box] [background-origin:border-box] animate-spin"></div>
 
               <div className="w-[calc(100%-12px)] h-[calc(100%-12px)] relative rounded-full overflow-hidden z-10 bg-gray-400">
                 <Image
-                  src="/assets/About_us/50+years.png"
+                  src="https://res.cloudinary.com/djc8opvcg/image/upload/v1785905365/express_pesticides/About_us/50_years_vci7ox.png"
                   fill
                   alt="50+year"
                   className="object-cover"
@@ -146,15 +146,13 @@ export default function AboutPage() {
       {/* Section 2: CMD's Msg */}
       <section className="pt-20 p-5">
         <div className="relative bg-[#0A1649] text-white rounded-2xl">
-          <div className="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-center">
-            {/* Heading spanning full width at the top of the grid */}
-            <h2 className="text-2xl md:text-3xl font-extrabold md:col-span-2">
-              Message from <span className="text-blue-400">CMD</span>
-            </h2>
-
+          <div className="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 items-center">
             {/* Text Content Column */}
-            <div className="order-2 md:order-1 space-y-3">
-              <p className="text-lg leading-relaxed text-justify text-slate-200">
+            <div className="col-span-1 md:col-span-2 order-2 md:order-1 flex flex-col justify-center space-y-6">
+              <h2 className="text-3xl md:text-5xl lg:text-6xl font-extrabold">
+                Message from <span className="text-blue-400">CMD</span>
+              </h2>
+              <p className="text-base md:text-lg text-slate-200 leading-relaxed">
                 “Established in 1972 by Mr. Felix J. Quadros, Epcorn has over
                 50+ years of expertise in delivering reliable pest management
                 solutions. Driven by a commitment to protecting health,
@@ -170,15 +168,18 @@ export default function AboutPage() {
             <div className="order-1 md:order-2 flex flex-col items-center md:items-end justify-self-center md:justify-self-end w-full max-w-sm">
               <div className="w-full aspect-square relative rounded-lg overflow-hidden bg-white shadow-lg shadow-black/40">
                 <Image
-                  src="/assets/About_us/Flex_sir.png"
+                  src="https://res.cloudinary.com/djc8opvcg/image/upload/v1785905366/express_pesticides/About_us/Flex_sir_wz8ae2.png"
                   alt="Mr. Felix J. Quadros - Founder, Chairman & Managing Director"
                   fill
                   className="object-cover object-top"
-                  sizes="(max-w-7xl) 384px, 100vw"
+                  sizes="(max-width: 768px) 100vw, 384px"
                   priority
                 />
               </div>
-              <p className="mt-3 z-10 font-semibold text-lg text-center md:text-right w-full">
+              <p className="mt-3 w-full text-center md:text-right font-medium">
+                Mr. Felix J. Quadros
+              </p>
+              <p className="z-10 font-semibold text-sm md:text-base lg:text-lg text-center md:text-right w-full">
                 <span className="text-green-400">Founder</span>,{" "}
                 <span className="text-white">Chairman</span> &{" "}
                 <span className="text-amber-400">Managing Director</span>
@@ -187,7 +188,7 @@ export default function AboutPage() {
           </div>
 
           {/* Decorative Triangle Corner Accent */}
-          <div className="absolute h-0 w-0 border-x-[30px] border-b-[60px] -rotate-45 border-x-transparent border-b-[#0A1649] bg-transparent -bottom-5 right-10 " />
+          <div className="absolute h-0 w-0 border-x-[30px] border-b-[60px] -rotate-45 border-x-transparent border-b-[#0A1649] bg-transparent -bottom-5 right-10" />
         </div>
       </section>
       {/* Section 3: comprehensive page */}
@@ -196,7 +197,7 @@ export default function AboutPage() {
           {/* Heading spanning full width */}
 
           {/* Text Content Column */}
-          <div className="">
+          <div className="flex flex-col justify-between h-full">
             <h4 className="text-2xl md:text-3xl font-extrabold text-gray-900">
               Comprehensive Pest Management Solution
             </h4>
@@ -214,14 +215,14 @@ export default function AboutPage() {
           {/* Clean 4-Image Grid Column */}
           <div className="grid grid-cols-2 gap-4 w-full">
             {[
-              "/assets/About_us/Image_01.jpg",
-              "/assets/About_us/Image_02.jpg",
-              "/assets/About_us/Image_03.jpg",
-              "/assets/About_us/Image_04.jpg",
+              "https://res.cloudinary.com/djc8opvcg/image/upload/v1785905363/express_pesticides/About_us/Image_01_wczcsr.webp",
+              "https://res.cloudinary.com/djc8opvcg/image/upload/v1785905365/express_pesticides/About_us/Image_02_iqrhal.webp",
+              "https://res.cloudinary.com/djc8opvcg/image/upload/v1785905366/express_pesticides/About_us/Image_03_ztx2am.webp",
+              "https://res.cloudinary.com/djc8opvcg/image/upload/v1785905367/express_pesticides/About_us/Image_04_dj5mpv.webp",
             ].map((img, index) => (
               <div
                 key={img}
-                className="relative aspect-video h-30 rounded-lg overflow-hidden shadow-sm border border-gray-100">
+                className="relative aspect-video h-30 rounded-lg overflow-hidden border shadow-lg border-gray-100">
                 <Image
                   src={img}
                   fill
@@ -323,9 +324,9 @@ export default function AboutPage() {
       </section>
       {/* Section 6: Vision */}
       <section className="grid grid-cols-1 sm:grid-cols-2 gap-5 px-5 bg-neutral-50 *:shadow-md">
-        <div className="py-16 bg-white">
+        <div className="py-16 bg-blue-400 rounded-lg">
           <div className="max-w-5xl mx-auto text-center px-6">
-            <FaEye className="text-5xl text-blue-600 mx-auto mb-4" />
+            <FaEye className="text-5xl text-white mx-auto mb-4" />
             <h2 className="text-3xl font-bold mb-4 text-gray-900">
               Our Vision
             </h2>
@@ -338,9 +339,9 @@ export default function AboutPage() {
         </div>
 
         {/* Section 6: Mission */}
-        <div className="py-16 bg-white">
+        <div className="py-16 bg-green-400 rounded-lg">
           <div className="max-w-5xl mx-auto text-center px-6">
-            <FaBullseye className="text-5xl text-blue-600 mx-auto mb-4" />
+            <FaBullseye className="text-5xl text-white mx-auto mb-4" />
             <h2 className="text-3xl font-bold mb-4 text-gray-900">
               Our Mission
             </h2>

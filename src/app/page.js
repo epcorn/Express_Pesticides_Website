@@ -6,12 +6,14 @@ import FAQ from "@/components/FAQ";
 import Footer from "@/components/Footer";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import ShowCities from "@/components/ShowCities";
 
 export default function HomePage() {
   return (
     <div>
       <HeroSection />
       <PriceCalculator />
+      <ShowCities />
       <WhyChooseUs />
       <OurClients />
       <FAQ />

@@ -49,7 +49,7 @@ export default function ProductDetailPage() {
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           {/* Product Image */}
-          <div className="w-full h-96 relative rounded-lg overflow-hidden shadow-lg border">
+          <div className="w-full h-96 relative rounded-lg overflow-hidden shadow-lg outline outline-gray-300 bg-white">
             <Image
               src={product.image}
               alt={product.name}

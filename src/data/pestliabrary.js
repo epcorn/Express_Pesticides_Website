@@ -88,7 +88,8 @@ export const pestData = {
       descrption:
         "Cockroach control requires professional identification of hiding places, breeding sites, and entry points. At Express Pesticides, our experts inspect the infestation, assess the level of activity, and implement targeted control measures using advanced gel baiting, residual treatments, monitoring devices, and sanitation recommendations. \nOur Integrated Pest Management (IPM) program focuses on eliminating existing infestations while preventing future cockroach activity, providing safe and effective protection for residential, commercial, hospitality, healthcare, and industrial facilities.",
     },
-    signsInfestationImage: '/assets/Signs_of_infestation/Cockroach_infestation.png',
+    signsInfestationImage:
+      "https://res.cloudinary.com/djc8opvcg/image/upload/v1785909329/express_pesticides/Signs_of_infestation/Cockroach_infestation_fglaad.webp",
     healthRisks: [
       "Food Poisoning: Transmit bacteria like Salmonella and E. coli.",
       "Allergic Reactions: Saliva, shed skins, and droppings trigger allergies and worsen asthma.",
@@ -147,7 +148,8 @@ export const pestData = {
       descrption:
         "Termite control requires professional inspection and targeted treatment. At Express Pesticides, our experts identify termite species, locate active colonies, and assess the extent of infestation before recommending a customized treatment plan.\nUsing advanced Integrated Pest Management (IPM) techniques, including pre- and post-construction anti-termite treatments, drilling and injection, soil treatment, wood treatment, baiting systems, and routine monitoring, we provide reliable, long-term protection for homes, commercial buildings, and industrial facilities.",
     },
-    signsInfestationImage: "/assets/Signs_of_infestation/Termite_infestation.png",
+    signsInfestationImage:
+      "https://res.cloudinary.com/djc8opvcg/image/upload/v1785909330/express_pesticides/Signs_of_infestation/Termite_infestation_ioze9x.webp",
     healthRisks: [
       "Structural Weakening: Damage compromises building safety.",
       "Financial Losses: Significant repair costs.",
@@ -208,7 +210,8 @@ export const pestData = {
       descrption:
         "Rodent control requires identifying nesting sites, entry points, food sources, and travel routes. Express Pesticides conducts comprehensive inspections and implements Integrated Rodent Management using bait stations, trapping systems, exclusion techniques, and continuous monitoring. \n Our customized rodent management solutions help protect residential, commercial, industrial, food processing, and healthcare facilities from rodent-related damage and contamination.",
     },
-    signsInfestationImage: '/assets/Signs_of_infestation/Rat_infestation.png',
+    signsInfestationImage:
+      "https://res.cloudinary.com/djc8opvcg/image/upload/v1785909330/express_pesticides/Signs_of_infestation/Rat_infestation_xi9kik.webp",
     healthRisks: [
       "Leptospirosis: Spread via urine-contaminated water.",
       "Salmonellosis: Food contamination causing food poisoning.",
@@ -270,7 +273,8 @@ export const pestData = {
       descrption:
         "Effective mosquito control requires eliminating breeding sites as well as reducing adult mosquito populations. At Express Pesticides, our specialists conduct a detailed inspection to identify stagnant water sources, breeding areas, and mosquito resting sites. \nUsing our Integrated Pest Management (IPM) approach, we combine source reduction, larval control, ULV fogging, residual spraying, and continuous monitoring to provide long-lasting mosquito protection for residential, commercial, industrial, and public spaces.",
     },
-    signsInfestationImage: '/assets/Signs_of_infestation/Mosquito_infestation.png',
+    signsInfestationImage:
+      "https://res.cloudinary.com/djc8opvcg/image/upload/v1785909329/express_pesticides/Signs_of_infestation/Mosquito_infestation_l5ykjg.webp",
     healthRisks: [
       "Dengue & Chikungunya (Aedes)",
       "Malaria (Anopheles)",
@@ -335,7 +339,8 @@ export const pestData = {
       descrption:
         "Effective fly management requires eliminating breeding sites and reducing adult fly populations. Express Pesticides provides professional inspections, sanitation recommendations, fly-proofing solutions, residual treatments, insect light traps, and continuous monitoring.\n Our IPM program delivers effective fly control for restaurants, food processing facilities, commercial buildings, healthcare facilities, and residential properties.",
     },
-    signsInfestationImage: '/assets/Signs_of_infestation/Fly_infestation.png',
+    signsInfestationImage:
+      "https://res.cloudinary.com/djc8opvcg/image/upload/v1785909330/express_pesticides/Signs_of_infestation/Fly_infestation_ofc82w.webp",
     healthRisks: [
       "Typhoid Fever",
       "Cholera",
@@ -394,7 +399,8 @@ export const pestData = {
       descrption:
         "Bed bug infestations require detailed inspection and thorough treatment of all hiding places. Express Pesticides provides professional inspection, targeted chemical and non-chemical treatments, and follow-up monitoring to ensure complete control. \nOur technicians use proven Integrated Pest Management techniques to eliminate bed bugs while helping prevent re-infestation.",
     },
-    signsInfestationImage: '/assets/Signs_of_infestation/Bedbug_infestation.png',
+    signsInfestationImage:
+      "https://res.cloudinary.com/djc8opvcg/image/upload/v1785909330/express_pesticides/Signs_of_infestation/Bedbug_infestation_bekh3q.webp",
     healthRisks: [
       "Allergic reactions: Severe itching or rashes in some people.",
       "Sleep disruption: Anxiety, restlessness, insomnia.",
@@ -450,7 +456,8 @@ export const pestData = {
       descrption:
         "Lizard control begins with identifying food sources, entry points, and harbourage areas. Express Pesticides uses exclusion techniques, habitat modification, professional repellents, and insect population reduction to discourage lizard activity. \n Our customized management program provides safe and effective long-term lizard control for homes, offices, warehouses, hotels, and industrial facilities.",
     },
-    signsInfestationImage: '/assets/Signs_of_infestation/Lizard_infestation.png',
+    signsInfestationImage:
+      "https://res.cloudinary.com/djc8opvcg/image/upload/v1785909329/express_pesticides/Signs_of_infestation/Lizard_infestation_xutxdn.webp",
     healthRisks: [
       "Food Contamination: Can carry Salmonella.",
       "Allergies: Droppings or shed skin may cause reactions in some.",
@@ -512,7 +519,8 @@ export const pestData = {
       descrption:
         "Getting rid of ants and preventing them from returning requires more than a single treatment. At Express Pesticides, our trained pest management professionals inspect your property, identify the ant species, locate nesting sites, and determine the source of the infestation before recommending the most effective treatment solution. \n Using our Integrated Pest Management (IPM) approach, we combine detailed inspection, targeted treatments, habitat modification, and continuous monitoring to provide long-term ant protection for homes, commercial facilities, restaurants, offices, industries, and institutions. \n Our experienced technicians use advanced treatment methods and professional-grade products to eliminate active colonies while helping prevent future infestations, ensuring a safer and healthier environment.",
     },
-    signsInfestationImage: '/assets/Signs_of_infestation/Ant_infestation.png',
+    signsInfestationImage:
+      "https://res.cloudinary.com/djc8opvcg/image/upload/v1785909329/express_pesticides/Signs_of_infestation/Ant_infestation_gsgztu.webp",
     healthRisks: [
       "Food Contamination: Transport bacteria.",
       "Allergic Reactions: Some species bite or sting.",
@@ -568,7 +576,8 @@ export const pestData = {
       descrption:
         "Silverfish control begins with identifying moisture problems and harbourage areas.\n Express Pesticides provides professional inspection, targeted treatments, moisture management recommendations, and ongoing monitoring to eliminate infestations and reduce the risk of recurrence.",
     },
-    signsInfestationImage: '/assets/Signs_of_infestation/Silverfish_infestation.png',
+    signsInfestationImage:
+      "https://res.cloudinary.com/djc8opvcg/image/upload/v1785909330/express_pesticides/Signs_of_infestation/Silverfish_infestation_pyephx.webp",
     healthRisks: [
       "Food contamination: Ruin grains, cereals, flour.",
       "Damage to paper and fabrics: Feed on books, wallpaper, clothing.",

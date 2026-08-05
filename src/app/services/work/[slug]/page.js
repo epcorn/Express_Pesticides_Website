@@ -1,19 +1,40 @@
+"use client"; // Required for Framer Motion scroll hooks
+
 import { workServiceData } from "@/data/servicesData";
 import Image from "next/image";
-import React from "react";
+import React, { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 
-export async function WhereWeWork({ params }) {
-  const { category, slug } = await params;
+export function WhereWeWork({ params }) {
+  // Unwrap params using React.use() because it's a Client Component
+  const { category, slug } = React.use(params);
   const work = workServiceData[category]?.[slug] || workServiceData[slug];
+
+  // Setup the scroll tracking container
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"], // Tracks as the hero section scrolls out of view
+  });
+
+  // Parallax and fade transforms based on scroll
+  const bgImageY = useTransform(scrollYProgress, [0, 1], [0, 80]);
+  const headerY = useTransform(scrollYProgress, [0, 1], [0, -40]);
+  const contentY = useTransform(scrollYProgress, [0, 1], [0, 20]);
+  const opacityFade = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
 
   if (!work) return null;
 
   return (
     <div>
-      {/* bg image */}
-      <section>
-        <div className="relative h-96 sm:h-[450px] md:h-[450px] lg:h-[450px] w-full">
-          {/* Background Image */}
+      {/* 1. HERO SECTION WITH PARALLAX */}
+      <section
+        ref={containerRef}
+        className="relative h-96 sm:h-[450px] md:h-[450px] lg:h-[450px] w-full overflow-hidden">
+        {/* Background Image: Moves slightly down to create depth */}
+        <motion.div
+          style={{ y: bgImageY }}
+          className="absolute -top-12 left-0 w-full h-[120%]">
           <Image
             src={work.bgImg}
             alt={slug}
@@ -21,42 +42,45 @@ export async function WhereWeWork({ params }) {
             priority
             className="object-cover"
           />
+        </motion.div>
 
-          {/* Perfect Center Overlay */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 px-4 text-white font-bold">
-            <div className="max-w-4xl w-full mx-auto text-center">
-              <h1 className="text-3xl sm:text-4xl md:text-6xl tracking-tight leading-tight">
-                {work.title}
-              </h1>
-              <p className="text-base sm:text-lg md:text-2xl mt-4 max-w-2xl mx-auto font-medium opacity-90">
-                {work.slog}
-              </p>
-            </div>
+        {/* Text Overlay: Fades out and shifts position as you scroll */}
+        <motion.div
+          style={{ y: headerY, opacity: opacityFade }}
+          className="absolute inset-0 flex flex-col items-center justify-center bg-black/55 px-4 text-white">
+          <div className="max-w-4xl w-full mx-auto text-center">
+            <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold tracking-tight leading-tight drop-shadow-lg">
+              {work.title}
+            </h1>
+            <p className="text-base sm:text-lg md:text-2xl mt-4 max-w-2xl mx-auto font-medium text-white/95 drop-shadow-md">
+              {work.slog}
+            </p>
           </div>
-        </div>
+        </motion.div>
       </section>
-      {/* Trusted pest control  */}
-      <section className="max-w-7xl mx-auto px-6 py-12 md:p-10 text-slate-800">
+
+      {/* 2. BODY CONTENT SECTION (Slightly shifts up over the hero) */}
+      <motion.section
+        style={{ y: contentY }}
+        className="relative z-10 bg-white max-w-7xl mx-auto px-6 py-12 md:p-10 text-slate-800">
         <div className="flex flex-col gap-6 max-w-4xl">
-          {/* Sub-slogan Heading */}
           <h2 className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight">
             {work.subSlog1}
           </h2>
 
-          {/* Paragraph Split Rendering */}
           <div className="space-y-4 text-base md:text-lg text-slate-600 leading-relaxed">
             {work.para1
               ?.split(". ")
-              .filter((sentence) => sentence.trim().length > 0) // Prevents rendering empty paragraphs
+              .filter((sentence) => sentence.trim().length > 0)
               .map((p, index) => (
                 <p key={index}>{p.endsWith(".") ? p : `${p}.`}</p>
               ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
-      {/* common risks */}
-      <section className="bg-blue-400">
+      {/* 3. COMMON RISKS */}
+      <section className="relative z-10 bg-blue-400">
         <div className="max-w-7xl mx-auto px-6 py-12 md:p-10 text-slate-900">
           <h3 className="text-white text-2xl md:text-3xl font-bold tracking-tight mb-8">
             Common Risks We Help You Solve
@@ -67,9 +91,7 @@ export async function WhereWeWork({ params }) {
               <li
                 key={i}
                 className="bg-white/90 backdrop-blur-sm p-6 rounded-lg shadow-sm flex flex-col gap-4">
-                {/* Header Row: Flex container aligning icon and title side-by-side */}
                 <div className="flex items-center gap-4">
-                  {/* Visual Anchor: Explicit container bounding for absolute fill images */}
                   <div className="relative h-12 w-12 shrink-0">
                     <Image
                       src={r.img}
@@ -78,13 +100,10 @@ export async function WhereWeWork({ params }) {
                       className="object-contain"
                     />
                   </div>
-
                   <h4 className="text-lg font-bold text-blue-900 leading-tight">
                     {r.title}
                   </h4>
                 </div>
-
-                {/* Description Block */}
                 <p className="text-sm md:text-base text-gray-700 leading-relaxed">
                   {r.desc}
                 </p>
@@ -94,10 +113,9 @@ export async function WhereWeWork({ params }) {
         </div>
       </section>
 
-      {/* footer section */}
-      <section className="bg-slate-900 text-white">
+      {/* 4. FOOTER SECTION */}
+      <section className="relative z-10 bg-slate-900 text-white">
         <div className="max-w-7xl mx-auto px-6 py-12 md:py-16 md:px-10 flex flex-col md:flex-row md:items-center md:justify-between gap-8">
-          {/* Left Column: Heading Text */}
           <div className="space-y-2">
             <h3 className="text-3xl md:text-4xl font-extrabold tracking-tight">
               Get A Quote Today
@@ -107,9 +125,7 @@ export async function WhereWeWork({ params }) {
             </p>
           </div>
 
-          {/* Right Column: Contact Details Cards */}
           <div className="flex flex-col sm:flex-row gap-4 md:gap-6 shrink-0">
-            {/* Phone Contact Block */}
             <a
               href="tel:02261386600"
               className="flex items-center gap-3 bg-white/5 hover:bg-white/10 p-4 pr-6 rounded-lg border border-white/10 transition-all group">
@@ -124,7 +140,6 @@ export async function WhereWeWork({ params }) {
               </div>
             </a>
 
-            {/* Email Contact Block */}
             <a
               href="mailto:epcorn@yahoo.in"
               className="flex items-center gap-3 bg-white/5 hover:bg-white/10 p-4 pr-6 rounded-lg border border-white/10 transition-all group">

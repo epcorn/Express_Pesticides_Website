@@ -10,7 +10,7 @@ import ErrorLogger from "@/components/ErrorLogger";
 export const metadata = {
   title: "Express Pesticides", //changed
   description: "Express Pesticides homepage", //added
-  icons: { icon: "/logo.jpg" },
+  icons: { icon: "/Epcorn_Logo.png" },
 };
 
 export default function RootLayout({ children }) {
@@ -25,7 +25,7 @@ export default function RootLayout({ children }) {
         />
         <Navbar />
         <BookServiceModal />
-        {/* <Chatbot /> */}
+        <Chatbot />
         <ErrorLogger />
 
         {/* This is still required to push content below the fixed h-16 navbar */}

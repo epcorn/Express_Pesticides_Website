@@ -1,5 +1,8 @@
+// /app/why_choose_us/[slug]/page.jsx
+import WhyChooseUsClient from "@/components/WhyChooseUsClient";
 import { whyChooseUsData } from "@/data/why-choose-us";
 import { notFound } from "next/navigation";
+
 
 export const createSlug = (title) =>
   title
@@ -16,16 +19,12 @@ export async function generateStaticParams() {
 
 export default async function WhyChooseUsDetailPage({ params }) {
   const { slug } = await params;
-  console.log(slug);
+
   const card = whyChooseUsData.find(
     (item) => createSlug(item.heading) === slug,
   );
 
   if (!card) notFound();
 
-  return (
-    <div className="content-center h-96">
-      <h3 className="text-center">Content Comming Soon...</h3>
-    </div>
-  );
+  return <WhyChooseUsClient card={card} />;
 }

@@ -10,9 +10,6 @@ export default function PestLibraryPage() {
   console.log(pests);
   return (
     <>
-      {" "}
-      {/* Adjusted padding for the tall navbar */}
-      {/* Page Header */}
       <section className="py-20  bg-gradient-to-b from-gray-400 to-white">
         <div className="max-w-7xl mx-auto px-6 text-center">
           <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-12">
@@ -41,10 +38,10 @@ export default function PestLibraryPage() {
                       alt={pest.name}
                       fill
                       sizes="192px"
-                      className="object-contain hover:scale-95 transition-all"
+                      className="object-contain scale-70 hover:scale-95 transition-all"
                     />
                   </div>
-                  <p className="mt-2 text-lg font-medium text-gray-800">
+                  <p className="mt-2 text-lg font-semibold text-gray-800">
                     {pest.name}
                   </p>
                 </div>

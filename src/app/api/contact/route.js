@@ -1,13 +1,13 @@
 import nodemailer from "nodemailer";
 
 export async function POST(req) {
-  try {  
-    const { firstName , lastName, email, subject,company, issue } = await req.json();
+  try {
+    const { firstName, lastName, email, company, issue } = await req.json();
 
     // ✅ Setup transporter using .env variables
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
-      port: Number(process.env.SMTP_PORT)||465,
+      port: Number(process.env.SMTP_PORT) || 465,
       secure: true, // true for port 465, false for others like 587
       auth: {
         user: process.env.EMAIL_USER,
@@ -15,11 +15,14 @@ export async function POST(req) {
       },
     });
 
+    const subject = "Service Enquiry";
     // ✅ Mail content
     const mailOptions = {
       from: `"${firstName} ${lastName}" <${process.env.EMAIL_USER}>`,
       to: process.env.EMAIL_USER, // send to your own inbox
-      subject: subject || "New Contact Form Submission",
+      subject: subject
+        ? `[Express Pesticides] ${subject}`
+        : "New Contact Form Submission - Express Pesticides",
       html: `
         <div style="font-family: Arial, sans-serif; line-height: 1.6;">
           <h2>New Contact Form Message</h2>
@@ -29,6 +32,8 @@ export async function POST(req) {
           <p><strong>Company : </strong> ${company}</p>
           <p><strong>Message:</strong></p>
           <p>${issue}</p>
+          
+          <p>Mail from expresspesticides.com</p>
         </div>
       `,
     };
@@ -36,12 +41,15 @@ export async function POST(req) {
     // ✅ Send email
     await transporter.sendMail(mailOptions);
 
-    return Response.json({ success: true, message: "Email sent successfully!" });
+    return Response.json({
+      success: true,
+      message: "Email sent successfully!",
+    });
   } catch (error) {
     console.error("Email send error:", error);
     return Response.json(
       { success: false, message: "Failed to send email", error: error.message },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
