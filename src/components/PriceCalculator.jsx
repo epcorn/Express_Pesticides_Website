@@ -178,10 +178,10 @@ export default function PriceCalculator() {
         {/* Estimated Price */}
         {calculatedCost > 0 && (
           <div className="text-center mt-6 sm:mt-8">
-            <div className="inline-block px-6 py-3 border border-blue-600 text-blue-600 rounded-full shadow-sm text-sm sm:text-base">
+            <div className="inline-block px-6 py-3 border border-blue-600 text-blue-600 rounded-full shadow-sm text-sm sm:text-base hover:bg-blue-600 hover:text-white transition-all">
               <span className="font-medium">Estimated Price: </span>
               <span className="font-bold text-lg sm:text-xl">
-                ₹ {calculatedCost.toLocaleString("en-IN") + " + GST"}
+                ₹ {calculatedCost.toLocaleString("en-IN") + " + GST(18%)"}
               </span>
             </div>
           </div>

@@ -144,11 +144,10 @@ export const mockPincodes = [
 
 export const holidays = ["08-15", "01-26"];
 
-export const expressInvoiceHtml = ({ formData, calculatedCost = 10 }) => {
+export const expressInvoiceHtml = ({ formData }) => {
   return `
  <html>
-
-<head>
+  <head>
   <style>
     /* Global Resets for 1-Page Constraint */
     @page {
@@ -342,7 +341,7 @@ export const expressInvoiceHtml = ({ formData, calculatedCost = 10 }) => {
       * This is an electronically generated invoice acknowledgement. Tax calculations include GST at standard rates.
     </div>
     <div class="total">
-      Total Paid: ₹ ${(1.18 * calculatedCost || 0).toFixed(2)}
+      Total Paid: ₹ ${formData?.amountPaid}
     </div>
   </div>
 </body>

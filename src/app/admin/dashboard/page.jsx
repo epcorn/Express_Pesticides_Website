@@ -31,8 +31,9 @@ export default function AdminDashboard() {
   }
 
   const handlePrint = (data) => {
+    console.log(data.amountPaid)
     printInvoiceDirectly({
-      formData: data,
+      formData: data,cost:""
     })
   }
 
