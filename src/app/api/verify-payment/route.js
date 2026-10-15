@@ -1,16 +1,19 @@
 export const dynamic = "force-dynamic";
+
 import { NextResponse } from "next/server";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
 import Razorpay from "razorpay";
 import axios from "axios";
+
 import { servicesData } from "@/app/services/lib/ServiceData";
 import dbConnect from "@/lib/dbConn";
 import ServiceBooking from "@/model/serviceBookingModal";
 
+const GST_RATE = 0.18;
+
 const transporter = nodemailer.createTransport({
   service: "gmail",
-  secure: true,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
@@ -22,93 +25,96 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_KEY_SECRET_TEST,
 });
 
-function buildInvoiceHtml(formData, paymentDetails, status) {
-  const { name, serviceType, preferredDay, dateOfService, firstServiceDate } =
-    formData;
-  const isSuccess = status === "Success";
+// Prevent user-provided values from injecting HTML into emails.
+function escapeHtml(value) {
+  return String(value ?? "").replace(
+    /[&<>"']/g,
+    (char) =>
+      ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;",
+      })[char],
+  );
+}
 
-  const serviceAddress = [
+// Calculate the service cost using server-side pricing.
+function calculateServiceCost(formData) {
+  const category = servicesData[formData.category];
+
+  if (!category) {
+    throw new Error("Invalid service category");
+  }
+
+  let cost;
+
+  if (category.perSqFt) {
+    const area = Number(formData.area);
+
+    if (!Number.isFinite(area) || area <= 0) {
+      throw new Error("Invalid service area");
+    }
+
+    cost = area * Number(category.rate);
+  } else {
+    const pricing = formData.subcategory
+      ? category[formData.subcategory]
+      : category;
+
+    const bhkPricing = pricing?.[formData.bhkType];
+
+    cost = Number(bhkPricing?.[formData.serviceType] ?? 0);
+  }
+
+  if (!Number.isFinite(cost) || cost <= 0) {
+    throw new Error("Invalid service pricing");
+  }
+
+  return Number(cost.toFixed(2));
+}
+
+// Build a simple booking confirmation email.
+function buildInvoiceHtml(formData, serviceAmount, gstAmt, amountPaid) {
+  const address = [
     formData.serviceAddress1,
     formData.serviceAddress2,
     formData.serviceAddress3,
     formData.serviceLocation,
     formData.serviceCity,
+    formData.servicePincode,
   ]
     .filter(Boolean)
+    .map(escapeHtml)
     .join(", ");
-
-  const billingAddress = [
-    formData.billingAddress1,
-    formData.billingAddress2,
-    formData.billingAddress3,
-    formData.billingLocation,
-    formData.billingCity,
-  ]
-    .filter(Boolean)
-    .join(", ");
-
-  const isBillingSame = formData.sameAsShipping;
-  const amountPaid = (paymentDetails.amount / 100).toLocaleString("en-IN");
-
-  let schedulingHtml =
-    formData.serviceType === "single"
-      ? `
-    <tr>
-      <td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>Date of Service:</strong></td>
-      <td style="padding: 10px 0; border-bottom: 1px solid #eee; text-align: right;">${formData.dateOfService}</td>
-    </tr>
-    <tr>
-      <td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>Preferred Time:</strong></td>
-      <td style="padding: 10px 0; border-bottom: 1px solid #eee; text-align: right;">${formData.preferredTime}</td>
-    </tr>
-  `
-      : `
-    <tr>
-      <td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>First Service Date:</strong></td>
-      <td style="padding: 10px 0; border-bottom: 1px solid #eee; text-align: right;">${formData.firstServiceDate}</td>
-    </tr>
-    <tr>
-      <td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>Preferred Day:</strong></td>
-      <td style="padding: 10px 0; border-bottom: 1px solid #eee; text-align: right;">${formData.preferredDay}</td>
-    </tr>
-    <tr>
-      <td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>Preferred Time:</strong></td>
-      <td style="padding: 10px 0; border-bottom: 1px solid #eee; text-align: right;">${formData.preferredTime}</td>
-    </tr>
-  `;
 
   return `
-    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #ddd; padding: 20px; border-radius: 8px;">
-      <div style="border-bottom: 1px solid lightgrey; display: flex; align-items: center; justify-content: space-between; padding: 1rem;">
-        <h1 style="color: ${isSuccess ? "#22c55e" : "#ef4444"}; margin: 0;">Payment ${status}</h1>
-        <img style="width: 200px; height: auto; margin-left:auto;" src="https://res.cloudinary.com/epcorn/image/upload/v1762003702/Express_Pesticides_Website/HOMEPAGE_IMAGES/Express_pestcide_logo_transparent_ra6ld9.png" alt="Express Pesticides Logo"/>
-      </div>
-      <p style="font-size: 16px;">Hi ${name},</p>
-      <p style="font-size: 16px;">
-        ${isSuccess ? `Thank you for your booking! Your payment was successful and your service is confirmed.` : `Payment validation failed for Order ID: ${paymentDetails.order_id}. Please contact support.`}
-      </p>
-      <h2 style="border-bottom: 2px solid #eee; padding-bottom: 5px; color: #333;">Order Summary</h2>
-      <table style="width: 100%; border-collapse: collapse; font-size: 14px; text-align: left;">
-        <tr><td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>Service:</strong></td><td style="text-align: right; padding: 10px 0; border-bottom: 1px solid #eee;">${formData.category}</td></tr>
-        ${formData.bhkType ? `<tr><td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>Property Type:</strong></td><td style="text-align: right; padding: 10px 0; border-bottom: 1px solid #eee;">${formData.bhkType}</td></tr>` : ""}
-        ${formData.area ? `<tr><td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>Area:</strong></td><td style="text-align: right; padding: 10px 0; border-bottom: 1px solid #eee;">${formData.area} sq.ft.</td></tr>` : ""}
-        <tr><td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>Service Type:</strong></td><td style="text-align: right; padding: 10px 0; border-bottom: 1px solid #eee;">${formData.serviceType}</td></tr>
-        ${schedulingHtml}
-        <tr><td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>Service Address:</strong></td><td style="text-align: right; padding: 10px 0; border-bottom: 1px solid #eee;">${serviceAddress}</td></tr>
-        <tr><td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>Billing Address:</strong></td><td style="text-align: right; padding: 10px 0; border-bottom: 1px solid #eee;">${isBillingSame ? "Same as Service Address" : billingAddress}</td></tr>
-        <tr><td style="padding: 10px 0;"><strong>Total Paid:</strong></td><td style="text-align: right; padding: 10px 0; font-weight: bold; font-size: 18px; color: #3B82F6;">₹ ${amountPaid}</td></tr>
-      </table>
+    <div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;padding:20px;border:1px solid #ddd;border-radius:8px">
+      <img
+        src="https://res.cloudinary.com/epcorn/image/upload/v1762003702/Express_Pesticides_Website/HOMEPAGE_IMAGES/Express_pestcide_logo_transparent_ra6ld9.png"
+        alt="Express Pesticides"
+        style="width:180px"
+      />
+
+      <h2 style="color:#16a34a">Payment Successful</h2>
+      <p>Hello ${escapeHtml(formData.name)},</p>
+      <p>Thank you for booking your service with Express Pesticides.</p>
+
+      <h3>Booking Summary</h3>
+      <p><b>Service:</b> ${escapeHtml(formData.category)}</p>
+      <p><b>Property Type:</b> ${escapeHtml(formData.bhkType || "Property")}</p>
+      <p><b>Service Type:</b> ${escapeHtml(formData.serviceType)}</p>
+      <p><b>Service Address:</b> ${address}</p>
+
+      <hr />
+      <p>Service Cost: ₹${serviceAmount.toFixed(2)}</p>
+      <p>GST (18%): ₹${gstAmt.toFixed(2)}</p>
+      <h3>Total Paid: ₹${amountPaid.toFixed(2)}</h3>
+
+      <p>Thank you for choosing Express Pesticides.</p>
     </div>
   `;
-}
-
-async function fetchPaymentWithTimeout(paymentId, timeoutMs = 7000) {
-  return Promise.race([
-    razorpay.payments.fetch(paymentId),
-    new Promise((_, reject) =>
-      setTimeout(() => reject(new Error("Razorpay fetch timeout")), timeoutMs),
-    ),
-  ]);
 }
 
 export async function POST(req) {
@@ -119,81 +125,113 @@ export async function POST(req) {
       razorpay_signature,
       formData,
     } = await req.json();
-    const key_secret = process.env.RAZORPAY_KEY_SECRET_TEST;
 
-    if (!key_secret) {
+    const secret = process.env.RAZORPAY_KEY_SECRET_TEST;
+
+    if (
+      !secret ||
+      !razorpay_order_id ||
+      !razorpay_payment_id ||
+      !razorpay_signature ||
+      !formData ||
+      typeof formData !== "object"
+    ) {
       return NextResponse.json(
-        { message: "Missing Secret key in environment configuration" },
-        { status: 500 },
+        { message: "Missing required payment details" },
+        { status: 400 },
       );
     }
 
-    // 1. Check Signature
-    const signBody = `${razorpay_order_id}|${razorpay_payment_id}`;
+    // 1. Verify the Razorpay signature.
     const expectedSignature = crypto
-      .createHmac("sha256", key_secret)
-      .update(signBody)
-      .digest("hex");
+      .createHmac("sha256", secret)
+      .update(`${razorpay_order_id}|${razorpay_payment_id}`)
+      .digest();
 
-    if (expectedSignature !== razorpay_signature) {
+    let receivedSignature;
+
+    try {
+      receivedSignature = Buffer.from(razorpay_signature, "hex");
+    } catch {
       return NextResponse.json(
-        { message: "Signature verification failed" },
+        { message: "Invalid payment signature" },
         { status: 400 },
       );
     }
 
-    // 2. Compute Expected Price
-    const selectedCategory = servicesData[formData.category];
-    if (!selectedCategory) {
+    if (
+      receivedSignature.length !== expectedSignature.length ||
+      !crypto.timingSafeEqual(expectedSignature, receivedSignature)
+    ) {
       return NextResponse.json(
-        { message: "Selected category does not exist" },
+        { message: "Payment signature verification failed" },
         { status: 400 },
       );
     }
 
-    let expectedServerCost = 0;
-    if (selectedCategory.perSqFt) {
-      const sqft = parseFloat(formData.area) || 0;
-      expectedServerCost = sqft * selectedCategory.rate;
-    } else if (formData.subcategory && selectedCategory[formData.subcategory]) {
-      const bhkPricing =
-        selectedCategory[formData.subcategory][formData.bhkType];
-      expectedServerCost = bhkPricing
-        ? bhkPricing[formData.serviceType] || 0
-        : 0;
-    } else {
-      const bhkPricing = selectedCategory[formData.bhkType];
-      expectedServerCost = bhkPricing
-        ? bhkPricing[formData.serviceType] || 0
-        : 0;
+    // 2. Calculate service cost and GST on the server.
+    let serviceAmount;
+    let gstAmt;
+
+    try {
+      serviceAmount = calculateServiceCost(formData);
+      gstAmt = Number((serviceAmount * GST_RATE).toFixed(2));
+    } catch (error) {
+      return NextResponse.json({ message: error.message }, { status: 400 });
     }
 
-    const absoluteExpectedAmountInPaise = Math.round(
-      1.18 * expectedServerCost * 100,
-    );
+    // 3. Verify the actual payment with Razorpay.
+    const paymentDetails = await razorpay.payments.fetch(razorpay_payment_id);
 
-    // 3. Fetch Razorpay Payment details
-    let paymentDetails = await fetchPaymentWithTimeout(razorpay_payment_id);
-
-    if (paymentDetails.amount !== absoluteExpectedAmountInPaise) {
+    if (
+      paymentDetails.order_id !== razorpay_order_id ||
+      paymentDetails.status !== "captured"
+    ) {
       return NextResponse.json(
-        {
-          message: `Amount mismatch: Expected ₹${absoluteExpectedAmountInPaise / 100}, but paid ₹${paymentDetails.amount / 100}`,
-        },
+        { message: "Payment is not captured for this order" },
         { status: 400 },
       );
     }
-    console.log("Saving fields:", {
-      orderId: razorpay_order_id,
-      paymentId: razorpay_payment_id,
-      amountPaid: paymentDetails?.amount / 100,
-    });
-    // 4. Save to Database
+
+    const expectedAmount = Math.round((serviceAmount + gstAmt) * 100);
+
+    if (paymentDetails.amount !== expectedAmount) {
+      return NextResponse.json(
+        { message: "Payment amount does not match the service cost" },
+        { status: 400 },
+      );
+    }
+
+    // 4. Connect to MongoDB and prevent duplicate bookings.
     await dbConnect();
 
+    const existingBooking = await ServiceBooking.findOne({
+      orderId: razorpay_order_id,
+    });
+
+    if (existingBooking) {
+      return NextResponse.json({
+        success: true,
+        message: "Booking already exists",
+        bookingId: existingBooking._id,
+      });
+    }
+
+    console.log("Calculated serviceAmount:", serviceAmount);
+    console.log("Calculated gstAmt:", gstAmt);
+    console.log(
+      "Schema fields:",
+      ServiceBooking.schema.path("serviceAmount")?.instance,
+      ServiceBooking.schema.path("gstAmt")?.instance,
+    );
+
+    // 5. Save booking and calculated amounts.
     const newBooking = await ServiceBooking.create({
       orderId: razorpay_order_id,
       paymentId: razorpay_payment_id,
+
+      serviceAmount,
+      gstAmt,
       amountPaid: paymentDetails.amount / 100,
       paymentStatus: "Success",
 
@@ -201,15 +239,19 @@ export async function POST(req) {
       subcategory: formData.subcategory,
       bhkType: formData.bhkType,
       serviceType: formData.serviceType,
+
       name: formData.name,
       email: formData.email,
       phone: formData.phone,
+
       dateOfService: formData.dateOfService
         ? new Date(formData.dateOfService)
         : null,
+
       firstServiceDate: formData.firstServiceDate
         ? new Date(formData.firstServiceDate)
         : null,
+
       preferredTime: formData.preferredTime,
       preferredDay: formData.preferredDay,
       area: formData.area,
@@ -227,6 +269,7 @@ export async function POST(req) {
       billName: formData.billName,
       billPhone: formData.billPhone,
       billEmail: formData.billEmail,
+
       billingAddress1: formData.billingAddress1,
       billingAddress2: formData.billingAddress2,
       billingAddress3: formData.billingAddress3,
@@ -236,50 +279,67 @@ export async function POST(req) {
         : null,
       billingCity: formData.billingCity,
     });
-    console.log("Saving fields:", {
-      orderId: razorpay_order_id,
-      paymentId: razorpay_payment_id,
-      amountPaid: paymentDetails?.amount / 100,
+
+    console.log("Saved amounts:", {
+      serviceAmount: newBooking.serviceAmount,
+      gstAmt: newBooking.gstAmt,
     });
-    // 5. Send Communications asynchronously
-    try {
-      const emailSubject = `Your Express Pesticides Service is Booked! (Order: ${razorpay_order_id})`;
-      const invoiceHtml = buildInvoiceHtml(formData, paymentDetails, "Success");
-      const SMSbody = `Hi ${formData.name},\nYou have booked ${formData.serviceType.toUpperCase()} service for your ${formData.bhkType || "Property"} - ${formData.serviceCity}.\nThanks for choosing Express Pesticides`;
 
-      await transporter.sendMail({
-        from: `"Express Pesticides" <${process.env.EMAIL_USER}>`,
-        to: formData.email,
-        bcc: "exteam.epcorn@gmail.com",
-        subject: emailSubject,
-        html: invoiceHtml,
-      });
+    // 6. Send email and SMS without blocking booking success.
+    const amountPaid = paymentDetails.amount / 100;
 
-      await axios.post(
-        `https://api.textbee.dev/api/v1/gateway/devices/${process.env.TEXT_BEE_DEVICE_ID}/send-sms`,
-        { recipients: [formData.phone.toString()], message: SMSbody },
-        { headers: { "x-api-key": process.env.TEXT_BEE_API } },
-      );
-    } catch (msgErr) {
-      console.error(
-        "⚠️ Communication API non-blocking warning:",
-        msgErr.message,
+    const notifications = [];
+
+    if (process.env.EMAIL_USER && process.env.EMAIL_PASS && formData.email) {
+      notifications.push(
+        transporter.sendMail({
+          from: `"Express Pesticides" <${process.env.EMAIL_USER}>`,
+          to: formData.email,
+          bcc: "exteam.epcorn@gmail.com",
+          subject: `Service Booking Confirmed - ${razorpay_order_id}`,
+          html: buildInvoiceHtml(formData, serviceAmount, gstAmt, amountPaid),
+        }),
       );
     }
 
+    if (
+      process.env.TEXT_BEE_DEVICE_ID &&
+      process.env.TEXT_BEE_API &&
+      formData.phone
+    ) {
+      notifications.push(
+        axios.post(
+          `https://api.textbee.dev/api/v1/gateway/devices/${process.env.TEXT_BEE_DEVICE_ID}/send-sms`,
+          {
+            recipients: [String(formData.phone)],
+            message: `Hi ${formData.name}, your ${formData.serviceType} service booking with Express Pesticides is confirmed. Amount paid: Rs. ${amountPaid.toFixed(2)}.`,
+          },
+          {
+            headers: {
+              "x-api-key": process.env.TEXT_BEE_API,
+            },
+          },
+        ),
+      );
+    }
+
+    await Promise.allSettled(notifications);
+
+    // 7. Return the saved booking.
     return NextResponse.json(
       {
         success: true,
-        message: "Payment secured and documented",
-        newBooking,
+        message: "Payment verified and booking saved",
         bookingId: newBooking._id,
+        serviceAmount,
+        gstAmt,
+        amountPaid,
       },
       { status: 200 },
     );
-  } catch (error) {
-    console.error("🔥 Error during payment verification:", error);
+  } catch {
     return NextResponse.json(
-      { message: error.message || "Internal server error during verification" },
+      { message: "Unable to verify payment or save booking" },
       { status: 500 },
     );
   }

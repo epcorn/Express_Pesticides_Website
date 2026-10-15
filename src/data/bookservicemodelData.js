@@ -145,16 +145,30 @@ export const mockPincodes = [
 export const holidays = ["08-15", "01-26"];
 
 export const expressInvoiceHtml = ({ formData }) => {
+  const date = new Date(formData?.dateOfService).toLocaleDateString("en-IN", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+
+  const orderPlaced = new Date(formData?.createdAt).toLocaleString("en-IN", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+  });
+
   return `
  <html>
   <head>
-  <style>
+   <style>
     /* Global Resets for 1-Page Constraint */
     @page {
       size: A4;
       margin: 0;
     }
-    
+
     body {
       font-family: Arial, sans-serif;
       padding: 20px 30px;
@@ -185,12 +199,12 @@ export const expressInvoiceHtml = ({ formData }) => {
       color: #1E3A8A;
       line-height: 1.1;
     }
-    
+
     .invoice-meta {
       text-align: right;
       font-size: 11px;
     }
-    
+
     .invoice-title {
       font-size: 16px;
       font-weight: bold;
@@ -205,13 +219,18 @@ export const expressInvoiceHtml = ({ formData }) => {
     .logo-container {
       width: 100%;
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       margin-bottom: 15px;
     }
 
     .logo-img {
-      height: 55px;
+      height: 95px;
       object-fit: contain;
+    }
+
+    .addrs {
+      margin: 0;
+
     }
 
     /* 2-Column Space Saving Grid Layout */
@@ -260,90 +279,96 @@ export const expressInvoiceHtml = ({ formData }) => {
       padding: 8px 16px;
       border-radius: 4px;
     }
-    
+
     .terms-text {
       font-size: 10px;
       color: #6B7280;
       max-width: 60%;
     }
-
   </style>
 </head>
 
 <body>
   <!-- Brand Logo Placement -->
   <div class="logo-container">
+    <div class="addrs-container">
+      <p class="addrs">
+        <strong>Regd. Office: </strong><span> S - 5 Khira Industrial Estate,<br /> B.M. Bhargav Road, Santacruz (W),<br /> Mumbai - 400 054</span>
+      </p>
+      <p class="addrs" style="">
+        <strong>Tel: </strong><span> 9138 6600 / 2661 5745 / 6691 4400</span>
+      </p>
+      <p class="addrs"><strong>Email: epcorn@yahoo.in ● Visit us: www.expresspesticides.com</strong></p>
+    </div>
     <img class="logo-img" src="https://res.cloudinary.com/epcorn/image/upload/v1762003702/Express_Pesticides_Website/HOMEPAGE_IMAGES/Express_pestcide_logo_transparent_ra6ld9.png" alt="Express Pesticides Logo"/>
   </div>
 
-  <!-- Document Header -->
-  <div class="header">
-    <div class="company-title-area">
-      <div class="company-name">Express Pesticides Pvt. Ltd.</div>
-      <div style="font-size: 10px; color: #6B7280;">Epcorn Pest Management Division</div>
+  <p style="text-align:center;">
+    <strong>Service Type: <strong/><span> ${formData?.serviceType}<span/>
+  </p>
+  <div style="display:grid;grid-template-columns:1fr 1fr; border:1px solid black;">
+    <div style="border:1px solid #000;padding:10px;">
+      <strong>Name: </strong><span> ${formData?.name || ""}</span><br />
+      <strong>Email: </strong><span> ${formData?.email || ""}</span><br />
+      <strong>Phone: </strong><span> ${formData?.phone || ""}</span><br />
+      <strong>Order placed on: </strong><span> ${orderPlaced || ""}</span><br />
+      <strong>Order id:</strong> <span>${formData.orderId}</span><br />
+      <strong>Payment id:</strong> <span>${formData.paymentId}</span>
     </div>
-    <div class="invoice-meta">
-      <h1 class="invoice-title">Booking Invoice / Receipt</h1>
-      <p><strong>Date:</strong> ${new Date(formData?.createdAt).toLocaleString("en-IN", { day: "2-digit", month: "long", year: "numeric", hourCycle: "h24" })}</p>
-    </div>
-  </div>
-
-  <!-- Balanced 2-Column Section Layout -->
-  <div class="details-grid">
-    
-    <!-- Column 1: Customer Info -->
-    <div class="card">
-      <div class="section-title">Customer Details</div>
-      <div><strong>Name:</strong> ${formData?.name || ""}</div>
-      <div><strong>Email:</strong> ${formData?.email || ""}</div>
-      <div><strong>Phone:</strong> ${formData?.phone || ""}</div>
-      <div><strong>Pref. Day:</strong> ${formData?.preferredDay || ""}</div>
-      <div><strong>Pref. Time:</strong> ${formData?.preferredTime || ""}</div>
-    </div>
-    
-    <!-- Column 2: Order Reference Tracking -->
-    <div class="card">
-      <div class="section-title">Payment Reference</div>
-      <div><strong>Order ID:</strong> ${formData?.orderId || ""}</div>
-      <div><strong>Payment ID:</strong> ${formData?.paymentId || ""}</div>
-    </div>
-
-    <!-- Column 1: Core Service Metadata -->
-    <div class="card">
-      <div class="section-title">Service Ordered</div>
-      <div><strong>Service:</strong> ${formData?.category || ""}</div>
-      <div><strong>Category:</strong> ${formData?.subcategory || ""}</div>
-      <div><strong>Type:</strong> ${formData?.serviceType || ""}</div>
-      <div><strong>Area Scope:</strong> ${formData?.area || ""} / ${formData?.bhkType || ""}</div>
-      <div><strong>Schedule Date:</strong> ${formData?.dateOfService || formData?.firstServiceDate || ""}</div>
-    </div>
-
-    <!-- Column 2: Operational Target Address -->
-    <div class="card">
-      <div class="section-title">Service Address</div>
-      <div><strong>Address:</strong> ${formData.sameAsShipping ? "Same as Service Address" : "Diffrent from Service Address"}</div>
-      <div><strong>Address:</strong> ${[formData?.serviceAddress1, formData?.serviceAddress2, formData?.serviceAddress3].filter(Boolean).join(", ")}</div>
+    <div style="border:1px solid #000; padding:10px;">
+      <strong>Service Date: </strong><span> ${date || ""}</span><br />
+      <strong>Preffered Day: </strong><span> ${formData?.preferredDay || ""}</span><br />
+      <strong>Service time: </strong><span> ${formData?.preferredTime || ""}</span><br />
+      <strong>Phone: </strong><span> ${formData?.phone || ""}</span><br />
+      <div>
+      <strong>Address:</strong> ${formData.sameAsShipping ? "Same as Service Address" : "Diffrent from Service Address"}</div>
+      <div><strong>Address:</strong> ${[
+        formData?.serviceAddress1,
+        formData?.serviceAddress2,
+        formData?.serviceAddress3,
+      ]
+        .filter(Boolean)
+        .join(", ")}</div>
       <div><strong>City/Loc:</strong> ${formData?.serviceCity || ""}, ${formData?.serviceLocation || ""}</div>
       <div><strong>Pincode:</strong> ${formData?.servicePincode || ""}</div>
     </div>
-
-    <!-- Full Span Row Split: Billing Profile -->
-    <div class="card" style="grid-column: span 2;">
-      <div class="section-title">Billing Address</div>
-      <div><strong>Address:</strong> ${[formData?.billingAddress1, formData?.billingAddress2, formData?.billingAddress3].filter(Boolean).join(", ")}</div>
-      <div><strong>City / Location / Pin:</strong> ${formData?.billingCity || ""} ${formData?.billingLocation || ""} - ${formData?.billingPincode || ""}</div>
+  </div>
+  <div style="border:1px solid #000; margin-top:5px; display:grid;grid-template-columns:3fr 1fr; ">
+    <p style="border:1px solid #000;padding:10px;margin:0;">Particaulars</p>
+    <p style="border:1px solid #000;padding:10px;margin:0;">Amount</p>
+    <div style="border:1px solid #000;padding:10px;margin:0;">
+      <!-- Full Span Row Split: Billing Profile -->
+      <div style="grid-column: span 2;">
+        <div style="margin-top:60px;">Billing Address</div>
+        <div><strong>Address:</strong> ${[
+          formData?.billingAddress1,
+          formData?.billingAddress2,
+          formData?.billingAddress3,
+        ]
+          .filter(Boolean)
+          .join(", ")}</div>
+        <div><strong>City / Location / Pin:</strong> ${formData?.billingCity || ""} ${formData?.billingLocation || ""} -
+          ${formData?.billingPincode || ""}</div>
+      </div>
+      <div style="margin-top:90px;">
+        <p><b>Bill Amount: </b></p>
+        <p><b>GST 18%: </b></p>
+      </div>
     </div>
+    <div style="border:1px solid #000; padding:10px; text-align:right;display:flex;flex-direction:column; ">
+      <p style="margin-top:auto">${formData.serviceAmount}</p>
+      <p>${formData.gstAmt}</p>
+    </div>
+    <div style="border:1px solid #000;padding:10px;margin:0;"><b>Total Paid:</b></div>
+    <div style="border:1px solid #000;padding:10px;margin:0; text-align:right"><b>₹ ${formData?.amountPaid}</b></div>
+  </div>
+  </div>
+  </div>
+  <div style="margin-top:5px; border:2px solid #000;font-weight:800;font-size:1rem; text-align:right;">
+    <p>For Express pesticides PVT. LTD.</p>
+    <p style="margin-top:6.2rem; font-size:0.8rem;display:flex;justify-content:space-between;padding:0 10px;"><span>Date:</span><span>Authorised Signatory</span></p>
   </div>
 
-  <!-- Pricing Aggregations Block -->
-  <div class="footer-section">
-    <div class="terms-text">
-      * This is an electronically generated invoice acknowledgement. Tax calculations include GST at standard rates.
-    </div>
-    <div class="total">
-      Total Paid: ₹ ${formData?.amountPaid}
-    </div>
-  </div>
 </body>
 
 </html>

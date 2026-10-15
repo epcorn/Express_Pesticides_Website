@@ -4,6 +4,8 @@ const serviceSchema = new mongoose.Schema(
   {
     orderId: { type: String, required: true },
     paymentId: { type: String, required: true },
+    serviceAmount: { type: Number, required: true },
+    gstAmt: { type: Number, required: true },
     amountPaid: { type: Number, required: true },
     paymentStatus: { type: String, default: "Success" },
 

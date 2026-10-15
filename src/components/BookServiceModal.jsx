@@ -159,7 +159,7 @@ function BookServiceModal() {
       console.error("Pincode lookup failed:", err);
     }
   };
-  
+
   useEffect(() => {
     if (formData.servicePincode.length === 6) {
       lookupPincode(formData.servicePincode);
@@ -765,12 +765,33 @@ function BookServiceModal() {
                   </div>
 
                   <div className="pt-4 border-t">
-                    <div className="flex justify-between mb-2">
-                      <span className="font-medium text-gray-700">Total Estimated Cost:</span>
-                      <span className="font-bold text-blue-600 text-lg">
-                        ₹ {(1.18 * calculatedCost).toLocaleString("en-IN")} (Incl. 9% CGST & 9% SGST)
-                      </span>
+                    <div className="flex flex-col gap-2.5 mb-2 w-full">
+                      {/* Service Cost */}
+                      <div className="flex justify-between items-center">
+                        <span className="font-semibold text-gray-700">Service Cost</span>
+                        <span className="font-bold text-blue-600">₹ {calculatedCost.toFixed(2)}/-</span>
+                      </div>
+
+                      {/* GST */}
+                      <div className="flex justify-between items-center pb-2 border-b border-gray-200">
+                        <span className="font-semibold text-gray-700">GST (18%)</span>
+                        <span className="font-bold text-green-600">+₹ {(calculatedCost * 0.18).toFixed(2)}/-</span>
+                      </div>
+
+                      {/* Grand Total */}
+                      <div className="flex flex-col items-end gap-1 pt-1">
+                        <div className="flex items-baseline gap-2">
+                          <span className="font-semibold text-gray-700">Total Estimated Cost:</span>
+                          <span className="font-extrabold text-blue-600 text-xl">
+                            ₹ {(calculatedCost * 1.18).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/-
+                          </span>
+                        </div>
+                        <span className="text-xs text-gray-500 font-medium">
+                          (Incl. 9% CGST & 9% SGST)
+                        </span>
+                      </div>
                     </div>
+
 
                     {submitMessage && (
                       <p className={`mt-3 text-center ${submitMessage.includes("failed") || submitMessage.includes("Error") ? "text-red-600" : "text-green-600"}`}>
