@@ -1,5 +1,9 @@
 export const images = [
   {
+    sm: "https://res.cloudinary.com/epcorn/image/upload/v1793953104/WhatsApp_Image_2026-11-06_at_12.21.19_PM_vh6j0f.jpg",
+    lg: "https://res.cloudinary.com/epcorn/image/upload/v1793953104/WhatsApp_Image_2026-11-06_at_12.21.19_PM_vh6j0f.jpg",
+  },
+  {
     sm: "https://res.cloudinary.com/djc8opvcg/image/upload/v1785826566/express_pesticides/hero_img/Banner_1_jxv1yl.png",
     lg: "https://res.cloudinary.com/djc8opvcg/image/upload/v1785826562/express_pesticides/hero_img/Banner_1lg_xeouog.png",
   },

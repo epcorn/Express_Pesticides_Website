@@ -1,16 +1,25 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { X } from "lucide-react";
+import { ReceiptIndianRupee, X } from "lucide-react";
 import { servicesData } from "../app/services/lib/ServiceData.js";
 import { holidays, mockPincodes } from "@/data/bookservicemodelData.js";
-// import postalcodes from "postalcodes-india";
 import { toast } from "@/lib/toast.js";
+import { getCoupons } from "@/app/actions/coupon.js";
+import useCouponStore from "@/store/couponStore.js";
 
+const PREFERRED_TIME_SLOTS = [
+  "9–11 AM",
+  "11–12 AM",
+  "12–1 PM",
+  "1–3 PM",
+  "3–5 PM",
+  "5–7 PM",
+];
 
-
-function BookServiceModal() {
+export default function BookServiceModal() {
   const [isOpen, setIsOpen] = useState(false);
+  const [acceptCondition, setAcceptCondition] = useState(false);
   const [pincode, setPincode] = useState("");
   const [isPincodeValid, setIsPincodeValid] = useState(false);
   const [pincodeStatus, setPincodeStatus] = useState("idle");
@@ -18,8 +27,10 @@ function BookServiceModal() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState("");
   const [sameAsShipping, setSameAsShipping] = useState(true);
+  const [coupons, setCoupons] = useState([])
+  const [selectedCoupon, setSelectedCoupon] = useState(null);
 
-  const [formData, setFormData] = useState({
+  const initialFormState = {
     category: "",
     subcategory: "",
     bhkType: "",
@@ -32,15 +43,12 @@ function BookServiceModal() {
     preferredTime: "",
     preferredDay: "",
     area: "",
-    // Service Address (Ship To)
     serviceAddress1: "",
     serviceAddress2: "",
     serviceAddress3: "",
     serviceLocation: "",
     servicePincode: "",
     serviceCity: "",
-    // Billing Address (Bill To)
-    sameAsShipping,
     billName: "",
     billPhone: "",
     billEmail: "",
@@ -50,206 +58,175 @@ function BookServiceModal() {
     billingLocation: "",
     billingPincode: "",
     billingCity: "",
-  });
+    selectedCoupon: '',
+  };
 
+  const [formData, setFormData] = useState(initialFormState);
+
+  // Toggle body scroll
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? "hidden" : "auto";
+  }, [isOpen]);
+
+  // 1. Get coupon validation helper from Zustand store
+  const { isCouponForUser } = useCouponStore();
+
+  // 2. Compute discount and final total dynamically
+  const activeCoupon = coupons?.find((f) => f._id === selectedCoupon);
+
+  const discountAmount = (() => {
+    if (!activeCoupon) return 0;
+    if (activeCoupon.discountType === "percentage") {
+      return (calculatedCost * activeCoupon.discountValue) / 100;
+    } else {
+      return Math.min(activeCoupon.discountValue, calculatedCost);
+    }
+  })();
+
+  const discountedServiceCost = Math.max(0, calculatedCost - discountAmount);
+  const gstAmount = discountedServiceCost * 0.18;
+  const finalTotalCost = discountedServiceCost + gstAmount;
+
+  // 3. Handle coupon change with user assignment security check
+  const handleCouponChange = (e) => {
+    const couponId = e.target.value;
+    if (!couponId) {
+      setSelectedCoupon(null);
+      return;
+    }
+
+    const foundCoupon = coupons.find((c) => c._id === couponId);
+    if (!foundCoupon) return;
+
+    if (calculatedCost < (foundCoupon.minPurchaseAmount || 0)) {
+      toast.warning(`Minimum purchase of ₹${foundCoupon.minPurchaseAmount} required for this coupon.`);
+      setSelectedCoupon(null);
+      return;
+    }
+
+    // Check if user email or phone is required & valid for this coupon
+    const userIdentifier = formData.email || formData.phone;
+    const check = isCouponForUser(foundCoupon, userIdentifier);
+
+    if (!check.allowed) {
+      toast.warning(check.message);
+      setSelectedCoupon(null);
+      return;
+    }
+
+    setSelectedCoupon(couponId);
+  };
+
+  // Handle Input Changes & Validations
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
 
     if (name === "dateOfService" || name === "firstServiceDate") {
       const now = new Date();
-      let tomorrow = new Date();
-      const checkMonday = new Date(value);
-
-      tomorrow.setDate(now.getDate() + 1);
-      tomorrow = tomorrow.toISOString().split("T")[0];
+      const tomorrow = new Date(now.setDate(now.getDate() + 1))
+        .toISOString()
+        .split("T")[0];
+      const checkDate = new Date(value);
 
       if (holidays.includes(value.slice(5))) {
         toast.warning("Oops! It's a holiday. Choose another date.");
-
-        setFormData((prev) => ({
-          ...prev,
-          dateOfService: "",
-          firstServiceDate: "",
-        }));
+        setFormData((prev) => ({ ...prev, [name]: "" }));
         return;
       }
-
       if (value === tomorrow && now.getHours() >= 14) {
-        toast.warning(
-          "Please select another day. After 2 PM you cannot get an appointment for the next day."
-        );
-
-        setFormData((prev) => ({
-          ...prev,
-          dateOfService: "",
-          firstServiceDate: "",
-        }));
+        toast.warning("After 2 PM, next day appointments are unavailable.");
+        setFormData((prev) => ({ ...prev, [name]: "" }));
         return;
       }
-
-      if (checkMonday.getDay() === 1) {
-        toast.warning(
-          "Monday is off. Please select another day."
-        );
-
-        setFormData((prev) => ({
-          ...prev,
-          dateOfService: "",
-          firstServiceDate: "",
-        }));
+      if (checkDate.getDay() === 1) {
+        toast.warning("Monday is off. Please select another day.");
+        setFormData((prev) => ({ ...prev, [name]: "" }));
         return;
       }
     }
-
-    // if (name === "servicePincode" && value.length === 6) {
-    //   lookupPincode(value);
-    // }
   };
 
-  const lookupPincode = async (value) => {
-    try {
-      const response = await fetch(`/api/pincode?code=${value}`);
-
-      if (!response.ok) {
-        console.error("Failed to fetch pincode");
-        return;
-      }
-
-      const res = await response.json();
-      const info = Array.isArray(res) ? res[0] : res;
-
-      if (!mockPincodes.includes(value)) {
-        alert("Area is not serviceable");
-
-        setFormData((prev) => ({
-          ...prev,
-          servicePincode: "",
-          serviceLocation: "",
-          serviceCity: "",
-        }));
-        return;
-      }
-
-      if (pincode && pincode !== value) {
-        const goAhead = window.confirm(
-          `You checked for ${pincode} and entered ${value}.\nDo you want to continue?`
-        );
-
-        if (!goAhead) return;
-      }
-
-      if (info?.subDistrict && info?.district) {
-        const city =
-          info.subDistrict.split(" ")[0] === info.district
-            ? info.place.split(" ")[0]
-            : info.subDistrict.split(/[ (]/)[0];
-
-        setFormData((prev) => ({
-          ...prev,
-          serviceLocation: city,
-          serviceCity: info.district,
-        }));
-      }
-    } catch (err) {
-      console.error("Pincode lookup failed:", err);
-    }
-  };
-
+  // Pincode Lookup API
   useEffect(() => {
-    if (formData.servicePincode.length === 6) {
-      lookupPincode(formData.servicePincode);
+    if (formData.servicePincode.length !== 6) return;
+
+    async function verifyPincode() {
+      try {
+        const res = await fetch(`/api/pincode?code=${formData.servicePincode}`);
+        const data = await res.json();
+        const info = Array.isArray(data) ? data[0] : data;
+
+        if (!mockPincodes.includes(formData.servicePincode)) {
+          alert("Area is not serviceable");
+          setFormData((prev) => ({
+            ...prev,
+            servicePincode: "",
+            serviceLocation: "",
+            serviceCity: "",
+          }));
+          return;
+        }
+
+        if (info?.subDistrict && info?.district) {
+          const city =
+            info.subDistrict.split(" ")[0] === info.district
+              ? info.place.split(" ")[0]
+              : info.subDistrict.split(/[ (]/)[0];
+          setFormData((prev) => ({
+            ...prev,
+            serviceLocation: city,
+            serviceCity: info.district,
+          }));
+        }
+      } catch (err) {
+        console.error("Pincode lookup failed:", err);
+      }
     }
+    verifyPincode();
   }, [formData.servicePincode]);
 
-  const handlePincodeCheck = () => {
-    setPincodeStatus("loading");
-    setTimeout(() => {
-      if (mockPincodes.includes(pincode)) {
-        setIsPincodeValid(true);
-        setPincodeStatus("idle");
-      } else {
-        setIsPincodeValid(false);
-        setPincodeStatus("invalid");
-      }
-    }, 1000);
-  };
+  useEffect(() => {
+    if (activeCoupon && calculatedCost < (activeCoupon.minPurchaseAmount || 0)) {
+      setSelectedCoupon(null);
+      toast.warning("Coupon removed: order no longer meets the minimum amount.");
+    }
+  }, [calculatedCost]);
 
-  const resetPincode = () => {
-    setIsPincodeValid(false);
-    setPincode("");
-    setPincodeStatus("idle");
-  };
-
-  // Calculate cost dynamically
+  // Dynamic Cost Calculation
   useEffect(() => {
     const { category, subcategory, bhkType, serviceType, area } = formData;
-    if (!category || !serviceType) {
-      setCalculatedCost(0);
+    if (!category || !serviceType) return setCalculatedCost(0);
+
+    const catData = servicesData[category];
+    if (!catData) return setCalculatedCost(0);
+
+    if (catData.perSqFt) {
+      setCalculatedCost((parseFloat(area) || 0) * catData.rate);
       return;
     }
 
-    const selectedCategory = servicesData[category];
-    if (!selectedCategory) {
-      setCalculatedCost(0);
-      return;
-    }
-
-    if (selectedCategory.perSqFt) {
-      const sqft = parseFloat(area) || 0;
-      setCalculatedCost(sqft * selectedCategory.rate);
-      return;
-    }
-
-    if (subcategory && selectedCategory[subcategory]) {
-      const bhkPricing = selectedCategory[subcategory][bhkType];
-      setCalculatedCost(bhkPricing ? bhkPricing[serviceType] || 0 : 0);
-    } else if (!subcategory && selectedCategory[bhkType]) {
-      const bhkPricing = selectedCategory[bhkType];
-      setCalculatedCost(bhkPricing ? bhkPricing[serviceType] || 0 : 0);
-    } else {
-      setCalculatedCost(0);
-    }
+    const pricing = subcategory
+      ? catData[subcategory]?.[bhkType]
+      : catData[bhkType];
+    setCalculatedCost(pricing?.[serviceType] || 0);
   }, [formData]);
 
-  // Sync billing address if sameAsShipping is checked
+  // Sync Billing Address
   useEffect(() => {
     if (!sameAsShipping) return;
-
-    setFormData((prev) => {
-      const updated = {
-        ...prev,
-        billName: prev.name,
-        billPhone: prev.phone,
-        billEmail: prev.email,
-        billingAddress1: prev.serviceAddress1,
-        billingAddress2: prev.serviceAddress2,
-        billingAddress3: prev.serviceAddress3,
-        billingLocation: prev.serviceLocation,
-        billingPincode: prev.servicePincode,
-        billingCity: prev.serviceCity,
-      };
-
-      if (
-        updated.billName === prev.billName &&
-        updated.billPhone === prev.billPhone &&
-        updated.billEmail === prev.billEmail &&
-        updated.billingAddress1 === prev.billingAddress1 &&
-        updated.billingAddress2 === prev.billingAddress2 &&
-        updated.billingAddress3 === prev.billingAddress3 &&
-        updated.billingLocation === prev.billingLocation &&
-        updated.billingPincode === prev.billingPincode &&
-        updated.billingCity === prev.billingCity
-      ) {
-        return prev;
-      }
-
-      return updated;
-    });
+    setFormData((prev) => ({
+      ...prev,
+      billName: prev.name,
+      billPhone: prev.phone,
+      billEmail: prev.email,
+      billingAddress1: prev.serviceAddress1,
+      billingAddress2: prev.serviceAddress2,
+      billingAddress3: prev.serviceAddress3,
+      billingLocation: prev.serviceLocation,
+      billingPincode: prev.servicePincode,
+      billingCity: prev.serviceCity,
+    }));
   }, [
     sameAsShipping,
     formData.name,
@@ -263,103 +240,91 @@ function BookServiceModal() {
     formData.serviceCity,
   ]);
 
-  // Handle Form Submission Lock Execution
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true); // ✅ Fixed: Set to true when execution loop begins
-    setSubmitMessage("");
-
-    if (calculatedCost <= 0) {
-      setSubmitMessage("Please select valid service options.");
-      setIsSubmitting(false);
-      return;
-    }
-    handlePayment();
+  // Manual Pincode Verification Step
+  const handlePincodeCheck = () => {
+    setPincodeStatus("loading");
+    setTimeout(() => {
+      if (mockPincodes.includes(pincode)) {
+        setIsPincodeValid(true);
+        setPincodeStatus("idle");
+      } else {
+        setIsPincodeValid(false);
+        setPincodeStatus("invalid");
+      }
+    }, 800);
   };
 
-  const handlePayment = async () => {
+  // Payment Execution Handler
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!(calculatedCost > 0)) {
+      return setSubmitMessage("Please select valid service options.");
+    }
+
+    setIsSubmitting(true);
+    setSubmitMessage("");
+
     try {
       const orderRes = await fetch("/api/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: 1.18 * calculatedCost }),
+        body: JSON.stringify({
+          formData,                                   // server computes the price
+          couponCode: activeCoupon?.couponCode,
+          userIdentifier: formData.email.trim().toLowerCase(),
+        }),
       });
 
-      if (!orderRes.ok) throw new Error("Failed to create order reference");
       const orderData = await orderRes.json();
+      if (!orderRes.ok) throw new Error(orderData.error || "Failed to create order");
 
-      // Razorpay Payment Configuration Matrix Setup
       const options = {
-        // ✅ Fixed: Changed from _TEST variable to production live environmental variable
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID_TEST,
         amount: orderData.amount,
         currency: "INR",
         name: "Express Pesticides",
-        image: "https://res.cloudinary.com/epcorn/image/upload/v1762003702/Express_Pesticides_Website/HOMEPAGE_IMAGES/Express_pestcide_logo_transparent_ra6ld9.png",
+        image:
+          "https://res.cloudinary.com/epcorn/image/upload/v1762003702/Express_Pesticides_Website/HOMEPAGE_IMAGES/Express_pestcide_logo_transparent_ra6ld9.png",
         description: `Payment for ${formData.category}`,
         order_id: orderData.id,
-        notes: {
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          serviceAddress: `${formData.serviceAddress1}-${formData.serviceAddress2}-${formData.serviceAddress3}, ${formData.serviceLocation}, ${formData.serviceCity} - ${formData.servicePincode}`,
-          billingAddress: `${formData.billingAddress1}-${formData.billingAddress2}-${formData.billingAddress3}, ${formData.billingLocation}, ${formData.billingCity} - ${formData.billingPincode}`,
-          serviceType: formData.serviceType,
-          servicedate: formData.dateOfService || formData.firstServiceDate
-        },
-        method: {
-          netbanking: true, upi: true, card: true, wallet: false, emi: false, paylater: false
-        },
+        prefill: { name: formData.name, email: formData.email, contact: formData.phone },
+        theme: { color: "#3B82F6" },
         handler: async function (response) {
           setSubmitMessage("Verifying payment...");
           try {
             const verifyRes = await fetch("/api/verify-payment", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                ...response,
-                formData,
-              }),
+              body: JSON.stringify({ ...response, formData }),
             });
+            const result = await verifyRes.json().catch(() => ({}));
 
             if (verifyRes.ok) {
-              setSubmitMessage("Payment successful! Your service is booked.");
+              toast.success("Payment successful! Your service is booked.");
+              setSubmitMessage("Success! Service booked.");
               setTimeout(() => {
                 setIsOpen(false);
                 setSubmitMessage("");
-              }, 3000);
-
-              toast.success("Payment successful! Your service is booked.");
-
+              }, 2500);
             } else {
-              const errPayload = await verifyRes.json();
-              throw new Error(errPayload.message || "Payment validation parsing dropped.");
+              setSubmitMessage(`Payment validation failed: ${result.message || "Unknown error"}`);
             }
           } catch (err) {
-            setSubmitMessage(`Payment verification failed: ${err.message}`);
-          }
-          setIsSubmitting(false);
-        },
-        modal: {
-          ondismiss: function () {
-            setSubmitMessage("Error: Payment was cancelled");
+            setSubmitMessage(`Payment validation failed: ${err.message}`);
+          } finally {
             setIsSubmitting(false);
           }
         },
-        prefill: {
-          name: formData.name,
-          email: formData.email,
-          contact: formData.phone,
+        modal: {
+          ondismiss: () => {
+            setSubmitMessage("Payment cancelled");
+            setIsSubmitting(false);
+          },
         },
-        theme: { color: "#3B82F6" },
       };
 
       const rzp = new window.Razorpay(options);
       rzp.open();
-      rzp.on("payment.failed", function (response) {
-        setSubmitMessage(`Payment failed: ${response.error.description}`);
-        setIsSubmitting(false);
-      });
     } catch (error) {
       setSubmitMessage(`Error: ${error.message}`);
       setIsSubmitting(false);
@@ -372,52 +337,59 @@ function BookServiceModal() {
     (formData.subcategory
       ? Object.keys(servicesData[formData.category][formData.subcategory] || {})
       : Object.keys(servicesData[formData.category] || {}).filter(
-        (key) => key.includes("BHK") || key.includes("RK")
+        (k) => k.includes("BHK") || k.includes("RK"),
       ));
+  const minDate = new Date(new Date().setDate(new Date().getDate() + 1))
+    .toISOString()
+    .split("T")[0];
 
-  const preferredTimeSlots = [
-    "9–11 AM",
-    "11–12 AM",
-    "12–1 PM",
-    "1–3 PM",
-    "3–5 PM",
-    "5–7 PM",
-  ];
 
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
+    async function loadCoupons() {
+      try {
+        const res = await getCoupons();
+        if (res?.success) {
+          setCoupons(res.coupons.filter(c => c.isActive) || []);
+        } else {
+          setCoupons([]);
+        }
+      } catch (error) {
+        console.error("Failed to fetch coupons:", error);
+        setCoupons([]); // Safe fallback to array
+      }
     }
-  }, [isOpen]);
 
+    loadCoupons();
+  }, []);
+
+  //load coupon from stor
 
   return (
     <>
-
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed top-1/2 -translate-y-1/2 right-0 z-40 bg-blue-600 text-white font-bold py-3 px-5 lg:px-5 rounded-l-lg shadow-lg hover:bg-blue-700 cursor-pointer transition-all"
-        style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
-      >
+        className="fixed top-1/2 -translate-y-1/2 right-0 z-40 bg-blue-600 text-white font-bold py-3 px-4 rounded-l-lg shadow-lg hover:bg-blue-700 transition-all cursor-pointer"
+        style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}>
         Book a Service
-      </button >
+      </button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm dark:text-black">
-          <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto scrollbar-hidden">
-            <div className="sticky top-0 bg-white flex justify-between items-center p-4 border-b">
-              <h2 className="text-2xl font-bold">Book Your Service</h2>
-              <button onClick={() => setIsOpen(false)} className="border rounded-full p-1 text-red-600 hover:bg-red-200 hover:text-white cursor-pointer transition-all">
-                <X size={24} />
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            {/* Header */}
+            <div className="sticky top-0 bg-white flex justify-between items-center p-4 border-b z-10">
+              <h2 className="text-xl font-bold">Book Your Service</h2>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="border rounded-full p-1 text-red-600 hover:bg-red-100 transition-all">
+                <X size={22} />
               </button>
             </div>
 
             <div className="p-6">
               {!isPincodeValid ? (
-                <>
-                  <label className="font-medium">Enter Pincode:</label>
+                <div className="space-y-3">
+                  <label className="font-medium block">Enter Pincode:</label>
                   <input
                     type="number"
                     value={pincode}
@@ -427,40 +399,44 @@ function BookServiceModal() {
                   />
                   <button
                     onClick={handlePincodeCheck}
-                    className="w-full bg-blue-600 text-white py-2 rounded mt-2"
                     disabled={pincodeStatus === "loading"}
-                  >
-                    {pincodeStatus === "loading" ? "Checking..." : "Check Availability"}
+                    className="w-full bg-blue-600 text-white py-2 rounded font-medium">
+                    {pincodeStatus === "loading"
+                      ? "Checking..."
+                      : "Check Availability"}
                   </button>
                   {pincodeStatus === "invalid" && (
-                    <p className="text-red-600 text-sm text-center mt-2">
+                    <p className="text-red-600 text-sm text-center">
                       Sorry, we do not service this pincode yet.
                     </p>
                   )}
-                </>
+                </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="bg-green-50 border border-green-300 p-2 rounded">
-                    <p>
-                      Pincode: {pincode} (Serviceable){" "}
-                      <button
-                        type="button"
-                        onClick={resetPincode}
-                        className="text-blue-600 underline text-sm ml-2"
-                      >
-                        Change
-                      </button>
-                    </p>
+                <form onSubmit={handleSubmit} className="space-y-4 text-sm">
+                  {/* Pincode Success Banner */}
+                  <div className="bg-green-50 border border-green-300 p-2.5 rounded flex justify-between items-center">
+                    <span>
+                      Pincode: <strong>{pincode}</strong> (Serviceable)
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setIsPincodeValid(false)}
+                      className="text-blue-600 underline text-xs">
+                      Change
+                    </button>
                   </div>
 
+                  {/* Category Selection */}
                   <div>
-                    <label className="block font-medium mb-1">Service Category</label>
+                    <label className="block font-medium mb-1">
+                      Service Category
+                    </label>
                     <select
                       name="category"
                       value={formData.category}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border rounded"
-                    >
+                      className="w-full p-2 border rounded"
+                      required>
                       <option value="">-- Select Category --</option>
                       {categories.map((cat) => (
                         <option key={cat} value={cat}>
@@ -470,29 +446,34 @@ function BookServiceModal() {
                     </select>
                   </div>
 
+                  {/* Area or Property Type */}
                   {formData.category === "Civil Work" ? (
                     <div>
-                      <label className="block font-medium mb-1">Area (in sq.ft)</label>
+                      <label className="block font-medium mb-1">
+                        Area (sq.ft)
+                      </label>
                       <input
                         type="number"
                         name="area"
                         value={formData.area}
                         onChange={handleChange}
                         placeholder="Enter total area"
-                        className="w-full px-3 py-2 border rounded"
+                        className="w-full p-2 border rounded"
                         required
                       />
                     </div>
                   ) : (
                     bhkOptions?.length > 0 && (
                       <div>
-                        <label className="block font-medium mb-1">Property Type</label>
+                        <label className="block font-medium mb-1">
+                          Property Type
+                        </label>
                         <select
                           name="bhkType"
                           value={formData.bhkType}
                           onChange={handleChange}
-                          className="w-full px-3 py-2 border rounded"
-                        >
+                          className="w-full p-2 border rounded"
+                          required>
                           <option value="">-- Select --</option>
                           {bhkOptions.map((bhk) => (
                             <option key={bhk} value={bhk}>
@@ -504,93 +485,105 @@ function BookServiceModal() {
                     )
                   )}
 
+                  {/* Service Type */}
                   <div>
-                    <label className="block font-medium mb-1">Service Type</label>
+                    <label className="block font-medium mb-1">
+                      Service Type
+                    </label>
                     <select
                       name="serviceType"
                       value={formData.serviceType}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border rounded"
-                    >
+                      className="w-full p-2 border rounded">
                       <option value="single">Single Contract Service</option>
-                      <option value="annual">Annual Contract Service</option>
+                      <option value="annual">
+                        Annual Contract Service (Includes 3 free visits)
+                      </option>
                     </select>
-                    {formData.serviceType === "annual" && (
-                      <p className="text-sm text-green-700 mt-1">
-                        ✅ Annual Contract includes <strong>3 free service visits</strong> throughout the contract period.
-                      </p>
-                    )}
                   </div>
 
+                  {/* Dates & Times */}
                   {formData.serviceType === "single" ? (
                     <div>
-                      <label className="block font-medium mb-1">Date of Service</label>
+                      <label className="block font-medium mb-1">
+                        Date of Service
+                      </label>
                       <input
                         type="date"
                         name="dateOfService"
                         value={formData.dateOfService}
-                        min={new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split("T")[0]}
+                        min={minDate}
                         onChange={handleChange}
-                        className="w-full px-3 py-2 border rounded"
+                        className="w-full p-2 border rounded"
                         required
                       />
                     </div>
                   ) : (
-                    <>
+                    <div className="grid grid-cols-2 gap-3">
                       <div>
-                        <label className="block font-medium mb-1">First Service Start Date</label>
+                        <label className="block font-medium mb-1">
+                          First Service Date
+                        </label>
                         <input
                           type="date"
-                          min={new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split("T")[0]}
                           name="firstServiceDate"
+                          min={minDate}
                           value={formData.firstServiceDate}
                           onChange={handleChange}
-                          className="w-full px-3 py-2 border rounded"
+                          className="w-full p-2 border rounded"
                           required
                         />
                       </div>
                       <div>
-                        <label className="block font-medium mb-1">Preferred Day</label>
+                        <label className="block font-medium mb-1">
+                          Preferred Day
+                        </label>
                         <select
                           name="preferredDay"
                           value={formData.preferredDay}
                           onChange={handleChange}
-                          className="w-full px-3 py-2 border rounded"
-                          required
-                        >
+                          className="w-full p-2 border rounded"
+                          required>
                           <option value="">-- Select Day --</option>
-                          {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map(
-                            (d) => (
-                              <option key={d} value={d}>
-                                {d}
-                              </option>
-                            )
-                          )}
+                          {[
+                            "Tuesday",
+                            "Wednesday",
+                            "Thursday",
+                            "Friday",
+                            "Saturday",
+                            "Sunday",
+                          ].map((d) => (
+                            <option key={d} value={d}>
+                              {d}
+                            </option>
+                          ))}
                         </select>
                       </div>
-                    </>
+                    </div>
                   )}
 
                   <div>
-                    <label className="block font-medium mb-1">Preferred Time</label>
+                    <label className="block font-medium mb-1">
+                      Preferred Time Slot
+                    </label>
                     <select
                       name="preferredTime"
                       value={formData.preferredTime}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border rounded"
-                      required
-                    >
+                      className="w-full p-2 border rounded"
+                      required>
                       <option value="">-- Select Time Slot --</option>
-                      {preferredTimeSlots.map((time) => (
-                        <option key={time} value={time}>
-                          {time}
+                      {PREFERRED_TIME_SLOTS.map((t) => (
+                        <option key={t} value={t}>
+                          {t}
                         </option>
                       ))}
                     </select>
                   </div>
 
-                  <div className="border-t pt-4">
-                    <h3 className="font-semibold text-lg mb-2 text-blue-700">
+                  {/* Service Address Block */}
+                  <div className="border-t pt-4 space-y-2">
+                    <h3 className="font-semibold text-base text-blue-700">
                       Ship To (Service Address)
                     </h3>
                     <input
@@ -598,83 +591,89 @@ function BookServiceModal() {
                       placeholder="Full Name"
                       value={formData.name}
                       onChange={handleChange}
-                      className="border px-3 py-2 rounded w-full mb-2"
+                      className="border p-2 rounded w-full"
                       required
                     />
-                    <input
-                      name="phone"
-                      type="tel"
-                      placeholder="Phone Number"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      className="border px-3 py-2 rounded w-full mb-2"
-                      required
-                    />
-                    <input
-                      name="email"
-                      type="email"
-                      placeholder="Email Address"
-                      value={formData.email}
-                      onChange={handleChange}
-                      className="border px-3 py-2 rounded w-full mb-2"
-                      required
-                    />
+                    <div className="grid grid-cols-2 gap-2">
+                      <input
+                        name="phone"
+                        type="tel"
+                        placeholder="Phone Number"
+                        value={formData.phone}
+                        onChange={handleChange}
+                        className="border p-2 rounded w-full"
+                        required
+                      />
+                      <input
+                        name="email"
+                        type="email"
+                        placeholder="Email Address"
+                        value={formData.email}
+                        onChange={handleChange}
+                        className="border p-2 rounded w-full"
+                        required
+                      />
+                    </div>
                     <input
                       name="serviceAddress1"
-                      type="text"
-                      placeholder="Address Line 1 (Building/Office Name)"
+                      placeholder="Address Line 1 (Building/Office)"
                       value={formData.serviceAddress1}
                       onChange={handleChange}
-                      className="border px-3 py-2 rounded w-full mb-2"
+                      className="border p-2 rounded w-full"
                       required
                     />
-                    <input
-                      name="serviceAddress2"
-                      placeholder="Address Line 2 (Flat/Office No)"
-                      value={formData.serviceAddress2}
-                      onChange={handleChange}
-                      className="border px-3 py-2 rounded w-full mb-2"
-                    />
-                    <input
-                      name="serviceAddress3"
-                      placeholder="Address Line 3 (Road/Lane Name)"
-                      value={formData.serviceAddress3}
-                      onChange={handleChange}
-                      className="border px-3 py-2 rounded w-full mb-2"
-                    />
-                    <input
-                      type="number"
-                      name="servicePincode"
-                      placeholder="Pincode"
-                      value={formData.servicePincode}
-                      onChange={handleChange}
-                      className="border px-3 py-2 rounded w-full mb-2"
-                      required
-                    />
-                    <input
-                      name="serviceLocation"
-                      placeholder="Location"
-                      value={formData.serviceLocation}
-                      onChange={handleChange}
-                      className="border px-3 py-2 rounded w-full mb-2"
-                      required
-                    />
-                    <input
-                      name="serviceCity"
-                      placeholder="City"
-                      value={formData.serviceCity}
-                      onChange={handleChange}
-                      className="border px-3 py-2 rounded w-full mb-2"
-                      required
-                    />
+                    <div className="grid grid-cols-2 gap-2">
+                      <input
+                        name="serviceAddress2"
+                        placeholder="Flat/Office No"
+                        value={formData.serviceAddress2}
+                        onChange={handleChange}
+                        className="border p-2 rounded w-full"
+                      />
+                      <input
+                        name="serviceAddress3"
+                        placeholder="Road/Lane Name"
+                        value={formData.serviceAddress3}
+                        onChange={handleChange}
+                        className="border p-2 rounded w-full"
+                      />
+                    </div>
+                    <div className="grid grid-cols-3 gap-2">
+                      <input
+                        type="number"
+                        name="servicePincode"
+                        placeholder="Pincode"
+                        value={formData.servicePincode}
+                        onChange={handleChange}
+                        className="border p-2 rounded w-full"
+                        required
+                      />
+                      <input
+                        name="serviceLocation"
+                        placeholder="Location"
+                        value={formData.serviceLocation}
+                        onChange={handleChange}
+                        className="border p-2 rounded w-full"
+                        required
+                      />
+                      <input
+                        name="serviceCity"
+                        placeholder="City"
+                        value={formData.serviceCity}
+                        onChange={handleChange}
+                        className="border p-2 rounded w-full"
+                        required
+                      />
+                    </div>
                   </div>
 
-                  <div className="border-t pt-4">
-                    <div className="flex justify-between items-center mb-2">
-                      <h3 className="font-semibold text-lg text-blue-700">
+                  {/* Billing Address Block */}
+                  <div className="border-t pt-4 space-y-2">
+                    <div className="flex justify-between items-center">
+                      <h3 className="font-semibold text-base text-blue-700">
                         Bill To (Billing Address)
                       </h3>
-                      <label className="flex items-center space-x-2 text-sm">
+                      <label className="flex items-center space-x-2 text-xs cursor-pointer">
                         <input
                           type="checkbox"
                           checked={sameAsShipping}
@@ -685,136 +684,159 @@ function BookServiceModal() {
                     </div>
 
                     {!sameAsShipping && (
-                      <>
+                      <div className="space-y-2">
                         <input
                           name="billName"
-                          type="text"
                           placeholder="Full Name"
                           value={formData.billName}
                           onChange={handleChange}
-                          className="border px-3 py-2 rounded w-full mb-2"
+                          className="border p-2 rounded w-full"
                           required
                         />
-                        <input
-                          name="billPhone"
-                          type="tel"
-                          placeholder="Phone Number"
-                          value={formData.billPhone}
-                          onChange={handleChange}
-                          className="border px-3 py-2 rounded w-full mb-2"
-                          required
-                        />
-                        <input
-                          name="billEmail"
-                          type="email"
-                          placeholder="Email Address"
-                          value={formData.billEmail}
-                          onChange={handleChange}
-                          className="border px-3 py-2 rounded w-full mb-2"
-                          required
-                        />
+                        <div className="grid grid-cols-2 gap-2">
+                          <input
+                            name="billPhone"
+                            type="tel"
+                            placeholder="Phone Number"
+                            value={formData.billPhone}
+                            onChange={handleChange}
+                            className="border p-2 rounded w-full"
+                            required
+                          />
+                          <input
+                            name="billEmail"
+                            type="email"
+                            placeholder="Email Address"
+                            value={formData.billEmail}
+                            onChange={handleChange}
+                            className="border p-2 rounded w-full"
+                            required
+                          />
+                        </div>
                         <input
                           name="billingAddress1"
-                          placeholder="Address Line 1 (Building/Office Name)"
+                          placeholder="Address Line 1"
                           value={formData.billingAddress1}
                           onChange={handleChange}
-                          className="border px-3 py-2 rounded w-full mb-2"
+                          className="border p-2 rounded w-full"
                           required
                         />
-                        <input
-                          name="billingAddress2"
-                          placeholder="Address Line 2 (Flat/Office No)"
-                          value={formData.billingAddress2}
-                          onChange={handleChange}
-                          className="border px-3 py-2 rounded w-full mb-2"
-                        />
-                        <input
-                          name="billingAddress3"
-                          placeholder="Address Line 3 (Road/Lane Name)"
-                          value={formData.billingAddress3}
-                          onChange={handleChange}
-                          className="border px-3 py-2 rounded w-full mb-2"
-                        />
-                        <input
-                          name="billingPincode"
-                          type="number"
-                          placeholder="Pincode"
-                          value={formData.billingPincode}
-                          onChange={handleChange}
-                          className="border px-3 py-2 rounded w-full mb-2"
-                          required
-                        />
-                        <input
-                          name="billingLocation"
-                          placeholder="Location"
-                          value={formData.billingLocation}
-                          onChange={handleChange}
-                          className="border px-3 py-2 rounded w-full mb-2"
-                          required
-                        />
-                        <input
-                          name="billingCity"
-                          placeholder="City"
-                          value={formData.billingCity}
-                          onChange={handleChange}
-                          className="border px-3 py-2 rounded w-full mb-2"
-                          required
-                        />
-                      </>
+                        <div className="grid grid-cols-3 gap-2">
+                          <input
+                            type="number"
+                            name="billingPincode"
+                            placeholder="Pincode"
+                            value={formData.billingPincode}
+                            onChange={handleChange}
+                            className="border p-2 rounded w-full"
+                            required
+                          />
+                          <input
+                            name="billingLocation"
+                            placeholder="Location"
+                            value={formData.billingLocation}
+                            onChange={handleChange}
+                            className="border p-2 rounded w-full"
+                            required
+                          />
+                          <input
+                            name="billingCity"
+                            placeholder="City"
+                            value={formData.billingCity}
+                            onChange={handleChange}
+                            className="border p-2 rounded w-full"
+                            required
+                          />
+                        </div>
+                      </div>
                     )}
                   </div>
 
-                  <div className="pt-4 border-t">
-                    <div className="flex flex-col gap-2.5 mb-2 w-full">
-                      {/* Service Cost */}
-                      <div className="flex justify-between items-center">
-                        <span className="font-semibold text-gray-700">Service Cost</span>
-                        <span className="font-bold text-blue-600">₹ {calculatedCost.toFixed(2)}/-</span>
+                  {/* Coupon Selection Section */}
+                  <div className="border p-3 rounded-lg bg-gray-50 space-y-2">
+                    <label className="block font-medium text-xs text-gray-700">Apply Coupon</label>
+                    <div className="flex gap-2 items-center">
+                      <select
+                        name="couponSelect"
+                        id="couponSelect"
+                        value={selectedCoupon || ""}
+                        onChange={handleCouponChange}
+                        className="w-full p-2 border rounded text-xs bg-white"
+                      >
+                        <option value="">Select Coupon</option>
+                        {coupons?.map((co) => (
+                          <option key={co._id} value={co._id}>
+                            {co.couponCode} ({co.discountType === "percentage" ? `${co.discountValue}% OFF` : `₹${co.discountValue} OFF`})
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {activeCoupon && (
+                      <p className="flex items-center gap-1.5 text-xs text-green-700 font-medium">
+                        <ReceiptIndianRupee size={14} />
+                        <strong>{activeCoupon.couponCode}</strong> applied successfully!
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Cost Summary & Actions */}
+                  <div className="pt-4 border-t space-y-3">
+                    <div className="bg-gray-50 p-3 rounded-lg space-y-1 text-xs">
+                      <div className="flex justify-between">
+                        <span>Service Cost:</span>
+                        <span>₹ {calculatedCost.toFixed(2)}</span>
                       </div>
 
-                      {/* GST */}
-                      <div className="flex justify-between items-center pb-2 border-b border-gray-200">
-                        <span className="font-semibold text-gray-700">GST (18%)</span>
-                        <span className="font-bold text-green-600">+₹ {(calculatedCost * 0.18).toFixed(2)}/-</span>
-                      </div>
-
-                      {/* Grand Total */}
-                      <div className="flex flex-col items-end gap-1 pt-1">
-                        <div className="flex items-baseline gap-2">
-                          <span className="font-semibold text-gray-700">Total Estimated Cost:</span>
-                          <span className="font-extrabold text-blue-600 text-xl">
-                            ₹ {(calculatedCost * 1.18).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/-
-                          </span>
+                      {activeCoupon && (
+                        <div className="flex justify-between text-green-600 font-medium">
+                          <span>Discount ({activeCoupon.couponCode}):</span>
+                          <span>-₹ {discountAmount.toFixed(2)}</span>
                         </div>
-                        <span className="text-xs text-gray-500 font-medium">
-                          (Incl. 9% CGST & 9% SGST)
+                      )}
+
+                      <div className="flex justify-between border-b pb-1">
+                        <span>GST (18%):</span>
+                        <span>+₹ {gstAmount.toFixed(2)}</span>
+                      </div>
+
+                      <div className="flex justify-between text-sm font-bold pt-1 text-blue-600">
+                        <span>Total Estimated Cost:</span>
+                        <span>
+                          ₹{" "}
+                          {finalTotalCost.toLocaleString("en-IN", {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}
                         </span>
                       </div>
                     </div>
 
-
                     {submitMessage && (
-                      <p className={`mt-3 text-center ${submitMessage.includes("failed") || submitMessage.includes("Error") ? "text-red-600" : "text-green-600"}`}>
+                      <p
+                        className={`text-center text-xs font-semibold ${submitMessage.includes("Error") || submitMessage.includes("failed") ? "text-red-600" : "text-green-600"}`}>
                         {submitMessage}
                       </p>
                     )}
 
+                    <div className="flex items-center gap-2 text-xs">
+                      <input
+                        type="checkbox"
+                        id="termsAccept"
+                        checked={acceptCondition}
+                        onChange={(e) => setAcceptCondition(e.target.checked)}
+                      />
+                      <label htmlFor="termsAccept">
+                        I hereby accept all service conditions and policies.
+                      </label>
+                    </div>
+
                     <button
                       type="submit"
-                      disabled={isSubmitting}
-                      className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded font-medium disabled:opacity-50"
-                    >
+                      disabled={isSubmitting || !acceptCondition}
+                      className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded font-medium disabled:opacity-50">
                       {isSubmitting ? "Processing..." : "Proceed to Payment"}
                     </button>
-
-                    <div className="mt-6 text-center text-sm text-gray-600">
-                      <p>
-                        By booking, you agree to our{" "}
-                        <a href="/cancellation-policy" target="_blank" className="text-blue-600 underline">Cancellation Policy</a>,{" "}
-                        <a href="/refund-policy" target="_blank" className="text-blue-600 underline">Refund Policy</a> and{" "}
-                        <a href="/privacy-policy" target="_blank" className="text-blue-600 underline">Data Policy</a>.
-                      </p>
-                    </div>
                   </div>
                 </form>
               )}
@@ -825,5 +847,3 @@ function BookServiceModal() {
     </>
   );
 }
-
-export default BookServiceModal;

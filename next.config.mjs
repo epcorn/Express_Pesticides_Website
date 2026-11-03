@@ -1,12 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  output: 'standalone',
+  // Only enable standalone mode during 'next build', not 'next dev'
+  ...(process.env.NODE_ENV === 'production' && { output: 'standalone' }),
   eslint: {
     ignoreDuringBuilds: true,
   },
   images: {
-    unoptimized: true, // Moved here
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
@@ -15,7 +16,6 @@ const nextConfig = {
       },
     ],
   },
-  
 };
 
 export default nextConfig;

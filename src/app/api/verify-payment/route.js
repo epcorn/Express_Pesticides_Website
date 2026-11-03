@@ -4,20 +4,17 @@ import { NextResponse } from "next/server";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
 import Razorpay from "razorpay";
-import axios from "axios";
+import htmlPdf from "html-pdf-node";
 
-import { servicesData } from "@/app/services/lib/ServiceData";
 import dbConnect from "@/lib/dbConn";
 import ServiceBooking from "@/model/serviceBookingModal";
-
-const GST_RATE = 0.18;
+import Coupon from "@/model/couponModal";
+import { expressInvoiceHtml } from "@/data/bookservicemodelData";
+import { calculateServiceCost } from "@/lib/pricing";
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
+  auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS },
 });
 
 const razorpay = new Razorpay({
@@ -25,58 +22,17 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_KEY_SECRET_TEST,
 });
 
-// Prevent user-provided values from injecting HTML into emails.
 function escapeHtml(value) {
   return String(value ?? "").replace(
     /[&<>"']/g,
-    (char) =>
-      ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#39;",
-      })[char],
+    (c) =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[
+        c
+      ],
   );
 }
 
-// Calculate the service cost using server-side pricing.
-function calculateServiceCost(formData) {
-  const category = servicesData[formData.category];
-
-  if (!category) {
-    throw new Error("Invalid service category");
-  }
-
-  let cost;
-
-  if (category.perSqFt) {
-    const area = Number(formData.area);
-
-    if (!Number.isFinite(area) || area <= 0) {
-      throw new Error("Invalid service area");
-    }
-
-    cost = area * Number(category.rate);
-  } else {
-    const pricing = formData.subcategory
-      ? category[formData.subcategory]
-      : category;
-
-    const bhkPricing = pricing?.[formData.bhkType];
-
-    cost = Number(bhkPricing?.[formData.serviceType] ?? 0);
-  }
-
-  if (!Number.isFinite(cost) || cost <= 0) {
-    throw new Error("Invalid service pricing");
-  }
-
-  return Number(cost.toFixed(2));
-}
-
-// Build a simple booking confirmation email.
-function buildInvoiceHtml(formData, serviceAmount, gstAmt, amountPaid) {
+function buildInvoiceHtml(formData, p) {
   const address = [
     formData.serviceAddress1,
     formData.serviceAddress2,
@@ -91,30 +47,22 @@ function buildInvoiceHtml(formData, serviceAmount, gstAmt, amountPaid) {
 
   return `
     <div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;padding:20px;border:1px solid #ddd;border-radius:8px">
-      <img
-        src="https://res.cloudinary.com/epcorn/image/upload/v1762003702/Express_Pesticides_Website/HOMEPAGE_IMAGES/Express_pestcide_logo_transparent_ra6ld9.png"
-        alt="Express Pesticides"
-        style="width:180px"
-      />
-
+      <img src="https://res.cloudinary.com/epcorn/image/upload/v1762003702/Express_Pesticides_Website/HOMEPAGE_IMAGES/Express_pestcide_logo_transparent_ra6ld9.png" alt="Express Pesticides" style="width:180px" />
       <h2 style="color:#16a34a">Payment Successful</h2>
       <p>Hello ${escapeHtml(formData.name)},</p>
       <p>Thank you for booking your service with Express Pesticides.</p>
-
       <h3>Booking Summary</h3>
       <p><b>Service:</b> ${escapeHtml(formData.category)}</p>
       <p><b>Property Type:</b> ${escapeHtml(formData.bhkType || "Property")}</p>
       <p><b>Service Type:</b> ${escapeHtml(formData.serviceType)}</p>
       <p><b>Service Address:</b> ${address}</p>
-
       <hr />
-      <p>Service Cost: ₹${serviceAmount.toFixed(2)}</p>
-      <p>GST (18%): ₹${gstAmt.toFixed(2)}</p>
-      <h3>Total Paid: ₹${amountPaid.toFixed(2)}</h3>
-
+      <p>Service Cost: ₹${p.serviceAmount.toFixed(2)}</p>
+      ${p.discountAmount > 0 ? `<p>Discount (${escapeHtml(p.couponCode)}): -₹${p.discountAmount.toFixed(2)}</p>` : ""}
+      <p>GST (18%): ₹${p.gstAmt.toFixed(2)}</p>
+      <h3>Total Paid: ₹${p.amountPaid.toFixed(2)}</h3>
       <p>Thank you for choosing Express Pesticides.</p>
-    </div>
-  `;
+    </div>`;
 }
 
 export async function POST(req) {
@@ -142,26 +90,16 @@ export async function POST(req) {
       );
     }
 
-    // 1. Verify the Razorpay signature.
-    const expectedSignature = crypto
+    // 1. Verify signature
+    const expected = crypto
       .createHmac("sha256", secret)
       .update(`${razorpay_order_id}|${razorpay_payment_id}`)
       .digest();
-
-    let receivedSignature;
-
-    try {
-      receivedSignature = Buffer.from(razorpay_signature, "hex");
-    } catch {
-      return NextResponse.json(
-        { message: "Invalid payment signature" },
-        { status: 400 },
-      );
-    }
+    const received = Buffer.from(razorpay_signature, "hex");
 
     if (
-      receivedSignature.length !== expectedSignature.length ||
-      !crypto.timingSafeEqual(expectedSignature, receivedSignature)
+      received.length !== expected.length ||
+      !crypto.timingSafeEqual(expected, received)
     ) {
       return NextResponse.json(
         { message: "Payment signature verification failed" },
@@ -169,70 +107,85 @@ export async function POST(req) {
       );
     }
 
-    // 2. Calculate service cost and GST on the server.
-    let serviceAmount;
-    let gstAmt;
+    // 2. Fetch the order (created by our server) and the payment from Razorpay
+    const order = await razorpay.orders.fetch(razorpay_order_id);
+    let payment = await razorpay.payments.fetch(razorpay_payment_id);
 
+    if (payment.order_id !== razorpay_order_id) {
+      return NextResponse.json(
+        { message: "Payment does not belong to this order" },
+        { status: 400 },
+      );
+    }
+
+    if (payment.status === "authorized") {
+      payment = await razorpay.payments.capture(
+        razorpay_payment_id,
+        payment.amount,
+        "INR",
+      );
+    }
+    if (payment.status !== "captured") {
+      return NextResponse.json(
+        { message: `Payment not captured (status: ${payment.status})` },
+        { status: 400 },
+      );
+    }
+
+    // 3. Amount paid must equal the amount our server put on the order
+    if (payment.amount !== order.amount) {
+      return NextResponse.json(
+        { message: "Payment amount does not match the order" },
+        { status: 400 },
+      );
+    }
+
+    // 4. Re-check that formData wasn't tampered with after the order was created
+    const notes = order.notes || {};
+    let serviceAmount;
     try {
       serviceAmount = calculateServiceCost(formData);
-      gstAmt = Number((serviceAmount * GST_RATE).toFixed(2));
-    } catch (error) {
-      return NextResponse.json({ message: error.message }, { status: 400 });
+    } catch (e) {
+      return NextResponse.json({ message: e.message }, { status: 400 });
     }
-
-    // 3. Verify the actual payment with Razorpay.
-    const paymentDetails = await razorpay.payments.fetch(razorpay_payment_id);
-
-    if (
-      paymentDetails.order_id !== razorpay_order_id ||
-      paymentDetails.status !== "captured"
-    ) {
+    if (Math.abs(serviceAmount - Number(notes.serviceAmount)) > 0.01) {
       return NextResponse.json(
-        { message: "Payment is not captured for this order" },
+        { message: "Booking details do not match the paid order" },
         { status: 400 },
       );
     }
 
-    const expectedAmount = Math.round((serviceAmount + gstAmt) * 100);
+    const discountAmount = Number(notes.discountAmount || 0);
+    const gstAmt = Number(notes.gstAmt || 0);
+    const amountPaid = payment.amount / 100;
+    const couponCode =
+      notes.appliedCoupon && notes.appliedCoupon !== "NONE"
+        ? notes.appliedCoupon
+        : null;
 
-    if (paymentDetails.amount !== expectedAmount) {
-      return NextResponse.json(
-        { message: "Payment amount does not match the service cost" },
-        { status: 400 },
-      );
-    }
-
-    // 4. Connect to MongoDB and prevent duplicate bookings.
+    // 5. Prevent duplicate bookings
     await dbConnect();
-
-    const existingBooking = await ServiceBooking.findOne({
+    const existing = await ServiceBooking.findOne({
       orderId: razorpay_order_id,
     });
-
-    if (existingBooking) {
+    if (existing) {
       return NextResponse.json({
         success: true,
         message: "Booking already exists",
-        bookingId: existingBooking._id,
+        bookingId: existing._id,
       });
     }
 
-    console.log("Calculated serviceAmount:", serviceAmount);
-    console.log("Calculated gstAmt:", gstAmt);
-    console.log(
-      "Schema fields:",
-      ServiceBooking.schema.path("serviceAmount")?.instance,
-      ServiceBooking.schema.path("gstAmt")?.instance,
-    );
-
-    // 5. Save booking and calculated amounts.
+    // 6. Save booking
     const newBooking = await ServiceBooking.create({
       orderId: razorpay_order_id,
       paymentId: razorpay_payment_id,
 
       serviceAmount,
+      discountAmount,
+      couponCode,
       gstAmt,
-      amountPaid: paymentDetails.amount / 100,
+      amountPaid,
       paymentStatus: "Success",
 
       category: formData.category,
@@ -247,11 +200,9 @@ export async function POST(req) {
       dateOfService: formData.dateOfService
         ? new Date(formData.dateOfService)
         : null,
-
       firstServiceDate: formData.firstServiceDate
         ? new Date(formData.firstServiceDate)
         : null,
-
       preferredTime: formData.preferredTime,
       preferredDay: formData.preferredDay,
       area: formData.area,
@@ -269,7 +220,6 @@ export async function POST(req) {
       billName: formData.billName,
       billPhone: formData.billPhone,
       billEmail: formData.billEmail,
-
       billingAddress1: formData.billingAddress1,
       billingAddress2: formData.billingAddress2,
       billingAddress3: formData.billingAddress3,
@@ -280,64 +230,104 @@ export async function POST(req) {
       billingCity: formData.billingCity,
     });
 
-    console.log("Saved amounts:", {
-      serviceAmount: newBooking.serviceAmount,
-      gstAmt: newBooking.gstAmt,
-    });
+    // 7. Consume the coupon (non-fatal: the payment is already captured)
+    if (couponCode) {
+      try {
+        const userId = String(notes.userIdentifier ?? "")
+          .trim()
+          .toLowerCase();
+        const coupon = await Coupon.findOne({ couponCode })
+          .select("assignedTo")
+          .lean();
+        const isAssigned = coupon?.assignedTo?.length > 0;
 
-    // 6. Send email and SMS without blocking booking success.
-    const amountPaid = paymentDetails.amount / 100;
+        const filter = isAssigned
+          ? {
+              couponCode,
+              assignedTo: { $elemMatch: { user: userId, used: false } },
+            }
+          : {
+              couponCode,
+              $or: [
+                { usageLimit: null },
+                { $expr: { $lt: ["$usedCount", "$usageLimit"] } },
+              ],
+            };
 
-    const notifications = [];
+        const update = isAssigned
+          ? { $set: { "assignedTo.$.used": true }, $inc: { usedCount: 1 } }
+          : { $inc: { usedCount: 1 } };
 
+        const res = await Coupon.updateOne(filter, update);
+        if (res.modifiedCount === 0) {
+          // Someone else took the last use between create-order and now.
+          console.warn(
+            `Coupon ${couponCode} could not be consumed for order ${razorpay_order_id}`,
+          );
+        }
+      } catch (e) {
+        console.error("Failed to consume coupon:", e);
+      }
+    }
+
+    const invoiceData = {
+      ...formData,
+      orderId: razorpay_order_id,
+      paymentId: razorpay_payment_id,
+      serviceAmount,
+      discountAmount,
+      couponCode,
+      gstAmt,
+      amountPaid,
+      createdAt: newBooking.createdAt || new Date(),
+    };
+    // 8. Email (never fails the booking)
     if (process.env.EMAIL_USER && process.env.EMAIL_PASS && formData.email) {
-      notifications.push(
-        transporter.sendMail({
+      try {
+        const attachments = [];
+        try {
+          const pdfBuffer = await htmlPdf.generatePdf(
+            { content: expressInvoiceHtml({ formData: invoiceData }) },
+            { format: "A4", printBackground: true },
+          );
+          attachments.push({
+            filename: `Invoice_${razorpay_order_id}.pdf`,
+            content: pdfBuffer,
+            contentType: "application/pdf",
+          });
+        } catch (pdfErr) {
+          console.error("PDF generation failed:", pdfErr);
+        }
+
+        await transporter.sendMail({
           from: `"Express Pesticides" <${process.env.EMAIL_USER}>`,
           to: formData.email,
-          bcc: "exteam.epcorn@gmail.com",
           subject: `Service Booking Confirmed - ${razorpay_order_id}`,
-          html: buildInvoiceHtml(formData, serviceAmount, gstAmt, amountPaid),
-        }),
-      );
+          html: buildInvoiceHtml(formData, {
+            serviceAmount,
+            discountAmount,
+            couponCode,
+            gstAmt,
+            amountPaid,
+          }),
+          attachments,
+        });
+      } catch (mailErr) {
+        console.error("Email failed:", mailErr);
+      }
     }
 
-    if (
-      process.env.TEXT_BEE_DEVICE_ID &&
-      process.env.TEXT_BEE_API &&
-      formData.phone
-    ) {
-      notifications.push(
-        axios.post(
-          `https://api.textbee.dev/api/v1/gateway/devices/${process.env.TEXT_BEE_DEVICE_ID}/send-sms`,
-          {
-            recipients: [String(formData.phone)],
-            message: `Hi ${formData.name}, your ${formData.serviceType} service booking with Express Pesticides is confirmed. Amount paid: Rs. ${amountPaid.toFixed(2)}.`,
-          },
-          {
-            headers: {
-              "x-api-key": process.env.TEXT_BEE_API,
-            },
-          },
-        ),
-      );
-    }
-
-    await Promise.allSettled(notifications);
-
-    // 7. Return the saved booking.
-    return NextResponse.json(
-      {
-        success: true,
-        message: "Payment verified and booking saved",
-        bookingId: newBooking._id,
-        serviceAmount,
-        gstAmt,
-        amountPaid,
-      },
-      { status: 200 },
-    );
-  } catch {
+    return NextResponse.json({
+      success: true,
+      message: "Payment verified and booking saved",
+      bookingId: newBooking._id,
+      serviceAmount,
+      discountAmount,
+      gstAmt,
+      amountPaid,
+    });
+  } catch (error) {
+    console.error("verify-payment error:", error);
     return NextResponse.json(
       { message: "Unable to verify payment or save booking" },
       { status: 500 },

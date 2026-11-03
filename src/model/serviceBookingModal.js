@@ -9,6 +9,9 @@ const serviceSchema = new mongoose.Schema(
     amountPaid: { type: Number, required: true },
     paymentStatus: { type: String, default: "Success" },
 
+    discountAmount: { type: Number, default: 0 },
+    couponCode: String,
+
     category: { type: String, default: null },
     subcategory: { type: String, default: null },
     bhkType: { type: String, default: null },

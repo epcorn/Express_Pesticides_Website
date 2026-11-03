@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Menu, X, ChevronDown, ChevronRight } from "lucide-react";
 import Image from "next/image";
@@ -10,11 +10,36 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState(null);
 
+  const [desktopDownloadOpen, setDesktopDownloadOpen] = useState(false);
+  const [desktopActiveCategory, setDesktopActiveCategory] = useState(null);
+
   const path = usePathname();
-  console.log(path.replace("/", "").toUpperCase())
+  
   const toggleTab = (tabName) => {
     setActiveTab(activeTab === tabName ? null : tabName);
   };
+
+  const desktopDropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        desktopDropdownRef.current &&
+        !desktopDropdownRef.current.contains(event.target)
+      ) {
+        setDesktopDownloadOpen(false);
+        setDesktopActiveCategory(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, []);
 
   const links = [
     "HOME",
@@ -86,47 +111,66 @@ export default function Navbar() {
             {links.map((item) => (
               <div key={item} className="uppercase">
                 {item === "Download" ? (
-                  <ul className="list-none m-0 p-0">
-                    <li className="relative group cursor-pointer font-medium text-black text-sm xl:text-base py-2">
-                      <span className="flex items-center gap-1">
-                        {item}
-                        <ChevronDown className="w-4 h-4 text-gray-500" />
-                      </span>
+                  <div className="relative" ref={desktopDropdownRef}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setDesktopDownloadOpen((prev) => !prev);
+                        setDesktopActiveCategory(null);
+                      }}
+                      className="flex items-center gap-1 font-medium text-black text-sm xl:text-base py-2"
+                    >
+                      Download
+                      <ChevronDown
+                        className={`w-4 h-4 text-gray-500 transition-transform ${desktopDownloadOpen ? "rotate-180" : ""
+                          }`}
+                      />
+                    </button>
 
-                      {/* Dropdown level 1 */}
-                      {/* FIX: Added a pseudo-element bridge (`before:content-['']...`) to prevent early closing when moving mouse downwards */}
-                      <ul className="absolute top-full left-0 z-50 min-w-[180px] bg-white border border-gray-100 shadow-lg rounded-md py-1 hidden group-hover:block before:content-[''] before:absolute before:-top-2 before:left-0 before:w-full before:h-2">
+                    {desktopDownloadOpen && (
+                      <ul className="absolute top-full left-0 z-50 min-w-64 bg-white border border-gray-100 shadow-lg rounded-md py-1">
                         {subLinks.map((s, i) => (
-                          <li key={i} className="relative group/sub p-3 flex items-center justify-between hover:bg-blue-50 hover:text-blue-600 transition-colors">
-                            <span className="text-sm">{s.name}</span>
-                            <ChevronRight className="w-4 h-4 text-gray-400 group-hover/sub:text-blue-600" />
+                          <li key={i} className="relative">
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setDesktopActiveCategory((prev) =>
+                                  prev === s.name ? null : s.name
+                                )
+                              }
+                              className="w-full px-4 py-3 flex items-center justify-between text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                            >
+                              {s.name}
+                              <ChevronRight className="w-4 h-4" />
+                            </button>
 
-                            {/* Dropdown level 2 */}
-                            <ul className="absolute top-0 left-full z-50 min-w-[250px] bg-white border border-gray-100 shadow-lg rounded-md py-1 pl-1 -ml-1 hidden group-hover/sub:block">
-                              {s.links.map((subLink, subIdx) => (
-                                <li key={subIdx}>
-                                  <a
-                                    href={subLink.link}
-                                    download={`${subLink.name}.pdf`}
-                                    className="block px-4 py-3  text-gray-600 hover:bg-gray-50 hover:text-black transition-colors normal-case whitespace-normal"
-                                  >
-                                    {subLink.name}
-                                  </a>
-                                </li>
-                              ))}
-                            </ul>
+                            {desktopActiveCategory === s.name && (
+                              <ul className="bg-gray-50 border-t border-gray-100 py-1">
+                                {s.links.map((subLink, subIdx) => (
+                                  <li key={subIdx}>
+                                    <a
+                                      href={subLink.link}
+                                      download={`${subLink.name}.pdf`}
+                                      className="block px-5 py-3 text-sm text-gray-600 hover:bg-blue-50 hover:text-blue-600 normal-case whitespace-normal"
+                                    >
+                                      {subLink.name}
+                                    </a>
+                                  </li>
+                                ))}
+                              </ul>
+                            )}
                           </li>
                         ))}
                       </ul>
-                    </li>
-                  </ul>
+                    )}
+                  </div>
                 ) : (
                   <Link
                     href={getLinkPath(item)}
                     className="relative font-medium text-black group transition-colors duration-300 text-sm xl:text-base block py-2"
                   >
                     {item}
-                    <span className={`absolute left-1/2 -translate-x-1/2 bottom-0 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full ${item.replace(" ", "") === path.replace("/", "").toUpperCase() ? "w-full" : ""}`}></span>
+                    <span className={`absolute left-1/2 -translate-x-1/2 bottom-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full ${item.replace(" ", "") === path.replace("/", "").toUpperCase() ? "w-full" : ""}`}></span>
                   </Link>
                 )}
               </div>

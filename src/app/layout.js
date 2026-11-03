@@ -6,6 +6,7 @@ import BookServiceModal from "../components/BookServiceModal";
 import Chatbot from "../components/Chatbot"; // was giving error
 import Script from "next/script";
 import ErrorLogger from "@/components/ErrorLogger";
+import FloatingDiyas from "@/components/FloatingDiya";
 
 export const metadata = {
   title: "Express Pesticides", //changed
@@ -23,6 +24,7 @@ export default function RootLayout({ children }) {
           src="https://checkout.razorpay.com/v1/checkout.js"
           strategy="lazyOnload"
         />
+        <FloatingDiyas />
         <Navbar />
         <BookServiceModal />
         <Chatbot />
